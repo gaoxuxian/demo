@@ -1,10 +1,9 @@
 package xx.demo;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
-import android.widget.FrameLayout;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends Activity
 {
 
     @Override
@@ -12,6 +11,5 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FrameLayout itemView = new FrameLayout(this);
     }
 }

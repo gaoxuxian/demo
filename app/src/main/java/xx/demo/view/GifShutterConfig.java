@@ -36,8 +36,6 @@ public class GifShutterConfig extends ShutterConfig
         mSmallRing.setInnerRadius(CameraPercentUtil.WidthPxToPercent(64));
         mSmallRing.setOutColor(Color.WHITE);
         mSmallRing.setInnerColor(Color.YELLOW);
-
-        mRing.set(mSmallRing);
     }
 
     @Override

@@ -6,13 +6,9 @@ package xx.demo.view;
 
 public class ShutterConfig extends BaseConfig
 {
-    protected Ring mRing;
-
     @Override
     public void init()
     {
-        mRing = new Ring();
-
         initDef();
         initSmall();
         initRecord();
@@ -33,23 +29,18 @@ public class ShutterConfig extends BaseConfig
 
     }
 
-    public Ring getRing()
-    {
-        return mRing;
-    }
-
     public Ring getDef()
     {
-        return getRing();
+        return new Ring();
     }
 
     public Ring getSmall()
     {
-        return getRing();
+        return new Ring();
     }
 
     public Ring getRecord()
     {
-        return getRing();
+        return new Ring();
     }
 }

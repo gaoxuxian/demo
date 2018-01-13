@@ -23,6 +23,11 @@ public class ShutterView extends BaseView<ShutterConfig>
         super(context, def_wh);
     }
 
+    public Ring getRing()
+    {
+        return mRing != null ? mRing : new Ring();
+    }
+
     public void setRing(Ring ring)
     {
         mRing = ring;
@@ -32,7 +37,7 @@ public class ShutterView extends BaseView<ShutterConfig>
     @Override
     public void setConfig(ShutterConfig config)
     {
-        mRing = config.getRing();
+        mRing = config.getDef();
         startToDraw();
     }
 

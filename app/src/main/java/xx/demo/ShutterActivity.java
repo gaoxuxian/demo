@@ -12,16 +12,15 @@ import android.widget.FrameLayout;
 
 import xx.demo.util.ShareData;
 import xx.demo.util.RingEvaluator;
-import xx.demo.view.BaseConfig;
-import xx.demo.view.BaseView;
 import xx.demo.view.GifShutterConfig;
 import xx.demo.view.ShutterView;
 
 public class ShutterActivity extends Activity implements View.OnClickListener
 {
     FrameLayout mParent;
-    BaseView mShutter;
+    ShutterView mShutter;
     Button mTestBtn;
+    Button mTestBtn1;
     private GifShutterConfig config;
 
     @Override
@@ -46,10 +45,17 @@ public class ShutterActivity extends Activity implements View.OnClickListener
             mParent.addView(mShutter, params);
 
             mTestBtn = new Button(this);
-            mTestBtn.setText("测试");
+            mTestBtn.setText("def --> small");
             mTestBtn.setOnClickListener(this);
             params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             mParent.addView(mTestBtn, params);
+
+            mTestBtn1 = new Button(this);
+            mTestBtn1.setText("small --> def");
+            mTestBtn1.setOnClickListener(this);
+            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.CENTER_HORIZONTAL;
+            mParent.addView(mTestBtn1, params);
         }
     }
 
@@ -70,7 +76,13 @@ public class ShutterActivity extends Activity implements View.OnClickListener
     {
         if (v == mTestBtn)
         {
-            ObjectAnimator animator = ObjectAnimator.ofObject(mShutter, "ring", new RingEvaluator(), config.getRing(), config.getDef());
+            ObjectAnimator animator = ObjectAnimator.ofObject(mShutter, "ring", new RingEvaluator(), config.getDef(), config.getSmall());
+            animator.setDuration(1000);
+            animator.start();
+        }
+        else if (v == mTestBtn1)
+        {
+            ObjectAnimator animator = ObjectAnimator.ofObject(mShutter, "ring", new RingEvaluator(), config.getSmall(), config.getDef());
             animator.setDuration(1000);
             animator.start();
         }

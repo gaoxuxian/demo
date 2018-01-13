@@ -1,22 +1,28 @@
 package xx.demo;
 
-import android.animation.ValueAnimator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import xx.demo.util.CameraPercentUtil;
 import xx.demo.util.ShareData;
+import xx.demo.util.RingEvaluator;
+import xx.demo.view.BaseConfig;
 import xx.demo.view.BaseView;
+import xx.demo.view.GifShutterConfig;
+import xx.demo.view.ShutterView;
 
 public class ShutterActivity extends Activity implements View.OnClickListener
 {
     FrameLayout mParent;
     BaseView mShutter;
     Button mTestBtn;
+    private GifShutterConfig config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,15 +35,33 @@ public class ShutterActivity extends Activity implements View.OnClickListener
     private void initView()
     {
         mParent = new FrameLayout(this);
+        mParent.setBackgroundColor(Color.RED);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mParent.setLayoutParams(params);
         setContentView(mParent);
         {
+            mShutter = new ShutterView(this);
+            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+            mParent.addView(mShutter, params);
+
             mTestBtn = new Button(this);
-            mTestBtn.setText("测试动态改变控件宽高");
+            mTestBtn.setText("测试");
             mTestBtn.setOnClickListener(this);
             params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             mParent.addView(mTestBtn, params);
+        }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        config = new GifShutterConfig();
+        config.init();
+        if (mShutter != null)
+        {
+            mShutter.setConfig(config);
         }
     }
 
@@ -46,20 +70,8 @@ public class ShutterActivity extends Activity implements View.OnClickListener
     {
         if (v == mTestBtn)
         {
-            ValueAnimator animator = ValueAnimator.ofInt(CameraPercentUtil.WidthPxToPercent(100), CameraPercentUtil.WidthPxToPercent(500));
+            ObjectAnimator animator = ObjectAnimator.ofObject(mShutter, "ring", new RingEvaluator(), config.getRing(), config.getDef());
             animator.setDuration(1000);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-            {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation)
-                {
-                    int value = (int)animation.getAnimatedValue();
-                    if (mShutter != null)
-                    {
-                        mShutter.ReLayout(value, value);
-                    }
-                }
-            });
             animator.start();
         }
     }

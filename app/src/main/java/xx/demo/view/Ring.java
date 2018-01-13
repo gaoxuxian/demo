@@ -1,6 +1,6 @@
 package xx.demo.view;
 
-import android.graphics.Rect;
+import android.graphics.RectF;
 
 /**
  *
@@ -9,20 +9,29 @@ import android.graphics.Rect;
 
 public class Ring
 {
-    private Rect mOutRoundRect;
+    public int mOutTopColor;
+    public int mOutBotColor;
 
-    private Rect mInnerRoundRect;
+    private RectF mOutRoundRect;
+
+    private float mOutRx, mOutRy;
+    private float mInnerRx, mInnerRy;
+
+    private RectF mInnerRoundRect;
 
     private int mOutColor;
 
     private int mInnerColor;
 
+    public int mInnerTopColor;
+    public int mInnerBotColor;
+
     private String mMidText;
 
     public Ring()
     {
-        mOutRoundRect = new Rect();
-        mInnerRoundRect = new Rect();
+        mOutRoundRect = new RectF();
+        mInnerRoundRect = new RectF();
     }
 
     // ====================================== Set =================================== //
@@ -30,21 +39,25 @@ public class Ring
     public void setOutRadius(int radius)
     {
         this.mOutRoundRect.set(-radius, -radius, radius, radius);
+        mOutRx = mOutRy = radius;
     }
 
     public void setInnerRadius(int radius)
     {
         this.mInnerRoundRect.set(-radius, -radius, radius, radius);
+        mInnerRx = mInnerRy = radius;
     }
 
     public void setOutColor(int color)
     {
         this.mOutColor = color;
+        mOutTopColor = mOutBotColor = color;
     }
 
     public void setInnerColor(int color)
     {
         this.mInnerColor = color;
+        mInnerTopColor = mInnerBotColor= color;
     }
 
     public void setMidText(String text)
@@ -52,15 +65,20 @@ public class Ring
         this.mMidText = text;
     }
 
-    // ====================================== Get =================================== //
-    public Rect getOutRoundRect()
+    public void setRoundRectParams(float rx, float ry)
     {
-        return mOutRoundRect == null ? new Rect() : mOutRoundRect;
+
     }
 
-    public Rect getInnerRoundRect()
+    // ====================================== Get =================================== //
+    public RectF getOutRoundRect()
     {
-        return mInnerRoundRect == null ? new Rect() : mInnerRoundRect;
+        return mOutRoundRect == null ? new RectF() : mOutRoundRect;
+    }
+
+    public RectF getInnerRoundRect()
+    {
+        return mInnerRoundRect == null ? new RectF() : mInnerRoundRect;
     }
 
     public int getOutColor()
@@ -76,5 +94,50 @@ public class Ring
     public String getMidText()
     {
         return mMidText == null ? "" : mMidText;
+    }
+
+    public float getOutRx()
+    {
+        return mOutRx;
+    }
+
+    public float getOutRy()
+    {
+        return mOutRy;
+    }
+
+    public float getInnerRx()
+    {
+        return mInnerRx;
+    }
+
+    public float getInnerRy()
+    {
+        return mInnerRy;
+    }
+
+    public Ring copy()
+    {
+        Ring out = new Ring();
+        out.set(this);
+        return out;
+    }
+
+    public void set(Ring ring)
+    {
+        this.mOutColor = ring.mOutColor;
+        this.mOutTopColor = ring.mOutTopColor;
+        this.mOutBotColor = ring.mOutBotColor;
+        this.mOutRoundRect = ring.mOutRoundRect;
+
+        this.mInnerColor = ring.mInnerColor;
+        this.mInnerTopColor = ring.mInnerTopColor;
+        this.mInnerBotColor = ring.mInnerBotColor;
+        this.mInnerRoundRect = ring.mInnerRoundRect;
+
+        this.mOutRx = ring.mOutRx;
+        this.mOutRy = ring.mOutRy;
+        this.mInnerRx = ring.mInnerRx;
+        this.mInnerRy = ring.mInnerRy;
     }
 }

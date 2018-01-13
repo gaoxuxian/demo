@@ -2,6 +2,7 @@ package xx.demo.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,12 +13,14 @@ import xx.demo.util.CameraPercentUtil;
  * Created by Gxx on 2018/1/12.
  */
 
-public abstract class BaseView extends View
+public abstract class BaseView<T extends BaseConfig> extends View
 {
     protected int mViewW;
     protected int mViewH;
 
     protected int mDefWH;
+
+    protected Paint mPaint;
 
     private BaseView(Context context)
     {
@@ -30,10 +33,12 @@ public abstract class BaseView extends View
 
         mDefWH = def_wh > 0 ? def_wh : CameraPercentUtil.WidthPxToPercent(150);
 
+        mPaint = new Paint();
+
         setWillNotDraw(true);
     }
 
-    public abstract void setConfig(BaseConfig config);
+    public abstract void setConfig(T config);
 
     protected abstract void drawToCanvas(Canvas canvas);
 

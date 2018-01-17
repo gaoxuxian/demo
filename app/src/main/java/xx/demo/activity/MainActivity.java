@@ -1,7 +1,9 @@
-package xx.demo;
+package xx.demo.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import xx.demo.R;
 
 public class MainActivity extends Activity
 {

@@ -1,4 +1,4 @@
-package xx.demo;
+package xx.demo.activity;
 
 import android.app.Activity;
 import android.graphics.Color;

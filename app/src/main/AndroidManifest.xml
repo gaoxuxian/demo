@@ -10,16 +10,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         </activity>
         <activity
-            android:name=".ShutterActivity"
+            android:name=".activity.ShutterActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-
         </activity>
-        <activity android:name=".TabLayoutActivity"
-                  android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name=".activity.TabLayoutActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activity.FocusViewActivity"
+                  android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

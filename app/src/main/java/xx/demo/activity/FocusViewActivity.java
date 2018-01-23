@@ -54,7 +54,6 @@ public class FocusViewActivity extends Activity
     {
         if (event.getAction() == MotionEvent.ACTION_UP && mTriggerLongPress)
         {
-            mTriggerLongPress = false;
             if (mFocusView != null)
             {
                 mFocusView.setVisibility(View.VISIBLE);
@@ -73,13 +72,14 @@ public class FocusViewActivity extends Activity
         @Override
         public boolean onDown(MotionEvent e)
         {
+            mTriggerLongPress = false;
             return true;
         }
 
         @Override
         public boolean onSingleTapUp(MotionEvent e)
         {
-            if (mFocusView != null)
+            if (!mTriggerLongPress && mFocusView != null)
             {
                 mFocusView.setCircleXY(e.getX(), e.getY());
                 mFocusView.showFocus(true);

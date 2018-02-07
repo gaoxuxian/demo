@@ -7,10 +7,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
+import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -89,6 +91,7 @@ public class ARWishView extends View
         canvas.save();
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+
         paint.setColor(Color.WHITE);
         int start = CameraPercentUtil.WidthPxToPercent(2);
         RectF rectF = new RectF(start, start, mBitmap.getWidth() - start, mBitmap.getHeight() - start);
@@ -249,7 +252,6 @@ public class ARWishView extends View
         if (mDoingAnim) return;
 
         mUIEnable = false;
-        isShow = false;
         mDoingAnim = true;
         ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
         animator.setDuration(250);
@@ -285,6 +287,7 @@ public class ARWishView extends View
             public void onAnimationEnd(Animator animation)
             {
                 mUIEnable = true;
+                isShow = false;
                 mDoingAnim = false;
             }
         });
@@ -306,15 +309,17 @@ public class ARWishView extends View
                         {
                             mCanNarrow = true;
                         }
+                        return true;
                     }
                     else
                     {
                         if (mShowRectF != null && mShowRectF.contains(event.getX(), event.getY()))
                         {
                             mCanShow = true;
+                            return true;
                         }
+                        return false;
                     }
-                    break;
                 }
 
                 case MotionEvent.ACTION_UP:
@@ -335,11 +340,9 @@ public class ARWishView extends View
                     }
                     mCanShow = false;
                     mCanNarrow = false;
-                    break;
+                    return false;
                 }
             }
-
-            return true;
         }
         return super.onTouchEvent(event);
     }
@@ -354,14 +357,33 @@ public class ARWishView extends View
 
         canvas.drawCircle(mCircleX, mCircleY, mRadius, mPaint);
 
-        if (isShow)
+        if (!mDoingAnim)
         {
-            mMatrix.reset();
-            int packupBmpWH = CameraPercentUtil.WidthPxToPercent(80);
-            float scale = packupBmpWH *1f / mPackupBmp.getWidth();
-            mMatrix.postScale(scale, scale);
-            mMatrix.postTranslate((getMeasuredWidth() - packupBmpWH)/2f, CameraPercentUtil.WidthPxToPercent(140));
-            canvas.drawBitmap(mPackupBmp, mMatrix, mPackupPaint);
+            if (isShow)
+            {
+                mMatrix.reset();
+                int packupBmpWH = CameraPercentUtil.WidthPxToPercent(80);
+                float scale = packupBmpWH *1f / mPackupBmp.getWidth();
+                mPackupPaint.reset();
+                mPackupPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+                mMatrix.postScale(scale, scale);
+                mMatrix.postTranslate((getMeasuredWidth() - packupBmpWH)/2f, CameraPercentUtil.WidthPxToPercent(140));
+                canvas.drawBitmap(mPackupBmp, mMatrix, mPackupPaint);
+            }
+            else
+            {
+                mPackupPaint.reset();
+                mPackupPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+                String text = "点击查看大图";
+                mPackupPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 13, getResources().getDisplayMetrics()));
+                mPackupPaint.setColor(Color.WHITE);
+                Paint.FontMetrics fontMetrics = mPackupPaint.getFontMetrics();
+                Rect rect = new Rect();
+                mPackupPaint.getTextBounds(text, 0, text.length(), rect);
+                float x = (getMeasuredWidth() - rect.width()) /2f;
+                float y = CameraPercentUtil.WidthPxToPercent(132 + 120 + 14) - fontMetrics.ascent;
+                canvas.drawText(text, x, y, mPackupPaint);
+            }
         }
 
         canvas.restore();

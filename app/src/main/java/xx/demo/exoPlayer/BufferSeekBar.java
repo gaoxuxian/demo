@@ -1,4 +1,4 @@
-package xx.demo.view;
+package xx.demo.exoPlayer;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -250,7 +250,12 @@ public class BufferSeekBar extends View
         mPaint.setColor(mBgColor);
 
         float progress_len = mViewW - mRadius * 2f;
-        mProgress = getPercent();
+        if (!mDown)
+        {
+            mProgress = getPercent();
+        }
+
+        mBufferProgress = getBufferPercent();
 
         float start_x = mRadius;
         float end_x = mViewW - mRadius;
@@ -274,7 +279,7 @@ public class BufferSeekBar extends View
     {
         float out = 0;
 
-        if (mPlayer != null)
+        if (mPlayer != null && mDuration != 0)
         {
             Timeline currentTimeline = mPlayer.getCurrentTimeline();
             int size = currentTimeline.getWindowCount();
@@ -290,11 +295,20 @@ public class BufferSeekBar extends View
                 }
                 time = C.usToMs(time);
                 time += mPlayer.getCurrentPosition();
-                if (mDuration != 0)
-                {
-                    out = time * 1f / mDuration;
-                }
+                out = time * 1f / mDuration;
             }
+        }
+
+        return out;
+    }
+
+    private float getBufferPercent()
+    {
+        float out = 1;
+
+        if (mPlayer != null && mBufferProgress < 1f)
+        {
+            out = mPlayer.getBufferedPercentage() * 1f /100f;
         }
 
         return out;

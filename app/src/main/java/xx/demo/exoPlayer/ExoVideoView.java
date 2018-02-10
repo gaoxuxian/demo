@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
@@ -22,35 +23,58 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
 import xx.demo.util.CameraPercentUtil;
-import xx.demo.view.BufferSeekBar;
 
 /**
- * Created by admin on 2018/2/7.
+ * 基于 ExoPlayer 封装的 VideoView
+ * Created by Gxx on 2018/2/7.
  */
 
-public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoListener, Player.EventListener
+public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoListener, Player.EventListener, BufferSeekBar.OnSeekBarChangeListener
 {
     private AspectRatioFrameLayout mContentFrame;
     private View mSurfaceView;
     private BufferSeekBar mSeekBar;
 
     private SimpleExoPlayer mPlayer;
-    private Player.EventListener componentListener;
+    private Timeline.Window mExoWindow;
+    private ExoController mController;
+
+    private long mDuration;
     private String TAG = "ExoVideoView";
 
     public ExoVideoView(@NonNull Context context)
     {
         super(context);
-        initCB();
-        init(context);
+
+        init();
+        initUI(context);
     }
 
-    private void initCB()
+    private void init()
     {
+        mController = new ExoController()
+        {
+            @Override
+            SimpleExoPlayer getExoPlayer()
+            {
+                return mPlayer;
+            }
 
+            @Override
+            Timeline.Window getExoWindow()
+            {
+                return mExoWindow;
+            }
+
+            @Override
+            public long getDuration()
+            {
+                return mDuration;
+            }
+        };
     }
 
-    private void init(Context context)
+    private void initUI(Context context)
     {
         mContentFrame = new AspectRatioFrameLayout(context);
         mContentFrame.setAspectRatio(1);
@@ -60,6 +84,7 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
         addView(mContentFrame, params);
 
         mSeekBar = new BufferSeekBar(context);
+        mSeekBar.setOnSeekBarChangeListener(this);
         mSeekBar.setColor(ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.2f)), Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.6f)));
         mSeekBar.setPointParams(CameraPercentUtil.WidthPxToPercent(10), Color.WHITE);
         mSeekBar.setProgressWidth(CameraPercentUtil.WidthPxToPercent(2));
@@ -81,6 +106,8 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
 
     public void setDuration(long duration)
     {
+        mDuration = duration;
+
         if (mSeekBar != null)
         {
             mSeekBar.setDuration(duration);
@@ -96,6 +123,11 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
         mPlayer = player;
         if (mPlayer != null)
         {
+            if (mExoWindow == null)
+            {
+                mExoWindow = new Timeline.Window();
+            }
+
             player.removeListener(this);
             player.removeVideoListener(this);
             if (mSurfaceView != null)
@@ -128,11 +160,52 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
         }
     }
 
+    public void pause()
+    {
+        if (mController != null)
+        {
+            mController.pause();
+        }
+    }
+
+    public void resume()
+    {
+        if (mController != null)
+        {
+            mController.resume();
+        }
+    }
+
+    public void release()
+    {
+        if (mPlayer != null)
+        {
+            mPlayer.release();
+        }
+    }
+
+    public void start()
+    {
+        resume();
+    }
+
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio)
     {
         Log.d(TAG, "ExoVideoView --> onVideoSizeChanged: ");
-        mContentFrame.setAspectRatio(width *1f/ height);
+        mContentFrame.setAspectRatio(width * 1f / height);
+        if (mDuration == 0)
+        {
+            Timeline currentTimeline = mPlayer.getCurrentTimeline();
+            int window_size = currentTimeline.getWindowCount();
+            long duration = 0;
+            for (int i = 0; i < window_size; i++)
+            {
+                currentTimeline.getWindow(i, mExoWindow);
+                duration += C.usToMs(mExoWindow.durationUs);
+            }
+            setDuration(duration);
+        }
     }
 
     @Override
@@ -156,13 +229,39 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
     @Override
     public void onLoadingChanged(boolean isLoading)
     {
-        Log.d(TAG, "ExoVideoView --> onLoadingChanged: ");
+        Log.d(TAG, "ExoVideoView --> onLoadingChanged: isLoading == "+isLoading);
     }
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState)
     {
         Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: ");
+        switch (playbackState)
+        {
+            case Player.STATE_IDLE:
+            {
+                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 空闲");
+                break;
+            }
+
+            case Player.STATE_BUFFERING:
+            {
+                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 正在缓冲");
+                break;
+            }
+
+            case Player.STATE_READY:
+            {
+                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 准备就绪");
+                break;
+            }
+
+            case Player.STATE_ENDED:
+            {
+                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 结束");
+                break;
+            }
+        }
     }
 
     @Override
@@ -199,5 +298,27 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
     public void onSeekProcessed()
     {
         Log.d(TAG, "ExoVideoView --> onSeekProcessed: ");
+    }
+
+    @Override
+    public void onStartTrackingTouch(float percent)
+    {
+        pause();
+    }
+
+    @Override
+    public void onProgressChanged(float percent)
+    {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(float percent)
+    {
+        if (mController != null)
+        {
+            mController.seekTo(percent);
+            mController.resume();
+        }
     }
 }

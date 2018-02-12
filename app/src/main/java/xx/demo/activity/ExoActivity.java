@@ -11,14 +11,11 @@ import android.widget.FrameLayout;
 
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 
 import java.io.File;
 
-import xx.demo.exoPlayer.CacheDataSourceFactory;
 import xx.demo.exoPlayer.ExoVideoView;
 import xx.demo.util.ExoPlayerUtil;
 import xx.demo.util.FileUtil;

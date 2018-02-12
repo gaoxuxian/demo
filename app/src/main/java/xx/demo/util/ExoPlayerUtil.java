@@ -12,9 +12,16 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.CacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 
-import xx.demo.exoPlayer.CacheDataSourceFactory;
+import java.io.File;
+
+//import xx.demo.exoPlayer.CacheDataSourceFactory;
 
 /**
  * Created by Gxx on 2018/2/10.
@@ -55,7 +62,11 @@ public class ExoPlayerUtil
      */
     public static MediaSource[] createMediaSourceInCache(Context context, String cache_dir, String...video_paths)
     {
-        CacheDataSourceFactory factory = new CacheDataSourceFactory(context, cache_dir, 100 * 1024 * 1024, 5 * 1024 * 1024);
+        CacheEvictor evictor = new LeastRecentlyUsedCacheEvictor(100 * 1024 * 1024);
+        SimpleCache cache = new SimpleCache(new File(cache_dir), evictor);
+        CacheDataSourceFactory factory = new CacheDataSourceFactory(cache,
+                new DefaultDataSourceFactory(context, Util.getUserAgent(context, context.getApplicationInfo().packageName)),
+                CacheDataSource.FLAG_BLOCK_ON_CACHE | CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
 
         ExtractorMediaSource.Factory mediaSourceFactory = new ExtractorMediaSource.Factory(factory);
         mediaSourceFactory.setExtractorsFactory(new DefaultExtractorsFactory());

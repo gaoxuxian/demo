@@ -4,13 +4,17 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.ColorUtils;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -34,6 +38,8 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
     private AspectRatioFrameLayout mContentFrame;
     private View mSurfaceView;
     private BufferSeekBar mSeekBar;
+    private WaitProgressView mWaitProgress;
+    private TextProgressView mTextProgress;
 
     private SimpleExoPlayer mPlayer;
     private Timeline.Window mExoWindow;
@@ -82,15 +88,56 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
         FrameLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.gravity = Gravity.CENTER;
         addView(mContentFrame, params);
+        {
+            mSeekBar = new BufferSeekBar(context);
+            mSeekBar.setOnSeekBarChangeListener(this);
+            mSeekBar.setColor(ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.2f)), Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.6f)));
+            mSeekBar.setPointParams(CameraPercentUtil.WidthPxToPercent(10), Color.WHITE);
+            mSeekBar.setProgressWidth(CameraPercentUtil.WidthPxToPercent(2));
+            params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CameraPercentUtil.WidthPxToPercent(100));
+            params.gravity = Gravity.CENTER;
+            mContentFrame.addView(mSeekBar, params);
 
-        mSeekBar = new BufferSeekBar(context);
-        mSeekBar.setOnSeekBarChangeListener(this);
-        mSeekBar.setColor(ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.2f)), Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.6f)));
-        mSeekBar.setPointParams(CameraPercentUtil.WidthPxToPercent(10), Color.WHITE);
-        mSeekBar.setProgressWidth(CameraPercentUtil.WidthPxToPercent(2));
-        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CameraPercentUtil.WidthPxToPercent(100));
-        params.gravity = Gravity.CENTER;
-        mContentFrame.addView(mSeekBar, params);
+            mWaitProgress = new WaitProgressView(context);
+            mWaitProgress.setProgressColor(ColorUtils.setAlphaComponent(Color.RED, (int) (255 * 0.5f)));
+            params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.CENTER;
+            mContentFrame.addView(mWaitProgress, params);
+
+//            mTextProgress = new TextProgressView(context);
+//            mTextProgress.setText("Loading...");
+//            mTextProgress.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+//            mTextProgress.setTextColor(ColorUtils.setAlphaComponent(Color.RED, (int) (255 * 0.5f)));
+//            mTextProgress.setGravity(Gravity.CENTER);
+//            mTextProgress.setProgressColor(ColorUtils.setAlphaComponent(Color.RED, (int) (255 * 0.5f)));
+//            params = new LayoutParams(CameraPercentUtil.WidthPxToPercent(150), CameraPercentUtil.WidthPxToPercent(150));
+//            params.gravity = Gravity.CENTER;
+//            mContentFrame.addView(mTextProgress, params);
+        }
+
+//        SpannableStringBuilder sbb = new SpannableStringBuilder(mTextProgress.getText());
+//        buildWavingSpans(sbb,mTextProgress);
+//        mTextProgress.setText(sbb);
+//        mTextProgress.show(true);
+
+    }
+
+    private JumpingSpan[] buildWavingSpans(SpannableStringBuilder sbb,TextView tv) {
+        JumpingSpan[] spans;
+        int loopDuration = 1500;
+        int startPos = 0;//textview字体的开始位置
+        int endPos = tv.getText().length();//结束位置
+        int waveCharDelay = loopDuration / (4 * (endPos - startPos));//每个字体延迟的时间
+
+
+        spans = new JumpingSpan[endPos - startPos];
+        for (int pos = startPos; pos < endPos; pos++) {//设置每个字体的jumpingspan
+            JumpingSpan jumpingBean =
+                    new JumpingSpan(tv, loopDuration, pos - startPos, waveCharDelay, 0.65f);
+            sbb.setSpan(jumpingBean, pos, pos + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spans[pos - startPos] = jumpingBean;
+        }
+        return spans;
     }
 
     public void setSurfaceView(View surfaceView)
@@ -240,18 +287,30 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
         {
             case Player.STATE_IDLE:
             {
+                if (mWaitProgress != null)
+                {
+                    mWaitProgress.show(false);
+                }
                 Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 空闲");
                 break;
             }
 
             case Player.STATE_BUFFERING:
             {
+                if (mWaitProgress != null)
+                {
+                    mWaitProgress.show(true);
+                }
                 Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 正在缓冲");
                 break;
             }
 
             case Player.STATE_READY:
             {
+                if (mWaitProgress != null)
+                {
+                    mWaitProgress.show(false);
+                }
                 Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 准备就绪");
                 break;
             }

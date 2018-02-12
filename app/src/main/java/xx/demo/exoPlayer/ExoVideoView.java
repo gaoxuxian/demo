@@ -7,7 +7,6 @@ import android.support.v4.graphics.ColorUtils;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.view.TextureView;
@@ -18,12 +17,9 @@ import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
 import xx.demo.util.CameraPercentUtil;
@@ -33,7 +29,7 @@ import xx.demo.util.CameraPercentUtil;
  * Created by Gxx on 2018/2/7.
  */
 
-public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoListener, Player.EventListener, BufferSeekBar.OnSeekBarChangeListener
+public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoListener, BufferSeekBar.OnSeekBarChangeListener
 {
     private AspectRatioFrameLayout mContentFrame;
     private View mSurfaceView;
@@ -47,6 +43,7 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
 
     private long mDuration;
     private String TAG = "ExoVideoView";
+    private Player.DefaultEventListener mCompatListener;
 
     public ExoVideoView(@NonNull Context context)
     {
@@ -78,6 +75,69 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
                 return mDuration;
             }
         };
+
+        mCompatListener = new Player.DefaultEventListener()
+        {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest)
+            {
+                Log.d(TAG, "ExoVideoView --> onTimelineChanged: ");
+            }
+
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState)
+            {
+                checkPlayerState(playbackState);
+            }
+
+            @Override
+            public void onPlayerError(ExoPlaybackException error)
+            {
+                Log.d(TAG, "ExoVideoView --> onPlayerError: ");
+            }
+        };
+    }
+
+    private void checkPlayerState(int playbackState)
+    {
+        switch (playbackState)
+        {
+            case Player.STATE_IDLE:
+            {
+                if (mWaitProgress != null)
+                {
+                    mWaitProgress.show(false);
+                }
+                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 空闲");
+                break;
+            }
+
+            case Player.STATE_BUFFERING:
+            {
+                if (mWaitProgress != null)
+                {
+                    mWaitProgress.show(true);
+                }
+                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 正在缓冲");
+                break;
+            }
+
+            case Player.STATE_READY:
+            {
+                if (mWaitProgress != null)
+                {
+                    mWaitProgress.show(false);
+                }
+                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 准备就绪");
+                break;
+            }
+
+            default:
+            {
+                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 结束");
+                break;
+            }
+        }
     }
 
     private void initUI(Context context)
@@ -172,7 +232,7 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
                 mExoWindow = new Timeline.Window();
             }
 
-            player.removeListener(this);
+            player.removeListener(mCompatListener);
             player.removeVideoListener(this);
             if (mSurfaceView != null)
             {
@@ -195,7 +255,7 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
                 player.setVideoSurfaceView((SurfaceView) mSurfaceView);
             }
             player.addVideoListener(this);
-            player.addListener(this);
+            player.addListener(mCompatListener);
 
             if (mSeekBar != null)
             {
@@ -236,7 +296,6 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio)
     {
-        Log.d(TAG, "ExoVideoView --> onVideoSizeChanged: ");
         mContentFrame.setAspectRatio(width * 1f / height);
         if (mDuration == 0)
         {
@@ -253,108 +312,7 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
     }
 
     @Override
-    public void onRenderedFirstFrame()
-    {
-        Log.d(TAG, "ExoVideoView --> onRenderedFirstFrame: ");
-    }
-
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest)
-    {
-        Log.d(TAG, "ExoVideoView --> onTimelineChanged: ");
-    }
-
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections)
-    {
-        Log.d(TAG, "ExoVideoView --> onTracksChanged: ");
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading)
-    {
-        Log.d(TAG, "ExoVideoView --> onLoadingChanged: isLoading == " + isLoading);
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState)
-    {
-        Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: ");
-        switch (playbackState)
-        {
-            case Player.STATE_IDLE:
-            {
-                if (mWaitProgress != null)
-                {
-                    mWaitProgress.show(false);
-                }
-                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 空闲");
-                break;
-            }
-
-            case Player.STATE_BUFFERING:
-            {
-                if (mWaitProgress != null)
-                {
-                    mWaitProgress.show(true);
-                }
-                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 正在缓冲");
-                break;
-            }
-
-            case Player.STATE_READY:
-            {
-                if (mWaitProgress != null)
-                {
-                    mWaitProgress.show(false);
-                }
-                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 准备就绪");
-                break;
-            }
-
-            case Player.STATE_ENDED:
-            {
-                Log.d(TAG, "ExoVideoView --> onPlayerStateChanged: 结束");
-                break;
-            }
-        }
-    }
-
-    @Override
-    public void onRepeatModeChanged(int repeatMode)
-    {
-        Log.d(TAG, "ExoVideoView --> onRepeatModeChanged: ");
-    }
-
-    @Override
-    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled)
-    {
-        Log.d(TAG, "ExoVideoView --> onShuffleModeEnabledChanged: ");
-    }
-
-    @Override
-    public void onPlayerError(ExoPlaybackException error)
-    {
-        Log.d(TAG, "ExoVideoView --> onPlayerError: ");
-    }
-
-    @Override
-    public void onPositionDiscontinuity(int reason)
-    {
-        Log.d(TAG, "ExoVideoView --> onPositionDiscontinuity: ");
-    }
-
-    @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters)
-    {
-        Log.d(TAG, "ExoVideoView --> onPlaybackParametersChanged: ");
-    }
-
-    @Override
-    public void onSeekProcessed()
-    {
-        Log.d(TAG, "ExoVideoView --> onSeekProcessed: ");
-    }
+    public void onRenderedFirstFrame() {}
 
     @Override
     public void onStartTrackingTouch(float percent)
@@ -363,10 +321,7 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
     }
 
     @Override
-    public void onProgressChanged(float percent)
-    {
-
-    }
+    public void onProgressChanged(float percent) {}
 
     @Override
     public void onStopTrackingTouch(float percent)

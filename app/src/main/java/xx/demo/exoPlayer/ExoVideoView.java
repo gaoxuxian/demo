@@ -99,6 +99,7 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
             mContentFrame.addView(mSeekBar, params);
 
             mWaitProgress = new WaitProgressView(context);
+            mWaitProgress.setPeriodDuration(1000);
             mWaitProgress.setProgressColor(ColorUtils.setAlphaComponent(Color.RED, (int) (255 * 0.5f)));
             params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.CENTER;
@@ -119,25 +120,21 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
 //        buildWavingSpans(sbb,mTextProgress);
 //        mTextProgress.setText(sbb);
 //        mTextProgress.show(true);
-
     }
 
-    private JumpingSpan[] buildWavingSpans(SpannableStringBuilder sbb,TextView tv) {
-        JumpingSpan[] spans;
+    private void buildWavingSpans(SpannableStringBuilder sbb, TextView tv)
+    {
         int loopDuration = 1500;
         int startPos = 0;//textview字体的开始位置
         int endPos = tv.getText().length();//结束位置
         int waveCharDelay = loopDuration / (4 * (endPos - startPos));//每个字体延迟的时间
 
-
-        spans = new JumpingSpan[endPos - startPos];
-        for (int pos = startPos; pos < endPos; pos++) {//设置每个字体的jumpingspan
-            JumpingSpan jumpingBean =
-                    new JumpingSpan(tv, loopDuration, pos - startPos, waveCharDelay, 0.65f);
+        for (int pos = startPos; pos < endPos; pos++)
+        {
+            //设置每个字体的jumpingspan
+            JumpingSpan jumpingBean = new JumpingSpan(tv, loopDuration, pos - startPos, waveCharDelay, 0.65f);
             sbb.setSpan(jumpingBean, pos, pos + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spans[pos - startPos] = jumpingBean;
         }
-        return spans;
     }
 
     public void setSurfaceView(View surfaceView)
@@ -276,7 +273,7 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
     @Override
     public void onLoadingChanged(boolean isLoading)
     {
-        Log.d(TAG, "ExoVideoView --> onLoadingChanged: isLoading == "+isLoading);
+        Log.d(TAG, "ExoVideoView --> onLoadingChanged: isLoading == " + isLoading);
     }
 
     @Override

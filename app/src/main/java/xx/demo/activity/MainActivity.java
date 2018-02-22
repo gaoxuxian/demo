@@ -50,8 +50,10 @@ public class MainActivity extends Activity
                 {
                     CLASS_NAME + ".ShutterActivity", "Shutter Activity"
                 },
+                {
+                    CLASS_NAME + ".CameraActivity", "Camera Activity"
+                },
         };
-
 
         mActivityArr = new ArrayList<>();
         {

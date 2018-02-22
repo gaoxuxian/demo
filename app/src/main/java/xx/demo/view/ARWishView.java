@@ -1,348 +1,279 @@
 package xx.demo.view;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
-import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.RadialGradient;
-import android.graphics.Rect;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.support.v4.graphics.ColorUtils;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
-import xx.demo.R;
 import xx.demo.util.CameraPercentUtil;
 import xx.demo.util.ShareData;
 
 /**
- * Created by admin on 2018/1/23.
+ *
+ * Created by Gxx on 2018/1/23.
  */
 
 public class ARWishView extends View
 {
+    private Matrix mMatrix;
     private Bitmap mBitmap;
-    private Bitmap mPackupBmp;
 
+    private int mPaintFlag;
+
+    private Paint mBmpPaint;
     private BitmapShader mBmpShader;
 
     private Paint mPaint;
-    private Paint mPackupPaint;
     private float mRadius;
+    private float mWhiteBGRadius;
 
-    private int mBmpOrgWH;
-    private int mBmpSmlWH;
+    private int mBigBmpWH;
+    private int mSmallBmpWH;
 
-    private int mBmpOrgLocal;
-    private int mBmpSmlLocal;
+    // bitmap circle params
+    private int mSmallBmpCircleRadius;
+
+    private int mViewW;
+    private int mViewH;
 
     private float mCircleX, mCircleY;
 
-    private boolean mUIEnable = true;
-    private boolean mDoingAnim;
-    private Matrix mMatrix;
-    private boolean isShow;
+    private RectF mRoundRect;
 
-    private RectF mRectF;
-    private RectF mShowRectF;
-    private boolean mCanNarrow;
-    private boolean mCanShow;
+    private final PorterDuffXfermode dst_atop_mode = new PorterDuffXfermode(PorterDuff.Mode.DST_ATOP);
+
+    private boolean mIsFangDa;
 
     public ARWishView(Context context)
     {
         super(context);
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-        mPackupPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
 
-        mBmpOrgWH = CameraPercentUtil.WidthPxToPercent(434);
-        mBmpSmlWH = CameraPercentUtil.WidthPxToPercent(118);
-
-        mBmpOrgLocal = CameraPercentUtil.WidthPxToPercent(140 + 80 + 50 + 90 + 217);
-        mBmpSmlLocal = CameraPercentUtil.WidthPxToPercent(100 + 32 + 60);
-
-        mPackupBmp = BitmapFactory.decodeResource(getResources(), R.drawable.ar_find_wish_pack);
-
+        mPaintFlag = Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG;
+        mPaint = new Paint(mPaintFlag);
+        mBmpPaint = new Paint(mPaintFlag);
         mMatrix = new Matrix();
+        mRoundRect = new RectF();
+
+        mViewH = ShareData.m_screenRealHeight;
+        mViewW = ShareData.m_screenRealWidth;
+        mBigBmpWH = CameraPercentUtil.WidthPxToPercent(434);
+        mSmallBmpWH = CameraPercentUtil.WidthPxToPercent(118);
+        mSmallBmpCircleRadius = CameraPercentUtil.WidthPxToPercent(60);
+
     }
-
-    public void setParams(Bitmap wish_logo, Bitmap tou_xiang, String local_msg, String user_name)
+    
+    public void setBitmap(Object bitmap)
     {
-        if (wish_logo == null || tou_xiang == null || local_msg == null || user_name == null) return;
-
-        Bitmap localBmp = BitmapFactory.decodeResource(getResources(), R.drawable.ar_find_wish_local);
-
-        // 宽高要比设计稿都大一点
-        int bitmapW = CameraPercentUtil.WidthPxToPercent(572);
-        int bitmapH = CameraPercentUtil.WidthPxToPercent(744);
-
-        mBitmap = Bitmap.createBitmap(bitmapW, bitmapH, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(mBitmap);
-
-        canvas.save();
-
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-
-        paint.setColor(Color.WHITE);
-        int start = CameraPercentUtil.WidthPxToPercent(2);
-        RectF rectF = new RectF(start, start, mBitmap.getWidth() - start, mBitmap.getHeight() - start);
-        canvas.drawRoundRect(rectF, CameraPercentUtil.WidthPxToPercent(30), CameraPercentUtil.WidthPxToPercent(30), paint);
-
-        // 上方圆
-        Matrix matrix = new Matrix();
-        float x = (mBitmap.getWidth() - CameraPercentUtil.WidthPxToPercent(434) * 1f) / 2f;
-        float y = CameraPercentUtil.WidthPxToPercent(92);
-        float scale = CameraPercentUtil.WidthPxToPercent(434) * 1f / wish_logo.getWidth();
-        matrix.postScale(scale, scale);
-        matrix.postTranslate(x, y);
-        canvas.drawBitmap(wish_logo, matrix, paint);
-
-        // 位置信息
-        String text = "超过十四个字后面就是省略号嗯额哦无";
-        int textSize = text.length();
-        if (textSize > 14)
+        if (bitmap == null) return;
+        
+        if (bitmap instanceof Integer)
         {
-            text = text.substring(0, 14) + "...";
+            mBitmap = BitmapFactory.decodeResource(getResources(), (int) bitmap);
         }
-        paint.reset();
-        paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-        paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()));
-        paint.setColor(0xff4c4c4c);
-        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
-        Rect textBound = new Rect();
-        paint.getTextBounds(text, 0, text.length(), textBound);
-        float textH = textBound.height();
-        float textW = paint.measureText(text);
-        x = (mBitmap.getWidth() - textW - CameraPercentUtil.WidthPxToPercent(38) * 1f) / 2f + CameraPercentUtil.WidthPxToPercent(38) * 1f;
-        y = CameraPercentUtil.WidthPxToPercent(92 + 434 + 36) - fontMetrics.top;
-        canvas.drawText(text, x, y, paint);
-
-        // 位置 logo
-        x -= CameraPercentUtil.WidthPxToPercent(38);
-        y = CameraPercentUtil.WidthPxToPercent(92 + 434 + 36) - (fontMetrics.top - fontMetrics.ascent);
-        matrix.reset();
-        scale = CameraPercentUtil.WidthPxToPercent(32) * 1f / localBmp.getWidth();
-        matrix.postScale(scale, scale);
-        matrix.postTranslate(x, y);
-        canvas.drawBitmap(localBmp, matrix, paint);
-
-        // 用户名称
-        text = "大猪佩奇有梦要想";
-        paint.reset();
-        paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-        paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, getResources().getDisplayMetrics()));
-        paint.setColor(0xff333333);
-        fontMetrics = paint.getFontMetrics();
-        textW = paint.measureText(text);
-        x = (mBitmap.getWidth() - textW - CameraPercentUtil.WidthPxToPercent(16 + 68) * 1f) / 2f + CameraPercentUtil.WidthPxToPercent(16 + 68);
-        y = CameraPercentUtil.WidthPxToPercent(92 + 434 + 36 + 44) + textH - fontMetrics.ascent;
-        canvas.drawText(text, x, y, paint);
-
-        // 用户头像 logo
-        BitmapShader shader = new BitmapShader(tou_xiang, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        matrix.reset();
-        scale = CameraPercentUtil.WidthPxToPercent(68) * 1f / tou_xiang.getWidth();
-        x -= CameraPercentUtil.WidthPxToPercent(16 + 68);
-        y = mBitmap.getHeight() - CameraPercentUtil.WidthPxToPercent(55 + 68 + 2);
-        matrix.postScale(scale, scale);
-        matrix.postTranslate(x, y);
-        shader.setLocalMatrix(matrix);
-        paint.reset();
-        paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-        paint.setShader(shader);
-        float radius = CameraPercentUtil.WidthPxToPercent(68) / 2f;
-        canvas.drawCircle(x + radius, y + radius, radius, paint);
-
-        canvas.restore();
-
-        mBmpShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        matrix.reset();
-        scale = CameraPercentUtil.WidthPxToPercent(118) * 1f / CameraPercentUtil.WidthPxToPercent(434);
-        float w = bitmapW * scale;
-        x = (ShareData.m_screenRealWidth * 1f - w) / 2f;
-        y = CameraPercentUtil.WidthPxToPercent(192) - CameraPercentUtil.WidthPxToPercent(92 + 217) * scale;
-        matrix.postScale(scale, scale);
-        matrix.postTranslate(x, y);
-        mBmpShader.setLocalMatrix(matrix);
-        mPaint.setShader(mBmpShader);
-
-        mRadius = CameraPercentUtil.WidthPxToPercent(217) * scale + CameraPercentUtil.WidthPxToPercent(3);
-
-        mCircleX = ShareData.m_screenRealWidth / 2f;
-        mCircleY = CameraPercentUtil.WidthPxToPercent(192);
-
-        invalidate();
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh)
-    {
-        super.onSizeChanged(w, h, oldw, oldh);
-
+        else if (bitmap instanceof String)
+        {
+            mBitmap = BitmapFactory.decodeFile((String) bitmap);
+        }
+        else if (bitmap instanceof Bitmap && !((Bitmap) bitmap).isRecycled())
+        {
+            mBitmap = (Bitmap) bitmap;
+        }
+        
         if (mBitmap != null)
         {
-            mRectF = new RectF();
-            mRectF.set((w - mBitmap.getWidth()) / 2f, (h - mBitmap.getHeight()) / 2f, (w + mBitmap.getWidth()) / 2f, (h + mBitmap.getHeight()) / 2f);
+            mBmpShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
 
-            mShowRectF = new RectF();
-            mShowRectF.set((w - CameraPercentUtil.WidthPxToPercent(120)) / 2f, CameraPercentUtil.WidthPxToPercent(132), (w + CameraPercentUtil.WidthPxToPercent(120)) / 2f, CameraPercentUtil.WidthPxToPercent(252));
+            float scale = mSmallBmpWH * 1f / mBitmap.getWidth();
+            float x = mViewW * 1f / 2f - mSmallBmpCircleRadius;
+            float y = CameraPercentUtil.WidthPxToPercent(100 + 32);
+            mMatrix.postScale(scale, scale);
+            mMatrix.postTranslate(x, y);
+            mBmpShader.setLocalMatrix(mMatrix);
+            mBmpPaint.setShader(mBmpShader);
+
+            mWhiteBGRadius = mSmallBmpCircleRadius;
+            mRoundRect.set(mViewW * 1f / 2f - mSmallBmpCircleRadius, CameraPercentUtil.WidthPxToPercent(100 + 32), mViewW * 1f / 2f + mSmallBmpCircleRadius, CameraPercentUtil.WidthPxToPercent(100 + 32 + 120));
+            mRadius = mWhiteBGRadius - CameraPercentUtil.WidthPxToPercent(2);
+
+            mCircleX = mViewW / 2f;
+            mCircleY = CameraPercentUtil.WidthPxToPercent(100 + 32 + 60);
         }
     }
 
-    public void zanding()
+    public void fangda()
     {
-        if (mDoingAnim || isShow) return;
+        mIsFangDa = true;
+        final float new_x = (mViewW - mBigBmpWH) / 2f;
+        final float new_y = CameraPercentUtil.WidthPxToPercent(240 + 122);
 
-        mUIEnable = false;
-        mDoingAnim = true;
-        ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-        animator.setDuration(250);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+        final float old_x = (mViewW - mSmallBmpWH) / 2f;
+        final float old_y = CameraPercentUtil.WidthPxToPercent(100 + 32);
+
+        final float old_scale = mSmallBmpWH * 1f / mBitmap.getWidth();
+        final float new_scale = mBigBmpWH * 1f / mBitmap.getWidth();
+
+        final float old_center_x = mViewW / 2f;
+        final float old_center_y = CameraPercentUtil.WidthPxToPercent(100 + 32 + 60);
+
+        final float new_center_x = mViewW / 2f;
+        final float new_center_y = CameraPercentUtil.WidthPxToPercent(240 + 122 + 217);
+
+        final float old_circle_radius = mSmallBmpWH * 1f / 2f;
+        final float new_circle_radius = mBigBmpWH * 1f / 2f;
+
+        final float old_white_bg_round_rect_radius = mSmallBmpCircleRadius;
+        final float new_white_bg_round_rect_radius = CameraPercentUtil.WidthPxToPercent(30);
+
+        final float old_left = mViewW * 1f / 2f - mSmallBmpCircleRadius;
+        final float old_right = mViewW * 1f / 2f + mSmallBmpCircleRadius;
+        final float old_top = CameraPercentUtil.WidthPxToPercent(100 + 32);
+        final float old_bottom = CameraPercentUtil.WidthPxToPercent(100 + 32 + 120);
+
+        final float new_left = (mViewW * 1f - CameraPercentUtil.WidthPxToPercent(568)) / 2f;
+        final float new_right = (mViewW * 1f + CameraPercentUtil.WidthPxToPercent(568)) / 2f;
+        final float new_top = CameraPercentUtil.WidthPxToPercent(240);
+        final float new_bottom = CameraPercentUtil.WidthPxToPercent(240 + 680);
+
+        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
             public void onAnimationUpdate(ValueAnimator animation)
             {
                 float value = (float) animation.getAnimatedValue();
+                float x = old_x + (new_x - old_x) * value;
+                float y = old_y + (new_y - old_y) * value;
+                float scale = old_scale + (new_scale - old_scale) * value;
 
-                mPaint.reset();
-                mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-                Matrix matrix = new Matrix();
-                float local = mBmpSmlLocal + (mBmpOrgLocal - mBmpSmlLocal) * value;
-                float w = mBmpSmlWH + (mBmpOrgWH - mBmpSmlWH) * value;
-                float scale = w * 1f / CameraPercentUtil.WidthPxToPercent(434);
-                float y = local - CameraPercentUtil.WidthPxToPercent(92 + 217) * scale;
-                float x = (ShareData.m_screenRealWidth * 1f - mBitmap.getWidth() * scale) / 2f;
-                matrix.postScale(scale, scale);
-                matrix.postTranslate(x, y);
+                mMatrix.reset();
+                mMatrix.postScale(scale, scale);
+                mMatrix.postTranslate(x, y);
+                mBmpShader.setLocalMatrix(mMatrix);
+                mBmpPaint.reset();
+                mBmpPaint.setFlags(mPaintFlag);
+                mBmpPaint.setShader(mBmpShader);
 
-                mBmpShader.setLocalMatrix(matrix);
-                mPaint.setShader(mBmpShader);
-                float start = CameraPercentUtil.WidthPxToPercent(217) * mBmpSmlWH * 1f / CameraPercentUtil.WidthPxToPercent(434) + CameraPercentUtil.WidthPxToPercent(3);
-                mRadius = start + (CameraPercentUtil.WidthPxToPercent(540) * 1f - start) * value;
-                mCircleY = local;
+                mRadius = old_circle_radius + (new_circle_radius - old_circle_radius) * value;
+                mCircleX = old_center_x + (new_center_x - old_center_x) * value;
+                mCircleY = old_center_y + (new_center_y - old_center_y) * value;
+
+                float left = old_left + (new_left - old_left) * value;
+                float right = old_right + (new_right - old_right) * value;
+                float top = old_top + ((new_top - old_top) * value);
+                float bottom = old_bottom + (new_bottom - old_bottom) * value;
+                mRoundRect.set(left, top, right, bottom);
+
+                mWhiteBGRadius = old_white_bg_round_rect_radius + (new_white_bg_round_rect_radius - old_white_bg_round_rect_radius) * value;
+
                 invalidate();
             }
         });
-
-        animator.addListener(new AnimatorListenerAdapter()
-        {
-            @Override
-            public void onAnimationEnd(Animator animation)
-            {
-                mUIEnable = true;
-                mDoingAnim = false;
-                isShow = true;
-                invalidate();
-            }
-        });
-        animator.start();
+        anim.setDuration(400);
+        anim.start();
     }
 
-    public void narrow()
+    public void suoxiao()
     {
-        if (mDoingAnim) return;
+        mIsFangDa = false;
+        final float new_x = (mViewW - mSmallBmpWH) / 2f;
+        final float new_y = CameraPercentUtil.WidthPxToPercent(100 + 32);
 
-        mUIEnable = false;
-        mDoingAnim = true;
-        ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-        animator.setDuration(250);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+        final float old_x = (mViewW - mBigBmpWH) / 2f;
+        final float old_y = CameraPercentUtil.WidthPxToPercent(240 + 122);
+
+        final float new_scale = mSmallBmpWH * 1f / mBitmap.getWidth();
+        final float old_scale = mBigBmpWH * 1f / mBitmap.getWidth();
+
+        final float old_center_x = mViewW / 2f;
+        final float old_center_y = CameraPercentUtil.WidthPxToPercent(240 + 122 + 217);
+
+        final float new_center_x = mViewW / 2f;
+        final float new_center_y = CameraPercentUtil.WidthPxToPercent(100 + 32 + 60);
+
+        final float old_circle_radius = mBigBmpWH * 1f / 2f;
+        final float new_circle_radius = mSmallBmpWH * 1f / 2f;
+
+        final float new_white_bg_round_rect_radius = mSmallBmpCircleRadius;
+        final float old_white_bg_round_rect_radius = CameraPercentUtil.WidthPxToPercent(30);
+
+        final float new_left = mViewW * 1f / 2f - mSmallBmpCircleRadius;
+        final float new_right = mViewW * 1f / 2f + mSmallBmpCircleRadius;
+        final float new_top = CameraPercentUtil.WidthPxToPercent(100 + 32);
+        final float new_bottom = CameraPercentUtil.WidthPxToPercent(100 + 32 + 120);
+
+        final float old_left = (mViewW * 1f - CameraPercentUtil.WidthPxToPercent(568)) / 2f;
+        final float old_right = (mViewW * 1f + CameraPercentUtil.WidthPxToPercent(568)) / 2f;
+        final float old_top = CameraPercentUtil.WidthPxToPercent(240);
+        final float old_bottom = CameraPercentUtil.WidthPxToPercent(240 + 680);
+
+        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
             public void onAnimationUpdate(ValueAnimator animation)
             {
                 float value = (float) animation.getAnimatedValue();
+                float x = old_x + (new_x - old_x) * value;
+                float y = old_y + (new_y - old_y) * value;
+                float scale = old_scale + (new_scale - old_scale) * value;
 
-                mPaint.reset();
-                mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-                Matrix matrix = new Matrix();
-                float local = mBmpOrgLocal + (mBmpSmlLocal - mBmpOrgLocal) * value;
-                float w = mBmpOrgWH + (mBmpSmlWH - mBmpOrgWH) * value;
-                float scale = w * 1f / CameraPercentUtil.WidthPxToPercent(434);
-                float y = local - CameraPercentUtil.WidthPxToPercent(92 + 217) * scale;
-                float x = (ShareData.m_screenRealWidth * 1f - mBitmap.getWidth() * scale) / 2f;
-                matrix.postScale(scale, scale);
-                matrix.postTranslate(x, y);
+                mMatrix.reset();
+                mMatrix.postScale(scale, scale);
+                mMatrix.postTranslate(x, y);
+                mBmpShader.setLocalMatrix(mMatrix);
+                mBmpPaint.reset();
+                mBmpPaint.setFlags(mPaintFlag);
+                mBmpPaint.setShader(mBmpShader);
 
-                mBmpShader.setLocalMatrix(matrix);
-                mPaint.setShader(mBmpShader);
-                float start = CameraPercentUtil.WidthPxToPercent(540);
-                mRadius = start + (CameraPercentUtil.WidthPxToPercent(217) * scale + CameraPercentUtil.WidthPxToPercent(3) * 1f - start) * value;
-                mCircleY = local;
+                mRadius = old_circle_radius + (new_circle_radius - old_circle_radius) * value;
+                mCircleX = old_center_x + (new_center_x - old_center_x) * value;
+                mCircleY = old_center_y + (new_center_y - old_center_y) * value;
+
+                float left = old_left + (new_left - old_left) * value;
+                float right = old_right + (new_right - old_right) * value;
+                float top = old_top + ((new_top - old_top) * value);
+                float bottom = old_bottom + (new_bottom - old_bottom) * value;
+                mRoundRect.set(left, top, right, bottom);
+
+                mWhiteBGRadius = old_white_bg_round_rect_radius + (new_white_bg_round_rect_radius - old_white_bg_round_rect_radius) * value;
+
                 invalidate();
             }
         });
-        animator.addListener(new AnimatorListenerAdapter()
-        {
-            @Override
-            public void onAnimationEnd(Animator animation)
-            {
-                mUIEnable = true;
-                isShow = false;
-                mDoingAnim = false;
-            }
-        });
-        animator.start();
+        anim.setDuration(400);
+        anim.start();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        if (mUIEnable)
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
         {
-            switch (event.getAction())
+            return true;
+        }
+        if (event.getAction() == MotionEvent.ACTION_UP)
+        {
+            if (mIsFangDa)
             {
-                case MotionEvent.ACTION_DOWN:
-                {
-                    if (isShow)
-                    {
-                        if (mRectF != null && !mRectF.contains(event.getX(), event.getY()))
-                        {
-                            mCanNarrow = true;
-                        }
-                        return true;
-                    }
-                    else
-                    {
-                        if (mShowRectF != null && mShowRectF.contains(event.getX(), event.getY()))
-                        {
-                            mCanShow = true;
-                            return true;
-                        }
-                        return false;
-                    }
-                }
-
-                case MotionEvent.ACTION_UP:
-                {
-                    if (isShow)
-                    {
-                        if (mCanNarrow && mRectF != null && !mRectF.contains(event.getX(), event.getY()))
-                        {
-                            narrow();
-                        }
-                    }
-                    else
-                    {
-                        if (mCanShow && mShowRectF != null && mShowRectF.contains(event.getX(), event.getY()))
-                        {
-                            zanding();
-                        }
-                    }
-                    mCanShow = false;
-                    mCanNarrow = false;
-                    return false;
-                }
+                suoxiao();
             }
+            else
+            {
+                fangda();
+            }
+            return true;
         }
         return super.onTouchEvent(event);
     }
@@ -354,38 +285,21 @@ public class ARWishView extends View
 
         canvas.save();
         canvas.drawColor(ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.5f)));
-
-        canvas.drawCircle(mCircleX, mCircleY, mRadius, mPaint);
-
-        if (!mDoingAnim)
-        {
-            if (isShow)
-            {
-                mMatrix.reset();
-                int packupBmpWH = CameraPercentUtil.WidthPxToPercent(80);
-                float scale = packupBmpWH *1f / mPackupBmp.getWidth();
-                mPackupPaint.reset();
-                mPackupPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-                mMatrix.postScale(scale, scale);
-                mMatrix.postTranslate((getMeasuredWidth() - packupBmpWH)/2f, CameraPercentUtil.WidthPxToPercent(140));
-                canvas.drawBitmap(mPackupBmp, mMatrix, mPackupPaint);
-            }
-            else
-            {
-                mPackupPaint.reset();
-                mPackupPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-                String text = "点击查看大图";
-                mPackupPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 13, getResources().getDisplayMetrics()));
-                mPackupPaint.setColor(Color.WHITE);
-                Paint.FontMetrics fontMetrics = mPackupPaint.getFontMetrics();
-                Rect rect = new Rect();
-                mPackupPaint.getTextBounds(text, 0, text.length(), rect);
-                float x = (getMeasuredWidth() - rect.width()) /2f;
-                float y = CameraPercentUtil.WidthPxToPercent(132 + 120 + 14) - fontMetrics.ascent;
-                canvas.drawText(text, x, y, mPackupPaint);
-            }
-        }
-
         canvas.restore();
+
+        if (mBitmap != null)
+        {
+            int save = canvas.saveLayer(null, null, Canvas.ALL_SAVE_FLAG);
+
+            canvas.drawCircle(mCircleX, mCircleY, mRadius, mBmpPaint);
+
+            mPaint.reset();
+            mPaint.setFlags(mPaintFlag);
+            mPaint.setColor(Color.WHITE);
+            mPaint.setXfermode(dst_atop_mode);
+            canvas.drawRoundRect(mRoundRect, mWhiteBGRadius, mWhiteBGRadius, mPaint);
+
+            canvas.restoreToCount(save);
+        }
     }
 }

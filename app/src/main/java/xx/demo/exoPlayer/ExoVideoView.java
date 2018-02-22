@@ -35,7 +35,6 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
     private View mSurfaceView;
     private BufferSeekBar mSeekBar;
     private WaitProgressView mWaitProgress;
-    private TextProgressView mTextProgress;
 
     private SimpleExoPlayer mPlayer;
     private Timeline.Window mExoWindow;

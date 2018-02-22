@@ -24,8 +24,8 @@ public class FocusView extends View
     private int mPaintFlags;
 
 //     view params
-//    private int mViewWH;
-//    private int mViewDefWH;
+    private int mViewWH;
+    private int mViewDefWH;
 
     // circle params
     private float mCircleX;
@@ -54,7 +54,7 @@ public class FocusView extends View
 
     private void initDefParams()
     {
-//        mViewDefWH = CameraPercentUtil.WidthPxToPercent(110);
+        mViewDefWH = CameraPercentUtil.WidthPxToPercent(110);
         mRadius = CameraPercentUtil.WidthPxToPercent(110) /2f;
         mStrokeWidth = CameraPercentUtil.WidthPxToPercent(2);
         mStrokeColor = 0xfff8f09a;
@@ -72,45 +72,38 @@ public class FocusView extends View
 
     public void setCircleParams(float radius, int strokeWidth)
     {
-//        mViewDefWH = (int) ((radius + strokeWidth) * 2 + 0.5f);
+        mViewDefWH = (int) ((radius + strokeWidth) * 2 + 0.5f);
         mRadius = radius;
         mStrokeWidth = strokeWidth;
-//        requestLayout();
+        requestLayout();
     }
 
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-//    {
-//        int with_mode = MeasureSpec.getMode(widthMeasureSpec);
-//        int with_size = MeasureSpec.getSize(widthMeasureSpec);
-//
-//        int height_mode = MeasureSpec.getMode(heightMeasureSpec);
-//        int height_size = MeasureSpec.getSize(heightMeasureSpec);
-//
-//        setMeasuredDimension(getMeasureSize(with_mode, with_size), getMeasureSize(height_mode, height_size));
-//    }
-//
-//    protected int getMeasureSize(int mode, int size)
-//    {
-//        int result = size + mStrokeWidth * 2;
-//
-//        if (mode == MeasureSpec.AT_MOST)
-//        {
-//            result = (mViewDefWH + mStrokeWidth * 2) > size ? size : (mViewDefWH + mStrokeWidth * 2);
-//        }
-//
-//        return result;
-//    }
-//
-//    @Override
-//    protected void onSizeChanged(int w, int h, int oldw, int oldh)
-//    {
-//        super.onSizeChanged(w, h, oldw, oldh);
-//        mViewWH = w;
-//        mRadius = (mViewWH - mStrokeWidth * 2) / 2f;
-//        setPivotX(mViewWH / 2f);
-//        setPivotY(mViewWH / 2f);
-//    }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    {
+        int with_mode = MeasureSpec.getMode(widthMeasureSpec);
+        int with_size = MeasureSpec.getSize(widthMeasureSpec);
+
+        int height_mode = MeasureSpec.getMode(heightMeasureSpec);
+        int height_size = MeasureSpec.getSize(heightMeasureSpec);
+
+        setMeasuredDimension(getMeasureSize(with_mode, with_size), getMeasureSize(height_mode, height_size));
+    }
+
+    protected int getMeasureSize(int mode, int size)
+    {
+        return mViewDefWH + mStrokeWidth * 2;
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh)
+    {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mViewWH = w;
+        mRadius = (mViewWH - mStrokeWidth * 2) / 2f;
+        setPivotX(mViewWH / 2f);
+        setPivotY(mViewWH / 2f);
+    }
 
     @Override
     protected void onDraw(Canvas canvas)

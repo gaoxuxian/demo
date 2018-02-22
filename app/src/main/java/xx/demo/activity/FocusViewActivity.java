@@ -28,7 +28,6 @@ public class FocusViewActivity extends Activity
     {
         super.onCreate(savedInstanceState);
 
-        ShareData.InitData(this);
         initGesture(this);
 
         parent = new FrameLayout(this);
@@ -38,7 +37,7 @@ public class FocusViewActivity extends Activity
         setContentView(parent);
 
         mFocusView = new FocusView(this);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         parent.addView(mFocusView, params);
     }
 

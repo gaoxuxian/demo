@@ -27,7 +27,6 @@ public class ARActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        ShareData.InitData(this);
         initView();
     }
 

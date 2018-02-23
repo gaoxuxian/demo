@@ -163,16 +163,6 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
             params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.CENTER;
             mContentFrame.addView(mWaitProgress, params);
-
-//            mTextProgress = new TextProgressView(context);
-//            mTextProgress.setText("Loading...");
-//            mTextProgress.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-//            mTextProgress.setTextColor(ColorUtils.setAlphaComponent(Color.RED, (int) (255 * 0.5f)));
-//            mTextProgress.setGravity(Gravity.CENTER);
-//            mTextProgress.setProgressColor(ColorUtils.setAlphaComponent(Color.RED, (int) (255 * 0.5f)));
-//            params = new LayoutParams(CameraPercentUtil.WidthPxToPercent(150), CameraPercentUtil.WidthPxToPercent(150));
-//            params.gravity = Gravity.CENTER;
-//            mContentFrame.addView(mTextProgress, params);
         }
 
 //        SpannableStringBuilder sbb = new SpannableStringBuilder(mTextProgress.getText());

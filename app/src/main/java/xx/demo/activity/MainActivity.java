@@ -100,12 +100,12 @@ public class MainActivity extends Activity
         SimpleRcAdapter adapter = new SimpleRcAdapter(new Source()
         {
             @Override
-            public Object getSource(Object by)
+            public Object getSource(Object key)
             {
                 Object source = null;
                 if (mActivityArr != null)
                 {
-                    source = mActivityArr.get((int) by);
+                    source = mActivityArr.get((int) key);
                     if (source != null)
                     {
                         source = ((HashMap)source).get(TITLE);
@@ -233,12 +233,12 @@ public class MainActivity extends Activity
     public interface Source
     {
         /**
-         * 根据 something 找到 source
+         * 根据 key 找到 source
          *
-         * @param by something
+         * @param key 一般是 source 下标
          * @return source
          */
-        Object getSource(Object by);
+        Object getSource(Object key);
 
         int getSourceSize();
 

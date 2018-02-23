@@ -28,7 +28,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+            android:theme="@style/Theme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -37,26 +37,21 @@
         </activity>
         <activity
             android:name=".activity.ShutterActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+            android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
             android:name=".activity.ARActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+            android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
             android:name=".activity.ExoActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+            android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
             android:name=".activity.CameraActivity"
-            android:label="@string/title_activity_camera"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.FullScreen">
         </activity>
-        <activity
-            android:name=".activity.BaseActivity"
-            android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+
     </application>
 
 </manifest>

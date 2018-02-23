@@ -1,19 +1,24 @@
 package xx.demo.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-public abstract class BaseActivity extends AppCompatActivity
+public abstract class BaseActivity extends Activity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        initData();
         onCreateUI(this);
+    }
+
+    protected void initData()
+    {
+
     }
 
     public void onCreateUI(Context context)

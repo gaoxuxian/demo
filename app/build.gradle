@@ -26,4 +26,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'com.android.support:design:26.1.0'
+
+    //exoPlayer
+    compile 'com.google.android.exoplayer:exoplayer:2.6.1'
+    compile 'com.google.android.exoplayer:exoplayer-core:2.6.1'
+
+    // android video cache
+    compile 'com.danikula:videocache:2.7.0'
 }

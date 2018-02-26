@@ -29,13 +29,12 @@ import xx.demo.exoPlayer.WaitProgressView;
 import xx.demo.util.CameraPercentUtil;
 import xx.demo.util.ImageUtil;
 
-public class CameraActivity extends BaseActivity implements SurfaceHolder.Callback, Camera.PreviewCallback, View.OnClickListener
+public class CameraActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener
 {
     private SurfaceView mSurfaceView;
     private ImageView mSettingView;
     private RecyclerView mSettingPopView;
     private TextView mTakePicBtn;
-    private TextView mRecordBtn;
     private WaitProgressView mProgressView;
     private Camera mCamera;
     private String TAG = "xxx";
@@ -44,7 +43,6 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
     private boolean showFlash;
     private int cameraDegree = 90;
     private boolean isFront;
-    private boolean canStartRecord;
 
     @Override
     protected void initData()
@@ -84,20 +82,6 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         params.bottomMargin = CameraPercentUtil.WidthPxToPercent(100);
         params.rightMargin = CameraPercentUtil.WidthPxToPercent(200);
         parent.addView(mTakePicBtn, params);
-
-        mRecordBtn = new TextView(parent.getContext());
-        mRecordBtn.setBackgroundColor(Color.WHITE);
-        mRecordBtn.setOnClickListener(this);
-        mRecordBtn.setText("准备录制");
-        mRecordBtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        mRecordBtn.setTextColor(Color.BLACK);
-        mRecordBtn.setGravity(Gravity.CENTER);
-        mRecordBtn.setPadding(CameraPercentUtil.WidthPxToPercent(20), 0,CameraPercentUtil.WidthPxToPercent(20),0);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, CameraPercentUtil.WidthPxToPercent(100));
-        params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
-        params.bottomMargin = CameraPercentUtil.WidthPxToPercent(100);
-        params.leftMargin = CameraPercentUtil.WidthPxToPercent(200);
-        parent.addView(mRecordBtn, params);
 
         mProgressView = new WaitProgressView(parent.getContext());
         mProgressView.setProgressColor(Color.RED);
@@ -259,12 +243,6 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
     }
 
     @Override
-    public void onPreviewFrame(byte[] data, Camera camera)
-    {
-
-    }
-
-    @Override
     public void onClick(View v)
     {
         if (v == mSettingView)
@@ -282,9 +260,6 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         {
             if (mCamera != null)
             {
-                canStartRecord = false;
-                mRecordBtn.setText("准备录制");
-
                 mProgressView.show(true);
                 mCamera.takePicture(null, null, null, new Camera.PictureCallback()
                 {
@@ -320,18 +295,6 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
                     }
                 });
             }
-        }
-        else if (v == mRecordBtn)
-        {
-            if (!canStartRecord)
-            {
-
-                canStartRecord = true;
-                mRecordBtn.setText("开始录制");
-                return;
-            }
-
-
         }
     }
 

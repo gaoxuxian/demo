@@ -53,6 +53,12 @@ public class MainActivity extends Activity
                 {
                     CLASS_NAME + ".CameraActivity", "Camera Activity"
                 },
+                {
+                    CLASS_NAME + ".RecordActivity", "Record Activity"
+                },
+                {
+                    CLASS_NAME + ".JavaLockActivity", "Java Lock Activity"
+                },
         };
 
         mActivityArr = new ArrayList<>();

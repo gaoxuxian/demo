@@ -51,7 +51,15 @@
             android:name=".activity.CameraActivity"
             android:theme="@style/Theme.FullScreen">
         </activity>
-
+        <activity
+            android:name=".activity.RecordActivity"
+            android:theme="@style/Theme.FullScreen">
+        </activity>
+        <activity
+            android:name=".activity.JavaLockActivity"
+            android:label="@string/title_activity_java_lock"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

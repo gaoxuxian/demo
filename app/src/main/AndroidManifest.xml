@@ -18,6 +18,8 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
 
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -57,7 +59,14 @@
         </activity>
         <activity
             android:name=".activity.JavaLockActivity"
-            android:label="@string/title_activity_java_lock"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activity.GLES20Activity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activity.GLES20ActivityV2"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

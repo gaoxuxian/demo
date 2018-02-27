@@ -42,28 +42,34 @@ public class MainActivity extends Activity
     {
         String[][] EXAMPLES = new String[][]{
                 {
-                    CLASS_NAME + ".ARActivity", "AR Activity"
+                        CLASS_NAME + ".ARActivity", "AR Activity"
                 },
                 {
-                    CLASS_NAME + ".ExoActivity", "Exo Activity"
+                        CLASS_NAME + ".ExoActivity", "Exo Activity"
                 },
                 {
-                    CLASS_NAME + ".ShutterActivity", "Shutter Activity"
+                        CLASS_NAME + ".ShutterActivity", "Shutter Activity"
                 },
                 {
-                    CLASS_NAME + ".CameraActivity", "Camera Activity"
+                        CLASS_NAME + ".CameraActivity", "Camera Activity"
                 },
                 {
-                    CLASS_NAME + ".RecordActivity", "Record Activity"
+                        CLASS_NAME + ".RecordActivity", "Record Activity"
                 },
                 {
-                    CLASS_NAME + ".JavaLockActivity", "Java Lock Activity"
+                        CLASS_NAME + ".JavaLockActivity", "Java Lock Activity"
+                },
+                {
+                        CLASS_NAME + ".GLES20Activity", "OpenGL ES20 Base Activity (gl 简单使用)"
+                },
+                {
+                        CLASS_NAME + ".GLES20ActivityV2", "OpenGL ES20 Image Activity (用 gl 画图片)"
                 },
         };
 
         mActivityArr = new ArrayList<>();
         {
-            for (String[] example: EXAMPLES)
+            for (String[] example : EXAMPLES)
             {
                 HashMap<String, Object> map = new HashMap<>();
                 map.put(TITLE, example[1]);
@@ -114,7 +120,7 @@ public class MainActivity extends Activity
                     source = mActivityArr.get((int) key);
                     if (source != null)
                     {
-                        source = ((HashMap)source).get(TITLE);
+                        source = ((HashMap) source).get(TITLE);
                     }
                 }
                 return source;
@@ -135,7 +141,7 @@ public class MainActivity extends Activity
                     source = mActivityArr.get((int) source_key);
                     if (source != null)
                     {
-                        source = ((HashMap)source).get(CLASS_NAME_KEY);
+                        source = ((HashMap) source).get(CLASS_NAME_KEY);
                     }
                 }
 

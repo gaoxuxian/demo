@@ -47,11 +47,11 @@ public class RecordActivity extends BaseActivity implements SurfaceHolder.Callba
             if (mCamera != null)
             {
                 Camera.Parameters parameters = mCamera.getParameters();
-                int previewW = ShareData.m_screenHeight;
+                int previewW = ShareData.m_screenRealHeight;
                 int previewH = ShareData.m_screenRealWidth;
                 parameters.setPreviewSize(previewW, previewH);
-                mCamera.setDisplayOrientation(90);
                 mCamera.setParameters(parameters);
+                mCamera.setDisplayOrientation(90);
                 try
                 {
                     mCamera.setPreviewDisplay(mSurfaceView.getHolder());

@@ -42,11 +42,25 @@ import xx.demo.activity.BaseActivity;
  * <p>
  * https://blog.piasy.com/2017/10/06/Open-gl-es-android-2-part-3/
  * <p>
- * OpenGL ES20 在线文档
+ * OpenGL ES20 API 英文在线文档(需翻墙)
  * <p>
  * http://www.khronos.org/registry/OpenGL-Refpages/es2.0/
  * <p>
+ * OpenGL 英文教程(理解概念、方法参数比较不错)(需翻墙)
+ * <p>
  * http://blog.db-in.com/all-about-opengl-es-2-x-part-1/
+ * <p>
+ * 湖广午王 的博客 (有比较全面的 OpenGL ES20 的系列教程)
+ * <p>
+ * http://blog.csdn.net/junzia/article/list
+ * <p>
+ * GL ES 矩阵变换
+ * <p>
+ * http://blog.csdn.net/jamesshaoya/article/details/54342241
+ * <p>
+ * 着色器 基础知识
+ * <p>
+ * https://www.jianshu.com/p/eea423753fb0
  */
 public class GLES20Activity extends BaseActivity
 {
@@ -101,19 +115,20 @@ public class GLES20Activity extends BaseActivity
 
         private static final String FRAGMENT_SHADER =
                 "precision mediump float;\n"
+                        + "uniform vec4 vColor;\n"
                         + "void main() {\n"
-                        + " gl_FragColor = vec4(0.5, 0, 0, 1);\n"
+                        + " gl_FragColor = vColor;\n"
                         + "}";
 
-        private static final float[] VERTEX = {
-                0, 1, 0,
-                -0.5f, -1, 0,
-                1, -1, 0,
+        private static final float[] VERTEX = { // 相对于坐标而言，这个是 等腰直角三角形
+                1f, 1f, 0,
+                -1f, -1, 0,
+                1f, -1, 0,
         };
 
         private FloatBuffer mVertexBuffer;
         private float[] mMVPMatrix = new float[16]; // 数组大小 请看系统 api ( android.opengl.Matrix.perspectiveM() ) 实现
-        private int mUMVPMatrix;
+        private int mUMVPMatrix; // 如果不添加矩阵，由于手机 宽高并不是 1：1，所以 图像会变形
 
         public MyRender()
         {
@@ -124,7 +139,7 @@ public class GLES20Activity extends BaseActivity
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config)
         {
-            // FIXME: 2018/2/27 MyRender --> onSurfaceCreated 这一句暂时不理解原理或者意义
+            // 设置背景颜色 --> 黑色
             GLES20.glClearColor(0f, 0f, 0f, 0f);
 
             /**
@@ -148,6 +163,7 @@ public class GLES20Activity extends BaseActivity
 
             int vPosition = GLES20.glGetAttribLocation(mShaderProgram, "vPosition");
             mUMVPMatrix = GLES20.glGetUniformLocation(mShaderProgram, "uMVPMatrix");
+            int vColor = GLES20.glGetUniformLocation(mShaderProgram, "vColor");
             GLES20.glEnableVertexAttribArray(vPosition); // 我的理解：使索引对应的 c 对象 可被修改
             // 给画笔指定顶点位置数据
             /*
@@ -160,22 +176,21 @@ public class GLES20Activity extends BaseActivity
             (6) Buffer: java 层记录所有顶点数据的 缓冲区
              */
             GLES20.glVertexAttribPointer(vPosition, 3, GLES20.GL_FLOAT, false, 12, mVertexBuffer);
+            GLES20.glUniform4fv(vColor, 1, new float[]{0f, 0.5f, 0f, 1f}, 0);
         }
 
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height)
         {
-            // FIXME: 2018/2/27 MyRender --> onSurfaceChanged 这一句暂时不理解做法或意义
-            GLES20.glViewport(0, 0, width, height);
-
+            // 生成一个 透视投影 矩阵
             Matrix.perspectiveM(mMVPMatrix, 0, 45, width * 1f / height, 0.1f, 100f);
-            Matrix.translateM(mMVPMatrix, 0, 0, 0, -5f);
+            Matrix.translateM(mMVPMatrix, 0, 0, 0, -0.1f);
         }
 
         @Override
         public void onDrawFrame(GL10 gl)
         {
-            // FIXME: 2018/2/27 MyRender --> onDrawFrame 这一句暂时不理解做法或意义
+            // 清除 GL 的帧缓冲区(大概意思是：上一帧的数据?)
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
             // 修改矩阵状态

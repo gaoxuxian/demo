@@ -173,6 +173,11 @@ public class GLES20ActivityV2 extends BaseActivity
                 -1, 0.5625f, 0,
                 -1, -0.5625f, 0,
                 1, -0.5625f, 0,
+
+//                1, 0.5625f /2f, 0,
+//                -1, 0.5625f /2f, 0,
+//                -1, -0.5625f /2f, 0,
+//                1, -0.5625f /2f, 0,
         };
 
         private static final short[] VERTEX_INDEX = {0, 1, 2, 0, 2, 3};

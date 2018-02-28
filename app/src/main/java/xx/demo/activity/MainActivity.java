@@ -24,6 +24,8 @@ public class MainActivity extends Activity
     private static final String TITLE = "title";
     private static final String CLASS_NAME_KEY = "class_name";
     private static final String CLASS_NAME = "xx.demo.activity";
+    private static final String CLASS_PACKAGE_MEDIA = ".media";
+    private static final String CLASS_PACKAGE_VIEW = ".view";
 
     private ArrayList<HashMap<String, Object>> mActivityArr;
 
@@ -42,28 +44,28 @@ public class MainActivity extends Activity
     {
         String[][] EXAMPLES = new String[][]{
                 {
-                        CLASS_NAME + ".ARActivity", "AR Activity"
+                        CLASS_NAME + CLASS_PACKAGE_VIEW + ".ARActivity", "AR Activity"
                 },
                 {
-                        CLASS_NAME + ".ExoActivity", "Exo Activity"
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".ExoActivity", "Exo Activity"
                 },
                 {
-                        CLASS_NAME + ".ShutterActivity", "Shutter Activity"
+                        CLASS_NAME + CLASS_PACKAGE_VIEW + ".ShutterActivity", "Shutter Activity"
                 },
                 {
-                        CLASS_NAME + ".CameraActivity", "Camera Activity"
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".CameraActivity", "Camera Activity"
                 },
                 {
-                        CLASS_NAME + ".RecordActivity", "Record Activity"
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".RecordActivity", "Record Activity"
                 },
                 {
                         CLASS_NAME + ".JavaLockActivity", "Java Lock Activity"
                 },
                 {
-                        CLASS_NAME + ".GLES20Activity", "OpenGL ES20 Base Activity (gl 简单使用)"
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLES20Activity", "OpenGL ES20 Base Activity (gl 简单使用)"
                 },
                 {
-                        CLASS_NAME + ".GLES20ActivityV2", "OpenGL ES20 Image Activity (用 gl 画图片)"
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLES20ActivityV2", "OpenGL ES20 Image Activity (用 gl 画图片)"
                 },
         };
 

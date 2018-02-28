@@ -1,4 +1,4 @@
-package xx.demo.activity;
+package xx.demo.activity.view;
 
 import android.app.Activity;
 import android.os.Bundle;

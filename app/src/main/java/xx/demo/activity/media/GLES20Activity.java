@@ -1,4 +1,4 @@
-package xx.demo.activity;
+package xx.demo.activity.media;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -12,6 +12,8 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import xx.demo.activity.BaseActivity;
 
 /**
  * OpenGL ES20 基本使用 一个简单的三角形
@@ -43,8 +45,8 @@ import javax.microedition.khronos.opengles.GL10;
  * OpenGL ES20 在线文档
  * <p>
  * http://www.khronos.org/registry/OpenGL-Refpages/es2.0/
- *
- * http://bayonetta.github.io/ios/OpenGL_ES2.0_tutorial_1/
+ * <p>
+ * http://blog.db-in.com/all-about-opengl-es-2-x-part-1/
  */
 public class GLES20Activity extends BaseActivity
 {

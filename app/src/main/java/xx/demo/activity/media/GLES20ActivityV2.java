@@ -1,4 +1,4 @@
-package xx.demo.activity;
+package xx.demo.activity.media;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,6 +19,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import xx.demo.R;
+import xx.demo.activity.BaseActivity;
 
 /**
  * 用 gl surface view 简单绘制矩形、一张图片纹理

@@ -1,4 +1,4 @@
-package xx.demo.activity;
+package xx.demo.activity.media;
 
 import android.app.Activity;
 import android.content.Context;

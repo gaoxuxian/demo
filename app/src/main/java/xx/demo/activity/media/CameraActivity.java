@@ -1,4 +1,4 @@
-package xx.demo.activity;
+package xx.demo.activity.media;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -24,11 +24,15 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import xx.demo.R;
+import xx.demo.activity.BaseActivity;
 import xx.demo.camera.PopSettingItem;
 import xx.demo.exoPlayer.WaitProgressView;
 import xx.demo.util.CameraPercentUtil;
 import xx.demo.util.ImageUtil;
 
+/**
+ * 简单调用 系统 Camera 进行镜头预览，还能进行镜头的基本设置
+ */
 public class CameraActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener
 {
     private SurfaceView mSurfaceView;

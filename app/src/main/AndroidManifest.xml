@@ -38,23 +38,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ShutterActivity"
+            android:name=".activity.view.ShutterActivity"
             android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
-            android:name=".activity.ARActivity"
+            android:name=".activity.view.ARActivity"
             android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
-            android:name=".activity.ExoActivity"
+            android:name=".activity.media.ExoActivity"
             android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
-            android:name=".activity.CameraActivity"
+            android:name=".activity.media.CameraActivity"
             android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
-            android:name=".activity.RecordActivity"
+            android:name=".activity.media.RecordActivity"
             android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
@@ -62,11 +62,11 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".activity.GLES20Activity"
+            android:name=".activity.media.GLES20Activity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".activity.GLES20ActivityV2"
+            android:name=".activity.media.GLES20ActivityV2"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

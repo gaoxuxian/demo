@@ -1,4 +1,4 @@
-package xx.demo.activity;
+package xx.demo.activity.media;
 
 import android.hardware.Camera;
 import android.view.SurfaceHolder;
@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 
 import java.io.IOException;
 
+import xx.demo.activity.BaseActivity;
 import xx.demo.camera.MediaMuxerWrapper;
 import xx.demo.camera.MediaVideoEncoder;
 import xx.demo.util.ShareData;

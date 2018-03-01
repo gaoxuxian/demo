@@ -59,15 +59,15 @@
         </activity>
         <activity
             android:name=".activity.JavaLockActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
             android:name=".activity.media.GLES20Activity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
             android:name=".activity.media.GLES20ActivityV2"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.FullScreen">
         </activity>
     </application>
 

@@ -26,6 +26,8 @@ import xx.demo.util.ShareData;
  * 用 gl surface view 简单绘制矩形、一张图片纹理
  * <p>
  * 基础知识请查看 {@link GLES20Activity}
+ * <p>
+ * http://www.cnblogs.com/ghj1976/archive/2012/04/27/2473624.html
  */
 
 public class GLES20ActivityV2 extends BaseActivity

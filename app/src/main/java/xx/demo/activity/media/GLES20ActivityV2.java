@@ -193,40 +193,38 @@ public class GLES20ActivityV2 extends BaseActivity
             float sWH = w / (float) h;
             float sWidthHeight = width / (float) height;
 
-            Matrix.frustumM(mProjectMatrix, 0, -2f, 2f, -2f, 2f, 3, 5);
-
-//            if (width > height)
-//            {
-//                if (sWH > sWidthHeight)
-//                {
-//                    /**
-//                     * Matrix.frustumM(float[] m, int offset,
-//                     *                 float left, float right, float bottom, float top,
-//                     *                 float near, float far)
-//                     *
-//                     * 关于 透视投影 的 params 个人理解:
-//                     * float[] m: 接收矩阵数据的数组
-//                     * int offset: 从哪个下标开始写入数据
-//                     * float left、right、bottom、top:
-//                     */
-//                    Matrix.frustumM(mProjectMatrix, 0, -sWidthHeight * sWH, sWidthHeight * sWH, -1, 1, 3, 5);
-//                }
-//                else
-//                {
-//                    Matrix.frustumM(mProjectMatrix, 0, -sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 5);
-//                }
-//            }
-//            else
-//            {
-//                if (sWH > sWidthHeight)
-//                {
-//                    Matrix.frustumM(mProjectMatrix, 0, -1, 1, -1 / sWidthHeight * sWH, 1 / sWidthHeight * sWH, 3, 5);
-//                }
-//                else
-//                {
-//                    Matrix.frustumM(mProjectMatrix, 0, -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 5);
-//                }
-//            }
+            if (width > height)
+            {
+                if (sWH > sWidthHeight)
+                {
+                    /**
+                     * Matrix.frustumM(float[] m, int offset,
+                     *                 float left, float right, float bottom, float top,
+                     *                 float near, float far)
+                     *
+                     * 关于 透视投影 的 params 个人理解:
+                     * float[] m: 接收矩阵数据的数组
+                     * int offset: 从哪个下标开始写入数据
+                     * float left、right、bottom、top:
+                     */
+                    Matrix.frustumM(mProjectMatrix, 0, -sWidthHeight * sWH, sWidthHeight * sWH, -1, 1, 3, 5);
+                }
+                else
+                {
+                    Matrix.frustumM(mProjectMatrix, 0, -sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 5);
+                }
+            }
+            else
+            {
+                if (sWH > sWidthHeight)
+                {
+                    Matrix.frustumM(mProjectMatrix, 0, -1, 1, -1 / sWidthHeight * sWH, 1 / sWidthHeight * sWH, 3, 5);
+                }
+                else
+                {
+                    Matrix.frustumM(mProjectMatrix, 0, -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 5);
+                }
+            }
             //设置相机位置
             Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 3.0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
             //计算变换矩阵

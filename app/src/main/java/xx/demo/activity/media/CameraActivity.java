@@ -29,6 +29,7 @@ import xx.demo.camera.PopSettingItem;
 import xx.demo.exoPlayer.WaitProgressView;
 import xx.demo.util.CameraPercentUtil;
 import xx.demo.util.ImageUtil;
+import xx.demo.view.ShadowSeekBar;
 
 /**
  * 简单调用 系统 Camera 进行镜头预览，还能进行镜头的基本设置
@@ -40,6 +41,7 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
     private RecyclerView mSettingPopView;
     private TextView mTakePicBtn;
     private WaitProgressView mProgressView;
+    private ShadowSeekBar mSeekbar;
     private Camera mCamera;
     private String TAG = "xxx";
 
@@ -92,6 +94,11 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
         parent.addView(mProgressView, params);
+
+        mSeekbar = new ShadowSeekBar(parent.getContext());
+        params = new FrameLayout.LayoutParams(CameraPercentUtil.WidthPxToPercent(588), ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER;
+        parent.addView(mSeekbar, params);
 
         mSettingPopView = new RecyclerView(parent.getContext());
         mSettingPopView.setBackgroundColor(ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.4f)));

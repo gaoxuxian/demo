@@ -13,6 +13,18 @@ import xx.demo.util.CameraPercentUtil;
 /**
  * 四散阴影 seekbar
  * Created by Gxx on 2018/3/2.
+ * <p>
+ * 网上资料启发阴影绘制
+ * <p>
+ * https://www.cnblogs.com/irrienberith/p/3953358.html
+ * <p>
+ * bitmap 添加阴影
+ * <p>
+ * http://blog.csdn.net/harvic880925/article/details/51889104
+ * <p>
+ * 硬件加速相关资料
+ * <p>
+ * https://www.jianshu.com/p/9cd7097a4fcf
  */
 
 public class ShadowSeekBar extends View

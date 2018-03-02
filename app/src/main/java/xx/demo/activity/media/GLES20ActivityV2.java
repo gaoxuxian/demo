@@ -28,6 +28,14 @@ import xx.demo.util.ShareData;
  * 基础知识请查看 {@link GLES20Activity}
  * <p>
  * http://www.cnblogs.com/ghj1976/archive/2012/04/27/2473624.html
+ * <p>
+ * 小码哥_WS 大神(很多 ffmpeg、OpenGL 资料)
+ * <p>
+ * http://blog.csdn.net/king1425
+ * <p>
+ * 松阳 大神 (很多 c代码写的 着色器)
+ * <p>
+ * http://blog.csdn.net/fansongy/article/list?viewmode=contents
  */
 
 public class GLES20ActivityV2 extends BaseActivity

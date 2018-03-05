@@ -219,6 +219,9 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
 
             try
             {
+                Camera.Parameters parameters = mCamera.getParameters();
+                parameters.setPreviewSize(2160, 1080);
+                mCamera.setParameters(parameters);
                 mCamera.setPreviewDisplay(holder);
                 mCamera.startPreview();
             }

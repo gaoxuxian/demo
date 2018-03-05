@@ -1,11 +1,14 @@
 package xx.demo.activity.media;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -82,7 +85,7 @@ public class GLES20Activity extends BaseActivity
         // gl surface view 基本设置
         mGlSurfaceView.setEGLContextClientVersion(2);// 设置 GL ES 版本
         mGlSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);// 系统默认会使用 RGB_888, a depth buffer depth of at least 16 bits 配置
-        mGlSurfaceView.setRenderer(new MyRender());// 将 GLSurfaceView 和 Renderer 连接起来
+        mGlSurfaceView.setRenderer(new MyRender(this));// 将 GLSurfaceView 和 Renderer 连接起来
         mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY); // 设置渲染方式
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         parent.addView(mGlSurfaceView, params);
@@ -104,21 +107,8 @@ public class GLES20Activity extends BaseActivity
 
     private static class MyRender implements GLSurfaceView.Renderer
     {
+        private final Context mContext;
         private int mShaderProgram;
-
-        private static final String VERTEX_SHADER =
-                "attribute vec4 vPosition;\n"
-                        + "uniform mat4 uMVPMatrix;\n"
-                        + "void main() {\n"
-                        + " gl_Position = uMVPMatrix * vPosition;\n"
-                        + "}";
-
-        private static final String FRAGMENT_SHADER =
-                "precision mediump float;\n"
-                        + "uniform vec4 vColor;\n"
-                        + "void main() {\n"
-                        + " gl_FragColor = vColor;\n"
-                        + "}";
 
         private static final float[] VERTEX = { // 相对于坐标而言，这个是 等腰直角三角形
                 1f, 1f, 0,
@@ -130,10 +120,32 @@ public class GLES20Activity extends BaseActivity
         private float[] mMVPMatrix = new float[16]; // 数组大小 请看系统 api ( android.opengl.Matrix.perspectiveM() ) 实现
         private int mUMVPMatrix; // 如果不添加矩阵，由于手机 宽高并不是 1：1，所以 图像会变形
 
-        public MyRender()
+        public MyRender(Context context)
         {
+            mContext = context;
             mVertexBuffer = ByteBuffer.allocateDirect(VERTEX.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(VERTEX);
             mVertexBuffer.position(0);
+        }
+
+        //通过路径加载Assets中的文本内容
+        public static String uRes(Resources mRes, String path)
+        {
+            StringBuilder result = new StringBuilder();
+            try
+            {
+                InputStream is = mRes.getAssets().open(path);
+                int ch;
+                byte[] buffer = new byte[1024];
+                while (-1 != (ch = is.read(buffer)))
+                {
+                    result.append(new String(buffer, 0, ch));
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            return result.toString().replaceAll("\\r\\n", "\n");
         }
 
         @Override
@@ -154,8 +166,8 @@ public class GLES20Activity extends BaseActivity
              */
 
             mShaderProgram = GLES20.glCreateProgram();
-            int vertex_shader = loadShader(GLES20.GL_VERTEX_SHADER, VERTEX_SHADER);
-            int fragment_shader = loadShader(GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER);
+            int vertex_shader = loadShader(GLES20.GL_VERTEX_SHADER, uRes(mContext.getResources(), "shader/default_vertex.txt"));
+            int fragment_shader = loadShader(GLES20.GL_FRAGMENT_SHADER, uRes(mContext.getResources(), "shader/default_fragment.txt"));
             GLES20.glAttachShader(mShaderProgram, vertex_shader);
             GLES20.glAttachShader(mShaderProgram, fragment_shader);
             GLES20.glLinkProgram(mShaderProgram);

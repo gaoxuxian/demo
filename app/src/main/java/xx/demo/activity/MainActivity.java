@@ -67,6 +67,9 @@ public class MainActivity extends Activity
                 {
                         CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLES20ActivityV2", "OpenGL ES20 Image Activity (用 gl 画图片)"
                 },
+                {
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLES20ActivityV3", "OpenGL ES20 Image Activity (用 gl 做镜头预览)"
+                },
         };
 
         mActivityArr = new ArrayList<>();

@@ -115,7 +115,6 @@ public class GLES20ActivityV2 extends BaseActivity
         private int mProgram;
         private int mUMVPMatrix;
         private float[] mMVPMatrix = new float[16];
-        private int mTexSamplerHandle;
         private float[] mProjectMatrix = new float[16];
         private float[] mViewMatrix = new float[16];
 
@@ -163,8 +162,6 @@ public class GLES20ActivityV2 extends BaseActivity
             int a_texCoord = GLES20.glGetAttribLocation(mProgram, "a_texCoord");
 
             mUMVPMatrix = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
-
-            mTexSamplerHandle = GLES20.glGetUniformLocation(mProgram, "s_texture");
 
             GLES20.glEnableVertexAttribArray(vPosition);
             GLES20.glVertexAttribPointer(vPosition, 3, GLES20.GL_FLOAT, false, 12, mVertexBuffer);
@@ -245,7 +242,6 @@ public class GLES20ActivityV2 extends BaseActivity
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
             GLES20.glUniformMatrix4fv(mUMVPMatrix, 1, false, mMVPMatrix, 0);
-            GLES20.glUniform1i(mTexSamplerHandle, 0);
 
             GLES20.glDrawElements(GLES20.GL_TRIANGLES, VERTEX_INDEX.length, GLES20.GL_UNSIGNED_SHORT, mVertexIndexBuffer);
         }

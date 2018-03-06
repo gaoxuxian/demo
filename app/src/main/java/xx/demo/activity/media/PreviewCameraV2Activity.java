@@ -20,6 +20,14 @@ import xx.demo.camera.CameraGLView;
  * 这种方式，实际上就是两个OpenGL Thread共享一个Texture，不再需要数据导入导出，从Camera采集的数据直接在GPU中完成转换和渲染。
  */
 
+/**
+ * 解释 使用 GLSurface view 时，为何绑定纹理id 之后，使用 OpenGL 渲染，可以直接渲染到 GLSurface view 的 surface 上 ( 关键点：eglMakeCurrent() )
+ * <p>
+ *     <该博客上还附有其他 Android 游戏开发的大神博客>
+ * <p>
+ * http://blog.csdn.net/happy19850920
+ */
+
 public class PreviewCameraV2Activity extends BaseActivity
 {
     private CameraGLView mCameraView;

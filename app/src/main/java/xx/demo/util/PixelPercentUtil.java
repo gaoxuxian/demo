@@ -5,7 +5,7 @@ package xx.demo.util;
  * Created by Gxx on 2017/11/8.
  */
 
-public class CameraPercentUtil
+public class PixelPercentUtil
 {
     /**
      * 宽720为标准，获取百分比位置

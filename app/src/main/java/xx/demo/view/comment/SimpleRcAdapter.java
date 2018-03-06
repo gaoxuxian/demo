@@ -1,16 +1,10 @@
 package xx.demo.view.comment;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import xx.demo.util.CameraPercentUtil;
+import xx.demo.util.PixelPercentUtil;
 
 public class SimpleRcAdapter extends RecyclerView.Adapter implements View.OnClickListener
 {
@@ -46,7 +40,7 @@ public class SimpleRcAdapter extends RecyclerView.Adapter implements View.OnClic
     {
         SimpleItemView itemView = new SimpleItemView(parent.getContext());
         itemView.setOnClickListener(this);
-        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CameraPercentUtil.WidthPxToPercent(100));
+        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PixelPercentUtil.WidthPxToPercent(100));
         itemView.setLayoutParams(params);
         return new RecyclerView.ViewHolder(itemView)
         {

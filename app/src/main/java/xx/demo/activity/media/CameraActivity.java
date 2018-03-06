@@ -119,7 +119,7 @@ public class CameraActivity extends BaseActivity
                 }
 
                 startActivity((Intent) source);
-                finish();
+//                finish();
             }
         });
 

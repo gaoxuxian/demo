@@ -10,7 +10,7 @@ import android.graphics.PathMeasure;
 import android.graphics.RectF;
 import android.view.View;
 
-import xx.demo.util.CameraPercentUtil;
+import xx.demo.util.PixelPercentUtil;
 
 /**
  * 模仿系统 progress view 效果，具体参数，可定制
@@ -41,8 +41,8 @@ public class WaitProgressView extends View
         mPaint = new Paint();
         mMeasure = new PathMeasure();
         mPaintFlags = Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG;
-        mProgressWidth = CameraPercentUtil.WidthPxToPercent(8);
-        mViewDefWH = CameraPercentUtil.WidthPxToPercent(100);
+        mProgressWidth = PixelPercentUtil.WidthPxToPercent(8);
+        mViewDefWH = PixelPercentUtil.WidthPxToPercent(100);
         mProgressColor = Color.WHITE;
         mPeriodDuration = 1500;
     }

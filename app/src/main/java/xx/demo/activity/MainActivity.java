@@ -135,7 +135,7 @@ public class MainActivity extends Activity
                 }
 
                 startActivity((Intent) source);
-                finish();
+//                finish();
             }
         });
 

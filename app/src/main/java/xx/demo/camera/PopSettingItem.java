@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import xx.demo.util.CameraPercentUtil;
-
 /**
  * Created by Gxx on 2018/2/23.
  */

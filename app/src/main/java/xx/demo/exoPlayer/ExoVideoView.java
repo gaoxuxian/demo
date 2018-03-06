@@ -22,7 +22,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
-import xx.demo.util.CameraPercentUtil;
+import xx.demo.util.PixelPercentUtil;
 
 /**
  * 基于 ExoPlayer 封装的 VideoView
@@ -151,9 +151,9 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
             mSeekBar = new BufferSeekBar(context);
             mSeekBar.setOnSeekBarChangeListener(this);
             mSeekBar.setColor(ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.2f)), Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.6f)));
-            mSeekBar.setPointParams(CameraPercentUtil.WidthPxToPercent(10), Color.WHITE);
-            mSeekBar.setProgressWidth(CameraPercentUtil.WidthPxToPercent(2));
-            params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CameraPercentUtil.WidthPxToPercent(100));
+            mSeekBar.setPointParams(PixelPercentUtil.WidthPxToPercent(10), Color.WHITE);
+            mSeekBar.setProgressWidth(PixelPercentUtil.WidthPxToPercent(2));
+            params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PixelPercentUtil.WidthPxToPercent(100));
             params.gravity = Gravity.CENTER;
             mContentFrame.addView(mSeekBar, params);
 

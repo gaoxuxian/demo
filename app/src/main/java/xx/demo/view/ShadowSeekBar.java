@@ -8,7 +8,7 @@ import android.support.v4.graphics.ColorUtils;
 import android.view.MotionEvent;
 import android.view.View;
 
-import xx.demo.util.CameraPercentUtil;
+import xx.demo.util.PixelPercentUtil;
 
 /**
  * 四散阴影 seekbar
@@ -54,14 +54,14 @@ public class ShadowSeekBar extends View
 
     private void init()
     {
-        mSelectedProgressWidth = CameraPercentUtil.WidthPxToPercent(4);
-        mProgressWidth = CameraPercentUtil.WidthPxToPercent(3);
+        mSelectedProgressWidth = PixelPercentUtil.WidthPxToPercent(4);
+        mProgressWidth = PixelPercentUtil.WidthPxToPercent(3);
 
         mSelectedProgressColor = Color.WHITE;
         mProgressColor = ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.5f));
 
-        mEdgeSpan = CameraPercentUtil.WidthPxToPercent(30);
-        mCircleRadius = CameraPercentUtil.WidthPxToPercent(34) / 2f;
+        mEdgeSpan = PixelPercentUtil.WidthPxToPercent(30);
+        mCircleRadius = PixelPercentUtil.WidthPxToPercent(34) / 2f;
 
         x = mEdgeSpan + mCircleRadius;
 
@@ -74,7 +74,7 @@ public class ShadowSeekBar extends View
         int result;
         if (mode == MeasureSpec.AT_MOST)
         {
-            result = CameraPercentUtil.WidthPxToPercent(60);
+            result = PixelPercentUtil.WidthPxToPercent(60);
             if (result > size)
             {
                 result = size;
@@ -143,7 +143,7 @@ public class ShadowSeekBar extends View
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(mSelectedProgressWidth);
         mPaint.setColor(mSelectedProgressColor);
-        mPaint.setShadowLayer(CameraPercentUtil.WidthPxToPercent(8), 0, 0, ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.1f)));
+        mPaint.setShadowLayer(PixelPercentUtil.WidthPxToPercent(8), 0, 0, ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.1f)));
 
         float start_x = mEdgeSpan;
         float end_x = x;
@@ -160,7 +160,7 @@ public class ShadowSeekBar extends View
         mPaint.reset();
         mPaint.setFlags(mPaintFlags);
         mPaint.setColor(mSelectedProgressColor);
-        mPaint.setShadowLayer(CameraPercentUtil.WidthPxToPercent(8), 0, 0, ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.1f)));
+        mPaint.setShadowLayer(PixelPercentUtil.WidthPxToPercent(8), 0, 0, ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.1f)));
         canvas.drawCircle(x, mViewH / 2f, mCircleRadius, mPaint);
 
         canvas.restore();

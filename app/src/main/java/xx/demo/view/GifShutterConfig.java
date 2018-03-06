@@ -2,7 +2,7 @@ package xx.demo.view;
 
 import android.graphics.Color;
 
-import xx.demo.util.CameraPercentUtil;
+import xx.demo.util.PixelPercentUtil;
 
 /**
  * Created by GAO-xx on 2018/1/13.
@@ -20,8 +20,8 @@ public class GifShutterConfig extends ShutterConfig
         super.initDef();
 
         mDefRing = new Ring();
-        mDefRing.setOutRadius(CameraPercentUtil.WidthPxToPercent(100));
-        mDefRing.setInnerRadius(CameraPercentUtil.WidthPxToPercent(80));
+        mDefRing.setOutRadius(PixelPercentUtil.WidthPxToPercent(100));
+        mDefRing.setInnerRadius(PixelPercentUtil.WidthPxToPercent(80));
         mDefRing.setOutColor(0x4DFFFFFF);
         mDefRing.setInnerColor(Color.YELLOW);
     }
@@ -32,8 +32,8 @@ public class GifShutterConfig extends ShutterConfig
         super.initSmall();
 
         mSmallRing = new Ring();
-        mSmallRing.setOutRadius(CameraPercentUtil.WidthPxToPercent(80));
-        mSmallRing.setInnerRadius(CameraPercentUtil.WidthPxToPercent(64));
+        mSmallRing.setOutRadius(PixelPercentUtil.WidthPxToPercent(80));
+        mSmallRing.setInnerRadius(PixelPercentUtil.WidthPxToPercent(64));
         mSmallRing.setOutColor(Color.WHITE);
         mSmallRing.setInnerColor(Color.YELLOW);
     }
@@ -44,9 +44,9 @@ public class GifShutterConfig extends ShutterConfig
         super.initRecord();
 
         mRecordRing = new Ring();
-        mRecordRing.setOutRadius(CameraPercentUtil.WidthPxToPercent(120));
-        mRecordRing.setInnerRadius(CameraPercentUtil.WidthPxToPercent(70));
-        mRecordRing.setRoundRectParams(CameraPercentUtil.WidthPxToPercent(5), CameraPercentUtil.WidthPxToPercent(5));
+        mRecordRing.setOutRadius(PixelPercentUtil.WidthPxToPercent(120));
+        mRecordRing.setInnerRadius(PixelPercentUtil.WidthPxToPercent(70));
+        mRecordRing.setRoundRectParams(PixelPercentUtil.WidthPxToPercent(5), PixelPercentUtil.WidthPxToPercent(5));
         mRecordRing.setOutColor(Color.WHITE);
         mRecordRing.setInnerColor(Color.YELLOW);
     }

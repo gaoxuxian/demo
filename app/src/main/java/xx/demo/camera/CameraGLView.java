@@ -40,10 +40,7 @@ public class CameraGLView extends GLSurfaceView implements GLSurfaceView.Rendere
                 mCameraDrawer.setCameraId(1);
 
                 Camera.Parameters parameters = mCamera.getParameters();
-                parameters.setPreviewSize(2160, 1080);
-                mCamera.setParameters(parameters);
-
-                mCameraDrawer.setDataSize(1080, 2160);
+                mCameraDrawer.setDataSize(parameters.getPreviewSize().height, parameters.getPreviewSize().width);
 
                 mCamera.setPreviewTexture(mCameraDrawer.getSurfaceTexture());
 

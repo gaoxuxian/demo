@@ -47,9 +47,6 @@ public class GLUtil
     {
         if (imgWidth > 0 && imgHeight > 0 && viewWidth > 0 && viewHeight > 0)
         {
-            float sWH = imgWidth / (float) imgHeight;
-            float sWidthHeight = viewWidth / (float) viewHeight;
-
             float[] projection = new float[16];
             float[] camera = new float[16];
 

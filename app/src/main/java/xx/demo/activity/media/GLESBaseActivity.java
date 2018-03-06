@@ -65,7 +65,7 @@ import xx.demo.activity.BaseActivity;
  * <p>
  * https://www.jianshu.com/p/eea423753fb0
  */
-public class GLES20Activity extends BaseActivity
+public class GLESBaseActivity extends BaseActivity
 {
     /**
      * 基础知识

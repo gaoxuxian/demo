@@ -20,12 +20,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 import xx.demo.R;
 import xx.demo.activity.BaseActivity;
-import xx.demo.util.ShareData;
 
 /**
  * 用 gl surface view 简单绘制矩形、一张图片纹理
  * <p>
- * 基础知识请查看 {@link GLES20Activity}
+ * 基础知识请查看 {@link GLESBaseActivity}
  * <p>
  * http://www.cnblogs.com/ghj1976/archive/2012/04/27/2473624.html
  * <p>
@@ -38,7 +37,7 @@ import xx.demo.util.ShareData;
  * http://blog.csdn.net/fansongy/article/list?viewmode=contents
  */
 
-public class GLES20ActivityV2 extends BaseActivity
+public class GLESBaseV2Activity extends BaseActivity
 {
     private GLSurfaceView mGlSurfaceView;
 

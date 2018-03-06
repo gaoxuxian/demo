@@ -1,397 +1,128 @@
 package xx.demo.activity.media;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.hardware.Camera;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
-import android.os.Build;
-import android.support.v4.graphics.ColorUtils;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import xx.demo.R;
 import xx.demo.activity.BaseActivity;
-import xx.demo.camera.PopSettingItem;
-import xx.demo.exoPlayer.WaitProgressView;
-import xx.demo.util.CameraPercentUtil;
-import xx.demo.util.ImageUtil;
-import xx.demo.view.ShadowSeekBar;
+import xx.demo.view.comment.SimpleRcAdapter;
 
-/**
- * 简单调用 系统 Camera 进行镜头预览，还能进行镜头的基本设置
- */
-public class CameraActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener
+public class CameraActivity extends BaseActivity
 {
-    private SurfaceView mSurfaceView;
-    private ImageView mSettingView;
-    private RecyclerView mSettingPopView;
-    private TextView mTakePicBtn;
-    private WaitProgressView mProgressView;
-    private ShadowSeekBar mSeekbar;
-    private Camera mCamera;
-    private String TAG = "xxx";
+    private static final String TITLE = "title";
+    private static final String CLASS_NAME_KEY = "class_name";
+    private static final String CLASS_NAME = "xx.demo.activity";
+    private static final String CLASS_PACKAGE_MEDIA = ".media";
 
-    private String[] mPopItemTitleArr;
-    private boolean showFlash;
-    private int cameraDegree = 90;
-    private boolean isFront;
+    private RecyclerView mList;
+    private ArrayList<HashMap<String, Object>> mActivityArr;
 
     @Override
     protected void initData()
     {
-        mPopItemTitleArr = new String[]{
-                "闪光灯", "前置镜头", "调整镜头角度"
+        String[][] EXAMPLES = new String[][]{
+                {
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".PreviewCameraActivity", "SurfaceView 预览镜头"
+                },
+                {
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".PreviewCameraV2Activity", "GLSurfaceView + OpenGL ES20 预览镜头"
+                },
+                {
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLESBaseActivity", "OpenGL ES20 画基础图形(基础代码流程)"
+                },
+                {
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLESBaseV2Activity", "OpenGL ES20 画图片(基础代码流程)"
+                },
+                {
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLESActivity", "OpenGL ES20 画基础图形(封装部分代码)"
+                },
+                {
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLESV2Activity", "OpenGL ES20 画图片(封装部分代码,和镜头预览有区别)"
+                },
         };
-    }
 
-    @Override
-    public void createChildren(FrameLayout parent, FrameLayout.LayoutParams params)
-    {
-        mSurfaceView = new SurfaceView(parent.getContext());
-        mSurfaceView.getHolder().addCallback(this);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.gravity = Gravity.CENTER;
-        parent.addView(mSurfaceView, params);
-
-        mSettingView = new ImageView(parent.getContext());
-        mSettingView.setOnClickListener(this);
-        mSettingView.setImageResource(R.drawable.camera_setting);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER_HORIZONTAL;
-        params.topMargin = CameraPercentUtil.WidthPxToPercent(25);
-        parent.addView(mSettingView, params);
-
-        mTakePicBtn = new TextView(parent.getContext());
-        mTakePicBtn.setBackgroundColor(Color.WHITE);
-        mTakePicBtn.setOnClickListener(this);
-        mTakePicBtn.setText("开始拍照");
-        mTakePicBtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        mTakePicBtn.setTextColor(Color.BLACK);
-        mTakePicBtn.setGravity(Gravity.CENTER);
-        mTakePicBtn.setPadding(CameraPercentUtil.WidthPxToPercent(20), 0,CameraPercentUtil.WidthPxToPercent(20),0);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, CameraPercentUtil.WidthPxToPercent(100));
-        params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
-        params.bottomMargin = CameraPercentUtil.WidthPxToPercent(100);
-        params.rightMargin = CameraPercentUtil.WidthPxToPercent(200);
-        parent.addView(mTakePicBtn, params);
-
-        mProgressView = new WaitProgressView(parent.getContext());
-        mProgressView.setProgressColor(Color.RED);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER;
-        parent.addView(mProgressView, params);
-
-        mSeekbar = new ShadowSeekBar(parent.getContext());
-        params = new FrameLayout.LayoutParams(CameraPercentUtil.WidthPxToPercent(588), ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER;
-        parent.addView(mSeekbar, params);
-
-        mSettingPopView = new RecyclerView(parent.getContext());
-        mSettingPopView.setBackgroundColor(ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.4f)));
-        mSettingPopView.setLayoutManager(new LinearLayoutManager(parent.getContext(), LinearLayoutManager.VERTICAL, false));
-        mSettingPopView.setVisibility(View.GONE);
-        params = new FrameLayout.LayoutParams(CameraPercentUtil.WidthPxToPercent(620), CameraPercentUtil.WidthPxToPercent(800));
-        params.gravity = Gravity.CENTER;
-        parent.addView(mSettingPopView, params);
-
-        initPopAdapter();
-    }
-
-    private void initPopAdapter()
-    {
-        SimpleRcAdapter adapter = new SimpleRcAdapter(new Source()
+        mActivityArr = new ArrayList<>();
         {
-            @Override
-            public Object getSource(Object key)
+            for (String[] example : EXAMPLES)
             {
-                Object out = null;
-
-                if (mPopItemTitleArr != null)
-                {
-                    out = mPopItemTitleArr[(int) key];
-                }
-                return out;
-            }
-
-            @Override
-            public int getSourceSize()
-            {
-                return mPopItemTitleArr != null ? mPopItemTitleArr.length : 0;
-            }
-
-            @Override
-            public void onSourceClick(Object source_key)
-            {
-                if (mCamera != null && source_key instanceof Integer)
-                {
-                    switch ((int) source_key)
-                    {
-                        // 闪光灯
-                        case 0:
-                            showFlash = !showFlash;
-                            Camera.Parameters parameters = mCamera.getParameters();
-                            parameters.setFlashMode(showFlash ? Camera.Parameters.FLASH_MODE_TORCH : Camera.Parameters.FLASH_MODE_OFF);
-                            mCamera.setParameters(parameters);
-                            break;
-                        // 前置镜头
-                        case 1:
-                            isFront = !isFront;
-                            mCamera.stopPreview();
-                            mCamera.release();
-                            try
-                            {
-                                mCamera = Camera.open(isFront ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
-                            }
-                            catch (Exception e)
-                            {
-
-                            }
-
-                            if (mCamera != null)
-                            {
-                                mCamera.setDisplayOrientation(cameraDegree);
-                                try
-                                {
-                                    mCamera.setPreviewDisplay(mSurfaceView.getHolder());
-                                }
-                                catch (IOException e)
-                                {
-                                    e.printStackTrace();
-                                }
-                                mCamera.startPreview();
-                            }
-                            break;
-                        // 调整镜头角度
-                        case 2:
-                            cameraDegree += 90;
-                            cameraDegree %= 360;
-                            mCamera.setDisplayOrientation(cameraDegree);
-                            break;
-                    }
-                }
-            }
-        });
-        mSettingPopView.setAdapter(adapter);
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder)
-    {
-        Log.d(TAG, "CameraActivity --> surfaceCreated: ");
-
-        if (Build.VERSION.SDK_INT >= 21)
-        {
-            CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
-            if (cameraManager != null)
-            {
+                HashMap<String, Object> map = new HashMap<>();
+                map.put(TITLE, example[1]);
                 try
                 {
-                    CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics("0");
-                    int supported_level = cameraCharacteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL);
-                    Log.d(TAG, "CameraActivity --> surfaceCreated ---> supported level == " + supported_level);
+                    Intent intent = new Intent();
+                    Class cls = Class.forName(example[0]);
+                    intent.setClass(this, cls);
+                    map.put(CLASS_NAME_KEY, intent);
+
+                    mActivityArr.add(map);
                 }
-                catch (CameraAccessException e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
             }
         }
-
-        mCamera = Camera.open();
-
-        if (mCamera != null)
-        {
-            mCamera.setDisplayOrientation(90);
-
-            try
-            {
-                Camera.Parameters parameters = mCamera.getParameters();
-                parameters.setPreviewSize(2160, 1080);
-                mCamera.setParameters(parameters);
-                mCamera.setPreviewDisplay(holder);
-                mCamera.startPreview();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
+    public void createChildren(FrameLayout parent, FrameLayout.LayoutParams params)
     {
-        Log.d(TAG, "CameraActivity --> surfaceChanged: ");
+        mList = new RecyclerView(parent.getContext());
+        mList.setLayoutManager(new LinearLayoutManager(parent.getContext(), LinearLayoutManager.VERTICAL, false));
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        parent.addView(mList, params);
+
+        initAdapter();
     }
 
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder)
+    private void initAdapter()
     {
-        Log.d(TAG, "CameraActivity --> surfaceDestroyed: ");
-
-        if (mSurfaceView != null)
+        SimpleRcAdapter adapter = new SimpleRcAdapter(new SimpleRcAdapter.Source()
         {
-            mSurfaceView.getHolder().removeCallback(this);
-        }
-
-        if (mCamera != null)
-        {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
-    }
-
-    @Override
-    public void onClick(View v)
-    {
-        if (v == mSettingView)
-        {
-            if (mSettingPopView.getVisibility() == View.VISIBLE)
+            @Override
+            public Object getSource(Object key)
             {
-                mSettingPopView.setVisibility(View.GONE);
-            }
-            else
-            {
-                mSettingPopView.setVisibility(View.VISIBLE);
-            }
-        }
-        else if (v == mTakePicBtn)
-        {
-            if (mCamera != null)
-            {
-                mProgressView.show(true);
-                mCamera.takePicture(null, null, null, new Camera.PictureCallback()
+                Object source = null;
+                if (mActivityArr != null)
                 {
-                    @Override
-                    public void onPictureTaken(byte[] data, Camera camera)
+                    source = mActivityArr.get((int) key);
+                    if (source != null)
                     {
-                        final byte[] pic = data;
-                        new Thread(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                Bitmap bitmap = ImageUtil.rotateAndCropPicture(pic, isFront, 90, 9f / 16f, 1024);
-                                final boolean succeed = ImageUtil.saveImage(CameraActivity.this, bitmap, ImageUtil.getOutPutDirectoryPath(), true);
-                                runOnUiThread(new Runnable()
-                                {
-                                    @Override
-                                    public void run()
-                                    {
-                                        if (succeed && mCamera != null)
-                                        {
-                                            mProgressView.show(false);
-
-                                            if (mCamera != null)
-                                            {
-                                                mCamera.startPreview();
-                                            }
-                                        }
-                                    }
-                                });
-                            }
-                        }).start();
+                        source = ((HashMap) source).get(TITLE);
                     }
-                });
-            }
-        }
-    }
-
-    private static class SimpleRcAdapter extends RecyclerView.Adapter implements View.OnClickListener
-    {
-        private Source mSourceListener;
-
-        public SimpleRcAdapter(Source source)
-        {
-            this.mSourceListener = source;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-        {
-            PopSettingItem itemView = new PopSettingItem(parent.getContext());
-            itemView.setPadding(CameraPercentUtil.WidthPxToPercent(20), 0, CameraPercentUtil.WidthPxToPercent(20), 0);
-            itemView.setOnClickListener(this);
-            RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CameraPercentUtil.WidthPxToPercent(100));
-            itemView.setLayoutParams(params);
-            return new RecyclerView.ViewHolder(itemView)
-            {
-            };
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
-        {
-            if (mSourceListener == null) return;
-
-            Object source = mSourceListener.getSource(position);
-
-            if (source == null) return;
-
-            if (source instanceof String)
-            {
-                View itemView = holder.itemView;
-
-                if (itemView == null) return;
-
-                itemView.setTag(position);
-
-                if (itemView instanceof PopSettingItem)
-                {
-                    ((PopSettingItem) itemView).setTitle((String) source);
                 }
+                return source;
             }
-        }
 
-        @Override
-        public int getItemCount()
-        {
-            return mSourceListener != null ? mSourceListener.getSourceSize() : 0;
-        }
+            @Override
+            public int getSourceSize()
+            {
+                return mActivityArr != null ? mActivityArr.size() : 0;
+            }
 
-        @Override
-        public void onClick(View v)
-        {
-            if (mSourceListener == null) return;
+            @Override
+            public void onSourceClick(Object source_key)
+            {
+                Object source = null;
+                if (mActivityArr != null)
+                {
+                    source = mActivityArr.get((int) source_key);
+                    if (source != null)
+                    {
+                        source = ((HashMap) source).get(CLASS_NAME_KEY);
+                    }
+                }
 
-            int position = (int) v.getTag();
+                startActivity((Intent) source);
+                finish();
+            }
+        });
 
-            mSourceListener.onSourceClick(position);
-        }
-    }
-
-    public interface Source
-    {
-        /**
-         * 根据 key 找到 source
-         *
-         * @param key 一般是 source 下标
-         * @return source
-         */
-        Object getSource(Object key);
-
-        int getSourceSize();
-
-        /**
-         * source 点击事件
-         *
-         * @param source_key 一般是 source 下标
-         */
-        void onSourceClick(Object source_key);
+        mList.setAdapter(adapter);
     }
 }

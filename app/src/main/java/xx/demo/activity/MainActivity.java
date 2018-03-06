@@ -4,20 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import xx.demo.util.CameraPercentUtil;
+import xx.demo.view.comment.SimpleRcAdapter;
 
 public class MainActivity extends Activity
 {
@@ -44,31 +40,19 @@ public class MainActivity extends Activity
     {
         String[][] EXAMPLES = new String[][]{
                 {
-                        CLASS_NAME + CLASS_PACKAGE_VIEW + ".ARActivity", "AR Activity"
+                        CLASS_NAME + ".JavaLockActivity", "Java Lock Activity"
                 },
                 {
-                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".ExoActivity", "Exo Activity"
+                        CLASS_NAME + CLASS_PACKAGE_VIEW + ".ARActivity", "AR Activity"
                 },
                 {
                         CLASS_NAME + CLASS_PACKAGE_VIEW + ".ShutterActivity", "Shutter Activity"
                 },
                 {
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".ExoActivity", "Exo Activity"
+                },
+                {
                         CLASS_NAME + CLASS_PACKAGE_MEDIA + ".CameraActivity", "Camera Activity"
-                },
-                {
-                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".RecordActivity", "Record Activity"
-                },
-                {
-                        CLASS_NAME + ".JavaLockActivity", "Java Lock Activity"
-                },
-                {
-                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLES20Activity", "OpenGL ES20 Base Activity (gl 简单使用)"
-                },
-                {
-                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLES20ActivityV2", "OpenGL ES20 Image Activity (用 gl 画图片)"
-                },
-                {
-                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLES20ActivityV3", "OpenGL ES20 Image Activity (用 gl 做镜头预览)"
                 },
         };
 
@@ -114,7 +98,7 @@ public class MainActivity extends Activity
 
     private void initSimpleAdapter()
     {
-        SimpleRcAdapter adapter = new SimpleRcAdapter(new Source()
+        SimpleRcAdapter adapter = new SimpleRcAdapter(new SimpleRcAdapter.Source()
         {
             @Override
             public Object getSource(Object key)
@@ -151,119 +135,10 @@ public class MainActivity extends Activity
                 }
 
                 startActivity((Intent) source);
+                finish();
             }
         });
 
         mContentView.setAdapter(adapter);
-    }
-
-    private static class SimpleRcAdapter extends RecyclerView.Adapter implements View.OnClickListener
-    {
-        private Source mSourceListener;
-
-        public SimpleRcAdapter(Source source)
-        {
-            this.mSourceListener = source;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-        {
-            SimpleItemView itemView = new SimpleItemView(parent.getContext());
-            itemView.setOnClickListener(this);
-            RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CameraPercentUtil.WidthPxToPercent(100));
-            itemView.setLayoutParams(params);
-            return new RecyclerView.ViewHolder(itemView)
-            {
-            };
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
-        {
-            if (mSourceListener == null) return;
-
-            Object source = mSourceListener.getSource(position);
-
-            if (source == null) return;
-
-            if (source instanceof String)
-            {
-                View itemView = holder.itemView;
-
-                if (itemView == null) return;
-
-                itemView.setTag(position);
-
-                if (itemView instanceof SimpleItemView)
-                {
-                    ((SimpleItemView) itemView).setItemText((String) source);
-                }
-            }
-        }
-
-        @Override
-        public int getItemCount()
-        {
-            return mSourceListener != null ? mSourceListener.getSourceSize() : 0;
-        }
-
-        @Override
-        public void onClick(View v)
-        {
-            if (mSourceListener == null) return;
-
-            int position = (int) v.getTag();
-
-            mSourceListener.onSourceClick(position);
-        }
-    }
-
-    private static class SimpleItemView extends FrameLayout
-    {
-        private TextView mTx;
-
-        public SimpleItemView(@NonNull Context context)
-        {
-            super(context);
-            initUI(context);
-        }
-
-        private void initUI(Context context)
-        {
-            mTx = new TextView(context);
-            mTx.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-            mTx.setGravity(Gravity.CENTER);
-            FrameLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.gravity = Gravity.CENTER;
-            addView(mTx, params);
-        }
-
-        public void setItemText(String text)
-        {
-            if (mTx == null) return;
-
-            mTx.setText(text);
-        }
-    }
-
-    public interface Source
-    {
-        /**
-         * 根据 key 找到 source
-         *
-         * @param key 一般是 source 下标
-         * @return source
-         */
-        Object getSource(Object key);
-
-        int getSourceSize();
-
-        /**
-         * source 点击事件
-         *
-         * @param source_key 一般是 source 下标
-         */
-        void onSourceClick(Object source_key);
     }
 }

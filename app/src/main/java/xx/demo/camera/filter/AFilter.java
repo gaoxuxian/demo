@@ -78,6 +78,15 @@ public abstract class AFilter
 
     public AFilter(Resources resources)
     {
+        /**
+         * 基础知识
+         * <p>
+         * 每个 Vertex 都会执行一遍 Vertex Shader，以确定 Vertex 的最终位置，
+         * <p>
+         * 其 main 函数中必须设置 gl_Position 全局变量，它将作为该 Vertex 的最终位置，进而把 Vertex 组合（assemble）成点、线、三角形。
+         * <p>
+         * 光栅化之后，每个 Fragment 都会执行一次 Fragment Shader，以确定每个 Fragment 的颜色，其 main 函数中必须设置 gl_FragColor 全局变量，它将作为该 Fragment 的最终颜色。
+         */
         mRes = resources;
         initArr();
         initBuffer();
@@ -103,12 +112,12 @@ public abstract class AFilter
      */
     protected abstract void onCreate();
 
-    protected abstract void onSizeChanged(int width, int height);
-
     /**
      * 需要手动绑定不同着色器定义的句柄
      */
     protected abstract void bindHandleInProgram(int program);
+
+    protected abstract void onSizeChanged(int width, int height);
 
     protected void initArr()
     {
@@ -233,6 +242,17 @@ public abstract class AFilter
     //创建GL程序
     public static int sCreateGlProgram(String vertexSource, String fragmentSource)
     {
+        /**
+         * 流程:
+         * 创建 GLSL 程序：glCreateProgram
+         * 加载 shader 代码：glShaderSource 和 glCompileShader
+         * attatch shader 代码：glAttachShader
+         * 链接 GLSL 程序：glLinkProgram
+         * 使用 GLSL 程序：glUseProgram
+         * 获取 shader 代码中的变量索引：glGetAttribLocation
+         * 启用 vertex：glEnableVertexAttribArray
+         * 绑定 vertex 坐标值：glVertexAttribPointer
+         */
         int vertex = sLoadShader(GLES20.GL_VERTEX_SHADER, vertexSource);
         if (vertex == 0) return 0;
         int fragment = sLoadShader(GLES20.GL_FRAGMENT_SHADER, fragmentSource);

@@ -18,7 +18,9 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
 
-    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
 
     <application
         android:name=".MyApplication"
@@ -51,8 +53,19 @@
         </activity>
         <activity
             android:name=".activity.media.CameraActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".activity.media.PreviewCameraActivity"
             android:theme="@style/Theme.FullScreen">
         </activity>
+
+        <activity
+            android:name=".activity.media.PreviewCameraV2Activity"
+            android:theme="@style/Theme.FullScreen">
+        </activity>
+
         <activity
             android:name=".activity.media.RecordActivity"
             android:theme="@style/Theme.FullScreen">
@@ -62,15 +75,23 @@
             android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
-            android:name=".activity.media.GLES20Activity"
+            android:name=".activity.media.GLESBaseActivity"
+            android:theme="@style/Theme.FullScreen">
+        </activity>
+
+        <!-- gl es 基础代码流程演示 -->
+        <activity
+            android:name=".activity.media.GLESBaseV2Activity"
+            android:theme="@style/Theme.FullScreen">
+        </activity>
+
+        <!-- 对gl 基础代码进行了封装的写法 -->
+        <activity
+            android:name=".activity.media.GLESActivity"
             android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
-            android:name=".activity.media.GLES20ActivityV2"
-            android:theme="@style/Theme.FullScreen">
-        </activity>
-        <activity
-            android:name=".activity.media.GLES20ActivityV3"
+            android:name=".activity.media.GLESV2Activity"
             android:theme="@style/Theme.FullScreen">
         </activity>
     </application>

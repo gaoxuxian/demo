@@ -62,13 +62,19 @@ public abstract class AFilter
      */
     protected IntBuffer mIndexBuffer;
 
-    //顶点坐标
+    /**
+     * 顶点坐标
+     */
     protected float[] vertex_pos_arr;
 
-    //纹理坐标
+    /**
+     * 纹理坐标
+     */
     protected float[] texture_pos_arr;
 
-    //索引坐标
+    /**
+     * 索引坐标
+     */
     protected int[] index_arr;
 
     private float[] temp_matrix = new float[16];
@@ -196,14 +202,39 @@ public abstract class AFilter
         GLES20.glGenTextures(1, texture, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[0]);
 
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
-                GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
-                GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,
-                GLES20.GL_REPEAT);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
-                GLES20.GL_REPEAT);
+        /**
+         * glTexParameteri(int target, int pname, int param)
+         * target: 当前绑定的纹理类型，1D、2D、3D 等
+         * pname: 滤波方法名
+         * param: 滤波方式
+         *
+         * PS:纹理坐标系用S-T来表示，S为横轴，T为纵轴。
+         *
+         * glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+         * GL_TEXTURE_2D: 操作2D纹理.
+         * GL_TEXTURE_WRAP_S: S方向上的贴图模式.
+         * GL_CLAMP: 将纹理坐标限制在0.0,1.0的范围之内.如果超出了会如何呢.不会错误,只是会边缘拉伸填充.
+
+         * glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+         * 这里同上,只是它是T方向
+
+         * glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+         * 这是纹理过滤
+         * GL_TEXTURE_MAG_FILTER: 放大过滤
+         * GL_LINEAR: 线性过滤, 使用距离当前渲染像素中心最近的4个纹素加权平均值.
+
+         * glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+         * GL_TEXTURE_MIN_FILTER: 缩小过滤
+         * GL_LINEAR_MIPMAP_NEAREST: 使用GL_NEAREST对最接近当前多边形的解析度的两个层级贴图进行采样,然后用这两个值进行线性插值.
+         */
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
+
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+
         return texture[0];
     }
 
@@ -315,12 +346,17 @@ public abstract class AFilter
      */
     protected void onDraw()
     {
+        // 使某句柄可用
         GLES20.glEnableVertexAttribArray(mHVertexPos);
+        // 将顶点坐标赋值到 顶点着色器 的顶点句柄
         GLES20.glVertexAttribPointer(mHVertexPos, 2, GLES20.GL_FLOAT, false, 0, mVerBuffer);
 
+        // 使某句柄可用
         GLES20.glEnableVertexAttribArray(mHTexturePos);
+        // 将纹理坐标赋值到 片段着色器 的纹理句柄
         GLES20.glVertexAttribPointer(mHTexturePos, 2, GLES20.GL_FLOAT, false, 0, mTexBuffer);
 
+        // 根据 顶点坐标index 顺序 绘制 顶点坐标
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, vertex_pos_arr.length, GLES20.GL_UNSIGNED_INT, mIndexBuffer);
 
         GLES20.glDisableVertexAttribArray(mHVertexPos);
@@ -346,11 +382,46 @@ public abstract class AFilter
 
     /**
      * 绑定默认纹理
+     * <p>
+     * 解释 纹理单元、纹理对象、多纹理处理 的情况
+     * <p>
+     * http://blog.csdn.net/jackyqiziheng/article/details/77294363
      */
     protected void onBindTexture()
     {
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + textureType);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTextureId());
-        GLES20.glUniform1i(mHTexture, textureType);
+        // 单纹理
+        /**
+         * glActiveTexture可以采取的实际范围受制于GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS。这是实现允许的同时多纹理的最大数量。
+         * 正确的调用方式glActiveTexture如下：
+         * glActiveTexture(GL_TEXTURE0 + i); where i is a number between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
+         */
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + textureType); // 设置当前活跃的纹理单元，默认纹理单元 0 == GLES20.GL_TEXTURE0
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTextureId()); // 将纹理 id 绑定到 当前活跃的纹理单元上
+        GLES20.glUniform1i(mHTexture, textureType); // 告诉 fragment shader 需要使用纹理单元0,所以传了一个0参数进去给 sampler2D ，这个采样器就会到纹理单元0中去采样
+
+        // 多纹理
+        /**
+         * // 创建两个纹理对象
+         * int[] textureHandle = new int[2];
+         * GLES20.glGenTextures(2, textureHandle, 0); // 第一个参数: 纹理对象的总数量，第三个参数: 从数组的哪个位置开始生成纹理id
+
+         * // 激活纹理单元0
+         * glActiveTexture(GL_TEXTURE0);
+         * // 绑定纹理对象和纹理单元0
+         * glBindTexture(GL_TEXTURE2D,textureHandle[0]);
+         * // 把bitmap存放在纹理对象对应的显存中
+         * GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap1, 0);
+
+         * // 激活纹理单元1
+         * glActiveTexture(GL_TEXTURE1);
+         * // 绑定纹理对象和纹理单元1
+         * glBindTexture(GL_TEXTURE2D,textureHandle[1]);
+         * // 把bitmap存放在纹理对象对应的显存中
+         * GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap2, 0);
+
+         * // 设置纹理采样器到纹理单元0中采样
+         * GLES20.glUniform1i(mTextureHandler1, 0);
+         * GLES20.glUniform1i(mTextureHandler2, 1);
+         */
     }
 }

@@ -1,4 +1,4 @@
-package xx.demo.camera.filter;
+package xx.demo.filter;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

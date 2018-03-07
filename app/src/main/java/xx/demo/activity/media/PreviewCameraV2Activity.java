@@ -7,11 +7,7 @@ import xx.demo.activity.BaseActivity;
 import xx.demo.camera.CameraGLView;
 
 /**
- * 解释 使用 GLSurface view 时，为何绑定纹理id 之后，使用 OpenGL 渲染，可以直接渲染到 GLSurface view 的 surface 上 ( 关键点：eglMakeCurrent() )
- * <p>
- *     <该博客上还附有其他 Android 游戏开发的大神博客>
- * <p>
- * http://blog.csdn.net/happy19850920
+ * OpenGL ES2.0 渲染镜头数据
  */
 
 public class PreviewCameraV2Activity extends BaseActivity

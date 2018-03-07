@@ -23,18 +23,6 @@ import xx.demo.activity.BaseActivity;
 
 /**
  * 用 gl surface view 简单绘制矩形、一张图片纹理
- * <p>
- * 基础知识请查看 {@link GLESBaseActivity}
- * <p>
- * http://www.cnblogs.com/ghj1976/archive/2012/04/27/2473624.html
- * <p>
- * 小码哥_WS 大神(很多 ffmpeg、OpenGL 资料)
- * <p>
- * http://blog.csdn.net/king1425
- * <p>
- * 松阳 大神 (很多 c代码写的 着色器)
- * <p>
- * http://blog.csdn.net/fansongy/article/list?viewmode=contents
  */
 
 public class GLESBaseV2Activity extends BaseActivity

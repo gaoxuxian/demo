@@ -1,4 +1,4 @@
-package xx.demo.camera.filter;
+package xx.demo.filter;
 
 import android.content.res.Resources;
 import android.opengl.GLES11Ext;
@@ -67,7 +67,7 @@ public class CameraFilter extends AFilter
         int[] texture = new int[1];
 
         GLES20.glGenTextures(1, texture, 0);
-        
+
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, texture[0]);
 
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);

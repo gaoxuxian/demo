@@ -7,7 +7,7 @@ import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import xx.demo.camera.filter.CameraFilter;
+import xx.demo.filter.CameraFilter;
 import xx.demo.util.GLUtil;
 
 public class CameraDrawer implements GLSurfaceView.Renderer

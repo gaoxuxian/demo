@@ -36,34 +36,6 @@ import xx.demo.activity.BaseActivity;
  * Shader 用来描述如何绘制(渲染)，GLSL 是 OpenGL 的编程语言，全称 OpenGL Shader Language，它的语法类似于 C 语言。
  * <p>
  * OpenGL 渲染需要两种 Shader：Vertex Shader 和 Fragment Shader。
- * <p>
- * 参考资料:
- * <p>
- * https://blog.piasy.com/2016/06/07/Open-gl-es-android-2-part-1/
- * <p>
- * https://blog.piasy.com/2016/06/14/Open-gl-es-android-2-part-2/
- * <p>
- * https://blog.piasy.com/2017/10/06/Open-gl-es-android-2-part-3/
- * <p>
- * OpenGL ES20 API 英文在线文档(需翻墙)
- * <p>
- * http://www.khronos.org/registry/OpenGL-Refpages/es2.0/
- * <p>
- * OpenGL 英文教程(理解概念、方法参数比较不错)(需翻墙)
- * <p>
- * http://blog.db-in.com/all-about-opengl-es-2-x-part-1/
- * <p>
- * 湖广午王 的博客 (有比较全面的 OpenGL ES20 的系列教程)
- * <p>
- * http://blog.csdn.net/junzia/article/list
- * <p>
- * GL ES 矩阵变换
- * <p>
- * http://blog.csdn.net/jamesshaoya/article/details/54342241
- * <p>
- * 着色器 基础知识
- * <p>
- * https://www.jianshu.com/p/eea423753fb0
  */
 public class GLESBaseActivity extends BaseActivity
 {

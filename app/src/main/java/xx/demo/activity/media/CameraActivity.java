@@ -39,6 +39,9 @@ public class CameraActivity extends BaseActivity
                         CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLESBaseV2Activity", "OpenGL ES20 画图片(基础代码流程)"
                 },
                 {
+                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLESBaseV3Activity", "OpenGL ES20 画基础图形(测试坐标)"
+                },
+                {
                         CLASS_NAME + CLASS_PACKAGE_MEDIA + ".GLESActivity", "OpenGL ES20 画基础图形(封装部分代码)"
                 },
                 {

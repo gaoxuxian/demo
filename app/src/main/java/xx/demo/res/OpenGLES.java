@@ -53,5 +53,10 @@ public interface OpenGLES
      *     <该博客上还附有其他 Android 游戏开发的大神博客>
      * <p>
      * http://blog.csdn.net/happy19850920
+     *
+     *
+     * 重点！！！
+     * OpenGL 顶点,坐标系,纹理坐标
+     * http://blog.csdn.net/tom_221x/article/details/38454753
      */
 }

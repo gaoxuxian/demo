@@ -58,5 +58,17 @@ public interface OpenGLES
      * 重点！！！
      * OpenGL 顶点,坐标系,纹理坐标
      * http://blog.csdn.net/tom_221x/article/details/38454753
+     *
+     * 重点 ！！！！ 关于矩阵变换的理解
+     * 关于 Android Matrix
+     * https://www.jianshu.com/p/42d8aceb3136
+     *
+     * 重点 ！！！！ 对于 齐次方程 等概念理解
+     * 什么是「齐次」，「非齐次」，「线性」，「非线性」？
+     * https://www.zhihu.com/question/19816504
+     *
+     * 重点 ！！！！
+     * 维基百科 -- 矩阵
+     * https://zh.wikipedia.org/wiki/%E7%9F%A9%E9%98%B5#%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84
      */
 }

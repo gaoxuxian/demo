@@ -4,7 +4,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import xx.demo.activity.BaseActivity;
-import xx.demo.camera.CameraGLView;
+import camera.CameraGLView;
 
 /**
  * OpenGL ES2.0 渲染镜头数据

@@ -1,1 +1,1 @@
-include ':app'
+include ':app',':exoplayerlib', ':utillib', ':commentuilib', ':opengleslib'

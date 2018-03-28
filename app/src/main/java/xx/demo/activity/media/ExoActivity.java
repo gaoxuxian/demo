@@ -2,7 +2,6 @@ package xx.demo.activity.media;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.TextureView;
@@ -16,10 +15,10 @@ import com.google.android.exoplayer2.source.MediaSource;
 
 import java.io.File;
 
-import xx.demo.exoPlayer.ExoVideoView;
-import xx.demo.util.ExoPlayerUtil;
-import xx.demo.util.FileUtil;
-import xx.demo.util.VideoUtil;
+import lib.util.FileUtil;
+import lib.util.VideoUtil;
+import lib.exoplayer.ExoPlayerUtil;
+import lib.exoplayer.ExoVideoView;
 
 public class ExoActivity extends Activity
 {

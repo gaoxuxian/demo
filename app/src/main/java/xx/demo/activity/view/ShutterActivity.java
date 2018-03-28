@@ -1,6 +1,5 @@
 package xx.demo.activity.view;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,10 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import xx.demo.util.ShareData;
-import xx.demo.util.RingEvaluator;
-import xx.demo.view.GifShutterConfig;
-import xx.demo.view.ShutterView;
+import lib.ui.ShutterView;
 
 public class ShutterActivity extends Activity implements View.OnClickListener
 {
@@ -21,7 +17,6 @@ public class ShutterActivity extends Activity implements View.OnClickListener
     ShutterView mShutter;
     Button mTestBtn;
     Button mTestBtn1;
-    private GifShutterConfig config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -62,28 +57,11 @@ public class ShutterActivity extends Activity implements View.OnClickListener
     protected void onResume()
     {
         super.onResume();
-        config = new GifShutterConfig();
-        config.init();
-        if (mShutter != null)
-        {
-            mShutter.setConfig(config);
-        }
     }
 
     @Override
     public void onClick(View v)
     {
-        if (v == mTestBtn)
-        {
-            ObjectAnimator animator = ObjectAnimator.ofObject(mShutter, "ring", new RingEvaluator(), config.getDef(), config.getSmall());
-            animator.setDuration(1000);
-            animator.start();
-        }
-        else if (v == mTestBtn1)
-        {
-            ObjectAnimator animator = ObjectAnimator.ofObject(mShutter, "ring", new RingEvaluator(), config.getSmall(), config.getDef());
-            animator.setDuration(1000);
-            animator.start();
-        }
+
     }
 }

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import xx.demo.R;
-import xx.demo.view.ARWishView;
+import lib.ui.ARWishView;
 
 public class ARActivity extends Activity
 {

@@ -1,7 +1,7 @@
 package xx.demo;
 
 import android.app.Application;
-import xx.demo.util.ShareData;
+import lib.util.ShareData;
 
 /**
  * Created by Gxx on 2018/2/9.

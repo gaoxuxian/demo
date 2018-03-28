@@ -11,9 +11,9 @@ import android.widget.FrameLayout;
 import java.io.IOException;
 
 import xx.demo.activity.BaseActivity;
-import xx.demo.camera.MediaMuxerWrapper;
-import xx.demo.camera.MediaVideoEncoder;
-import xx.demo.util.ShareData;
+import camera.MediaMuxerWrapper;
+import camera.MediaVideoEncoder;
+import lib.util.ShareData;
 
 public class RecordActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener
 {

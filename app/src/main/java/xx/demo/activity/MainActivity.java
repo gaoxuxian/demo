@@ -13,7 +13,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import xx.demo.view.comment.SimpleRcAdapter;
+import lib.ui.SimpleRcAdapter;
 
 public class MainActivity extends Activity
 {

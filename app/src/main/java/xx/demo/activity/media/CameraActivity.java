@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import xx.demo.activity.BaseActivity;
-import xx.demo.view.comment.SimpleRcAdapter;
+import lib.ui.SimpleRcAdapter;
 
 public class CameraActivity extends BaseActivity
 {

@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import lib.ui.DottedLineView;
 import lib.ui.SimpleRcAdapter;
 
 public class MainActivity extends Activity
@@ -91,6 +92,12 @@ public class MainActivity extends Activity
             params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             params.gravity = Gravity.CENTER;
             mParent.addView(mContentView, params);
+
+            DottedLineView dottedLineView = new DottedLineView(context);
+
+            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.gravity = Gravity.CENTER;
+            mParent.addView(dottedLineView, params);
         }
 
         initSimpleAdapter();

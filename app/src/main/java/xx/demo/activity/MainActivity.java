@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import lib.ui.DottedLineView;
 import lib.ui.SimpleRcAdapter;
 
 public class MainActivity extends Activity

@@ -98,6 +98,7 @@
             android:name=".activity.media.GLESV2Activity"
             android:theme="@style/Theme.FullScreen">
         </activity>
+
     </application>
 
 </manifest>

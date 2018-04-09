@@ -3,6 +3,7 @@ package xx.demo.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -83,6 +84,7 @@ public class MainActivity extends Activity
     private void initUI(Context context)
     {
         mParent = new FrameLayout(context);
+        mParent.setBackgroundColor(Color.RED);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mParent.setLayoutParams(params);
         setContentView(mParent);

@@ -6,19 +6,15 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-public abstract class BaseActivity extends Activity
+public abstract class BaseActivity extends Activity implements BaseActivityInterface
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        initData();
+        onCreateInitData();
         onCreateUI(this);
-    }
-
-    protected void initData()
-    {
-
+        onCreateFinal();
     }
 
     public void onCreateUI(Context context)
@@ -30,7 +26,4 @@ public abstract class BaseActivity extends Activity
 
         createChildren(mParent, params);
     }
-
-    public abstract void createChildren(FrameLayout parent, FrameLayout.LayoutParams params);
-
 }

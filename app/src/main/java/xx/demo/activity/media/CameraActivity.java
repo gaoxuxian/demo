@@ -23,7 +23,7 @@ public class CameraActivity extends BaseActivity
     private ArrayList<HashMap<String, Object>> mActivityArr;
 
     @Override
-    protected void initData()
+    public void onCreateInitData()
     {
         String[][] EXAMPLES = new String[][]{
                 {

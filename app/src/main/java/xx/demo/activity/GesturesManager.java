@@ -3,7 +3,6 @@ package xx.demo.activity;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ViewConfiguration;
 
 import lib.util.PixelPercentUtil;
 
@@ -12,63 +11,45 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
     private GestureDetector mDetector;
     private float mVelocityX;
     private float mVelocityY;
-    private int mTouchSlop;
     private int mMinMoveInterceptSize;
 
     private float mDownX;
     private float mDownY;
 
-    private int mShowType = ShowType.TYPE_NONE;
-
-    public void setBasicDataListener(BasicDataListener listener)
-    {
-        this.mDataListener = listener;
-    }
-
-    @interface ShowType
-    {
-        int TYPE_NONE = 0;
-        int TYPE_SHOW_LEFT = 1;
-        int TYPE_SHOW_RIGHT = 2;
-        int TYPE_SHOW_TOP = 3;
-        int TYPE_SHOW_BOTTOM = 4;
-    }
-
-    private GesturesListener mListener;
+    private GesturesListener mGesturesListener;
     private BasicDataListener mDataListener;
 
     public void setGesturesListener(GesturesListener listener)
     {
-        this.mListener = listener;
+        this.mGesturesListener = listener;
+    }
+
+    public void setBaseDataListener(BasicDataListener listener)
+    {
+        this.mDataListener = listener;
     }
 
     public interface BasicDataListener
     {
-        int getLeftWidth();
+        int getLeftToRightMinSize();
 
-        int getRightWidth();
+        int getRightToLeftMinSize();
 
-        int getBottomHeight();
+        int getTopToBottomMinSize();
 
-        int getTopHeight();
+        int getBottomToTopMinSize();
     }
 
     public interface GesturesListener
     {
-        void onInitLeft();
+        void onMove(float distance, int moveType);
 
-        void onInitRight();
-
-        void onInitBottom();
-
-        void onTransLeft(float transX, boolean show, boolean hide);
-
-        void onTransRight(float transX, boolean show, boolean hide);
+        void onUp(int upType, int moveType);
     }
 
     private int mMoveType = MoveType.TYPE_NONE;
 
-    @interface MoveType
+    public @interface MoveType
     {
         int TYPE_NONE = 0;
         int TYPE_LEFT_TO_RIGHT = 1;
@@ -77,10 +58,15 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
         int TYPE_BOTTOM_TO_TOP = 4;
     }
 
+    public @interface UpType
+    {
+        int TYPE_CONSISTENT = 0; // 一致的
+        int TYPE_ADVERSE = 1; // 相反的
+    }
+
     public GesturesManager(Context context)
     {
         mDetector = new GestureDetector(context, this);
-        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         mMinMoveInterceptSize = PixelPercentUtil.WidthPxxToPercent(30);
     }
 
@@ -96,18 +82,26 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
     {
         boolean out = false;
 
+        if (mDetector != null)
+        {
+            mDetector.onTouchEvent(ev);
+        }
+
         switch (ev.getAction() & ev.getActionMasked())
         {
             case MotionEvent.ACTION_DOWN:
             {
                 mDownX = ev.getX();
                 mDownY = ev.getY();
+                mVelocityX = 0;
+                mVelocityY = 0;
                 mMoveType = MoveType.TYPE_NONE;
                 break;
             }
 
             case MotionEvent.ACTION_MOVE:
             {
+                float diff = 0;
                 if (mMoveType == MoveType.TYPE_NONE)
                 {
                     float diffX = Math.abs(ev.getX() - mDownX);
@@ -120,20 +114,10 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
                             if ((ev.getX() - mDownX) > 0)
                             {
                                 mMoveType = MoveType.TYPE_LEFT_TO_RIGHT;
-
-                                if (mShowType == ShowType.TYPE_NONE && mListener != null)
-                                {
-                                    mListener.onInitLeft();
-                                }
                             }
                             else if ((ev.getX() - mDownX) < 0)
                             {
                                 mMoveType = MoveType.TYPE_RIGHT_TO_LEFT;
-
-                                if (mShowType == ShowType.TYPE_NONE && mListener != null)
-                                {
-                                    mListener.onInitRight();
-                                }
                             }
                         }
                         else
@@ -145,166 +129,158 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
                             else if ((ev.getY() - mDownY) < 0)
                             {
                                 mMoveType = MoveType.TYPE_BOTTOM_TO_TOP;
-
-                                if (mShowType == ShowType.TYPE_NONE && mListener != null)
-                                {
-                                    mListener.onInitBottom();
-                                }
                             }
                         }
                     }
                 }
 
-                float diffX = ev.getX() - mDownX;
-                float diffY = ev.getY() - mDownY;
+                switch (mMoveType)
+                {
+                    case MoveType.TYPE_RIGHT_TO_LEFT:
+                    case MoveType.TYPE_LEFT_TO_RIGHT:
+                    {
+                        diff = ev.getX() - mDownX;
+                        break;
+                    }
 
+                    case MoveType.TYPE_TOP_TO_BOTTOM:
+                    case MoveType.TYPE_BOTTOM_TO_TOP:
+                    {
+                        diff = ev.getY() - mDownY;
+                        break;
+                    }
+                }
+
+                if (mGesturesListener != null)
+                {
+                    mGesturesListener.onMove(diff, mMoveType);
+                }
+                break;
+            }
+
+            case MotionEvent.ACTION_OUTSIDE:
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+            {
+                float diffX = Math.abs(ev.getX() - mDownX);
+                float diffY = Math.abs(ev.getY() - mDownY);
+
+                int minSize = 0;
+                int type = UpType.TYPE_CONSISTENT;
                 switch (mMoveType)
                 {
                     case MoveType.TYPE_LEFT_TO_RIGHT:
                     {
-                        if (mListener != null && mDataListener != null)
+                        if (mDataListener != null)
                         {
-                            if (mShowType == ShowType.TYPE_NONE)
-                            {
-                                int leftWidth = mDataListener.getLeftWidth();
-                                float transX = -leftWidth + diffX;
-                                if (transX < -leftWidth)
-                                {
-                                    transX = -leftWidth;
-                                }
-                                else if (transX > 0)
-                                {
-                                    transX = 0;
-                                }
-                                mListener.onTransLeft(transX, false, false);
-                            }
-                            else if (mShowType == ShowType.TYPE_SHOW_RIGHT)
-                            {
-                                mListener.onTransRight(diffX, false, false);
-                            }
+                            minSize = mDataListener.getLeftToRightMinSize();
+                        }
+
+                        if (mVelocityX > 0)
+                        {
+                            type = UpType.TYPE_CONSISTENT;
+                        }
+                        else if (mVelocityX < 0)
+                        {
+                            type = UpType.TYPE_ADVERSE;
+                        }
+                        else if (diffX < minSize)
+                        {
+                            type = UpType.TYPE_ADVERSE;
+                        }
+                        else if (diffX > minSize)
+                        {
+                            type = UpType.TYPE_CONSISTENT;
                         }
                         break;
                     }
 
                     case MoveType.TYPE_RIGHT_TO_LEFT:
                     {
-                        if (mListener != null)
+                        if (mDataListener != null)
                         {
-                            if (mShowType == ShowType.TYPE_NONE)
-                            {
-                                mListener.onTransRight(diffX,false, false);
-                            }
-                            else if (mShowType == ShowType.TYPE_SHOW_LEFT)
-                            {
-                                int leftWidth = mDataListener.getLeftWidth();
-                                float transX = diffX;
-                                if (transX < -leftWidth)
-                                {
-                                    transX = -leftWidth;
-                                }
-                                else if (transX > 0)
-                                {
-                                    transX = 0;
-                                }
-                                mListener.onTransLeft(transX,false, false);
-                            }
+                            minSize = mDataListener.getRightToLeftMinSize();
                         }
+
+                        if (mVelocityX > 0)
+                        {
+                            type = UpType.TYPE_ADVERSE;
+                        }
+                        else if (mVelocityX < 0)
+                        {
+                            type = UpType.TYPE_CONSISTENT;
+                        }
+                        else if (diffX > minSize)
+                        {
+                            type = UpType.TYPE_CONSISTENT;
+                        }
+                        else if (diffX < minSize)
+                        {
+                            type = UpType.TYPE_ADVERSE;
+                        }
+                        break;
+                    }
+
+                    case MoveType.TYPE_TOP_TO_BOTTOM:
+                    {
+                        if (mDataListener != null)
+                        {
+                            minSize = mDataListener.getTopToBottomMinSize();
+                        }
+
+                        if (mVelocityY > 0)
+                        {
+                            type = UpType.TYPE_CONSISTENT;
+                        }
+                        else if (mVelocityY < 0)
+                        {
+                            type = UpType.TYPE_ADVERSE;
+                        }
+                        else if (diffY < minSize)
+                        {
+                            type = UpType.TYPE_ADVERSE;
+                        }
+                        else if (diffY > minSize)
+                        {
+                            type = UpType.TYPE_CONSISTENT;
+                        }
+                        break;
+                    }
+
+                    case MoveType.TYPE_BOTTOM_TO_TOP:
+                    {
+                        if (mDataListener != null)
+                        {
+                            minSize = mDataListener.getBottomToTopMinSize();
+                        }
+
+                        if (mVelocityY < 0)
+                        {
+                            type = UpType.TYPE_CONSISTENT;
+                        }
+                        else if (mVelocityY > 0)
+                        {
+                            type = UpType.TYPE_ADVERSE;
+                        }
+                        else if (diffY < minSize)
+                        {
+                            type = UpType.TYPE_ADVERSE;
+                        }
+                        else if (diffY > minSize)
+                        {
+                            type = UpType.TYPE_CONSISTENT;
+                        }
+                        break;
                     }
                 }
-                break;
-            }
 
-            case MotionEvent.ACTION_UP:
-            {
-                float diffX = ev.getX() - mDownX;
-                float diffY = ev.getY() - mDownY;
-
-                switch (mShowType)
+                if (mGesturesListener != null)
                 {
-                    case ShowType.TYPE_NONE:
-                    {
-                        switch (mMoveType)
-                        {
-                            case MoveType.TYPE_LEFT_TO_RIGHT:
-                            {
-                                if (mListener != null)
-                                {
-                                    int leftWidth = mDataListener.getLeftWidth();
-                                    float transX = -leftWidth + diffX;
-                                    if (transX < -leftWidth)
-                                    {
-                                        transX = -leftWidth;
-                                    }
-                                    else if (transX > 0)
-                                    {
-                                        transX = 0;
-                                    }
-                                    mListener.onTransLeft(transX, true, false);
-                                    mShowType = ShowType.TYPE_SHOW_LEFT;
-                                }
-                                break;
-                            }
-
-                            case MoveType.TYPE_RIGHT_TO_LEFT:
-                            {
-
-                                break;
-                            }
-
-                            case MoveType.TYPE_TOP_TO_BOTTOM:
-                            {
-
-                                break;
-                            }
-
-                            case MoveType.TYPE_BOTTOM_TO_TOP:
-                            {
-
-                                break;
-                            }
-                        }
-                        break;
-                    }
-
-                    case ShowType.TYPE_SHOW_LEFT:
-                    {
-                        if (mListener != null)
-                        {
-                            int leftWidth = mDataListener.getLeftWidth();
-                            float transX = diffX;
-                            if (transX < -leftWidth)
-                            {
-                                transX = -leftWidth;
-                            }
-                            else if (transX > 0)
-                            {
-                                transX = 0;
-                            }
-                            mListener.onTransLeft(transX, false, true);
-                            mShowType = ShowType.TYPE_NONE;
-                        }
-                        break;
-                    }
-
-                    case ShowType.TYPE_SHOW_RIGHT:
-                    {
-                        break;
-                    }
-
-                    case ShowType.TYPE_SHOW_TOP:
-                    {
-                        break;
-                    }
-
-                    case ShowType.TYPE_SHOW_BOTTOM:
-                    {
-                        break;
-                    }
+                    mGesturesListener.onUp(type, mMoveType);
                 }
                 break;
             }
         }
-
         return out;
     }
 }

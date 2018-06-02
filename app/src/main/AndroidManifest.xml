@@ -33,11 +33,6 @@
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/Theme.FullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.view.ShutterActivity"
@@ -55,17 +50,14 @@
             android:name=".activity.media.CameraActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".activity.media.PreviewCameraActivity"
             android:theme="@style/Theme.FullScreen">
         </activity>
-
         <activity
             android:name=".activity.media.PreviewCameraV2Activity"
             android:theme="@style/Theme.FullScreen">
         </activity>
-
         <activity
             android:name=".activity.media.RecordActivity"
             android:theme="@style/Theme.FullScreen">
@@ -97,6 +89,23 @@
         <activity
             android:name=".activity.media.GLESV2Activity"
             android:theme="@style/Theme.FullScreen">
+        </activity>
+        <activity
+            android:name=".activity.Java8Activity"
+            android:label="@string/title_activity_java8"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activity.ContentProviderActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".activity.GesturesActivity"
+                  android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 

@@ -186,7 +186,7 @@ public class GesturesActivity extends BaseActivity
                 {
                     case GesturesManager.MoveType.TYPE_LEFT_TO_RIGHT:
                     {
-                        if (upType == GesturesManager.UpType.TYPE_CONSISTENT)
+                        if (upType == GesturesManager.UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE)
                         {
                             if (mShowType == ShowType.TYPE_SHOW_LEFT)
                             {
@@ -224,7 +224,7 @@ public class GesturesActivity extends BaseActivity
 
                     case GesturesManager.MoveType.TYPE_RIGHT_TO_LEFT:
                     {
-                        if (upType == GesturesManager.UpType.TYPE_CONSISTENT)
+                        if (upType == GesturesManager.UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE)
                         {
                             if (mShowType == ShowType.TYPE_SHOW_RIGHT)
                             {
@@ -263,7 +263,7 @@ public class GesturesActivity extends BaseActivity
 
                     case GesturesManager.MoveType.TYPE_TOP_TO_BOTTOM:
                     {
-                        if (upType == GesturesManager.UpType.TYPE_CONSISTENT)
+                        if (upType == GesturesManager.UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE)
                         {
                             if (mShowType == ShowType.TYPE_SHOW_TOP)
                             {
@@ -301,7 +301,7 @@ public class GesturesActivity extends BaseActivity
 
                     case GesturesManager.MoveType.TYPE_BOTTOM_TO_TOP:
                     {
-                        if (upType == GesturesManager.UpType.TYPE_CONSISTENT)
+                        if (upType == GesturesManager.UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE)
                         {
                             if (mShowType == ShowType.TYPE_SHOW_BOTTOM)
                             {

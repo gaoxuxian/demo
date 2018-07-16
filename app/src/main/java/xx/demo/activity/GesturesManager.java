@@ -60,8 +60,9 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
 
     public @interface UpType
     {
-        int TYPE_CONSISTENT = 0; // 一致的
-        int TYPE_ADVERSE = 1; // 相反的
+        int TYPE_STATIC_LIFT = 0;
+        int TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE = 1; // 与 move 类型 一致的
+        int TYPE_FLING_OPPOSITE_OF_MOVE_TYPE = 2; // 与 move 类型 相反的
     }
 
     public GesturesManager(Context context)
@@ -166,7 +167,7 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
                 float diffY = Math.abs(ev.getY() - mDownY);
 
                 int minSize = 0;
-                int type = UpType.TYPE_CONSISTENT;
+                int type = UpType.TYPE_STATIC_LIFT;
                 switch (mMoveType)
                 {
                     case MoveType.TYPE_LEFT_TO_RIGHT:
@@ -178,19 +179,19 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
 
                         if (mVelocityX > 0)
                         {
-                            type = UpType.TYPE_CONSISTENT;
+                            type = UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE;
                         }
                         else if (mVelocityX < 0)
                         {
-                            type = UpType.TYPE_ADVERSE;
+                            type = UpType.TYPE_FLING_OPPOSITE_OF_MOVE_TYPE;
                         }
                         else if (diffX < minSize)
                         {
-                            type = UpType.TYPE_ADVERSE;
+                            type = UpType.TYPE_FLING_OPPOSITE_OF_MOVE_TYPE;
                         }
-                        else if (diffX > minSize)
+                        else if (diffX >= minSize)
                         {
-                            type = UpType.TYPE_CONSISTENT;
+                            type = UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE;
                         }
                         break;
                     }
@@ -204,19 +205,19 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
 
                         if (mVelocityX > 0)
                         {
-                            type = UpType.TYPE_ADVERSE;
+                            type = UpType.TYPE_FLING_OPPOSITE_OF_MOVE_TYPE;
                         }
                         else if (mVelocityX < 0)
                         {
-                            type = UpType.TYPE_CONSISTENT;
+                            type = UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE;
                         }
-                        else if (diffX > minSize)
+                        else if (diffX >= minSize)
                         {
-                            type = UpType.TYPE_CONSISTENT;
+                            type = UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE;
                         }
                         else if (diffX < minSize)
                         {
-                            type = UpType.TYPE_ADVERSE;
+                            type = UpType.TYPE_FLING_OPPOSITE_OF_MOVE_TYPE;
                         }
                         break;
                     }
@@ -230,19 +231,19 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
 
                         if (mVelocityY > 0)
                         {
-                            type = UpType.TYPE_CONSISTENT;
+                            type = UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE;
                         }
                         else if (mVelocityY < 0)
                         {
-                            type = UpType.TYPE_ADVERSE;
+                            type = UpType.TYPE_FLING_OPPOSITE_OF_MOVE_TYPE;
                         }
                         else if (diffY < minSize)
                         {
-                            type = UpType.TYPE_ADVERSE;
+                            type = UpType.TYPE_FLING_OPPOSITE_OF_MOVE_TYPE;
                         }
-                        else if (diffY > minSize)
+                        else if (diffY >= minSize)
                         {
-                            type = UpType.TYPE_CONSISTENT;
+                            type = UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE;
                         }
                         break;
                     }
@@ -256,19 +257,19 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
 
                         if (mVelocityY < 0)
                         {
-                            type = UpType.TYPE_CONSISTENT;
+                            type = UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE;
                         }
                         else if (mVelocityY > 0)
                         {
-                            type = UpType.TYPE_ADVERSE;
+                            type = UpType.TYPE_FLING_OPPOSITE_OF_MOVE_TYPE;
                         }
                         else if (diffY < minSize)
                         {
-                            type = UpType.TYPE_ADVERSE;
+                            type = UpType.TYPE_FLING_OPPOSITE_OF_MOVE_TYPE;
                         }
-                        else if (diffY > minSize)
+                        else if (diffY >= minSize)
                         {
-                            type = UpType.TYPE_CONSISTENT;
+                            type = UpType.TYPE_FLING_CONSISTENT_WITH_MOVE_TYPE;
                         }
                         break;
                     }

@@ -6,4 +6,5 @@
     <string name="title_activity_java_lock">JavaLockActivity</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_java8">Java8Activity</string>
+    <string name="title_activity_heighten">HeightenActivity</string>
 </resources>

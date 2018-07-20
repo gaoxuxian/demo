@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import java.io.IOException;
+import java.util.List;
 
 import xx.demo.activity.BaseActivity;
 
@@ -43,6 +44,11 @@ public class PreviewCameraActivity extends BaseActivity implements SurfaceHolder
             {
                 Camera.Parameters parameters = mCamera.getParameters();
                 parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
+                for (Camera.Size size : supportedPreviewSizes)
+                {
+
+                }
 
                 /**
                  * api 翻译：

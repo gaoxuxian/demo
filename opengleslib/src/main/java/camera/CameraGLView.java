@@ -7,6 +7,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -40,6 +41,19 @@ public class CameraGLView extends GLSurfaceView implements GLSurfaceView.Rendere
                 mCameraDrawer.setCameraId(1);
 
                 Camera.Parameters parameters = mCamera.getParameters();
+                List<Camera.Size> sizeList = parameters.getSupportedPreviewSizes();
+                if (sizeList != null)
+                {
+                    for (Camera.Size size : sizeList)
+                    {
+                        if (size.height == 1080 && size.width == 1440)
+                        {
+                            parameters.setPreviewSize(size.width, size.height);
+                            break;
+                        }
+                    }
+                }
+                mCamera.setParameters(parameters);
                 mCameraDrawer.setDataSize(parameters.getPreviewSize().height, parameters.getPreviewSize().width);
 
                 mCamera.setPreviewTexture(mCameraDrawer.getSurfaceTexture());

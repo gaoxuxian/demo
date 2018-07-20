@@ -7,4 +7,6 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_java8">Java8Activity</string>
     <string name="title_activity_heighten">HeightenActivity</string>
+    <string name="title_activity_gles1">GlesActivity1</string>
+    <string name="title_activity_gles2">GlesActivity2</string>
 </resources>

@@ -15,8 +15,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.READ_LOGS"/>
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -57,6 +55,11 @@
         <activity
             android:name=".activity.media.PreviewCameraV2Activity"
             android:theme="@style/Theme.FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".activity.media.RecordActivity"
@@ -106,11 +109,15 @@
         <activity
             android:name=".activity.view.HeightenActivity"
             android:theme="@style/Theme.FullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+        </activity>
+        <activity
+            android:name=".gles.GlesActivity1"
+            android:theme="@style/Theme.FullScreen">
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+        </activity>
+        <activity
+            android:name=".gles.GlesActivity2"
+            android:label="@string/title_activity_gles2">
         </activity>
     </application>
 

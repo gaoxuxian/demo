@@ -49,7 +49,11 @@
         <activity
             android:name=".activity.media.PreviewCameraV2Activity"
             android:theme="@style/Theme.FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activity.media.RecordActivity"
@@ -98,11 +102,7 @@
         <activity
             android:name=".activity.view.SeekBarActivity"
             android:theme="@style/Theme.FullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

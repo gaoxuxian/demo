@@ -6,8 +6,8 @@ public class CirclePointConfig implements IConfig
 {
     public @interface PointDrawType
     {
-        int resource = 0; // 画图
-        int self = 1; // 自己控制参数画
+        int self = 0; // 自己控制参数画
+        int resource = 1; // 画图
     }
 
     public @interface DataType
@@ -41,10 +41,6 @@ public class CirclePointConfig implements IConfig
 
     public int mPointDrawType; // 点的画法
 
-    public int mZeroPointBmpResId; // 原点的图片资源
-
-    public int mPointBmpResId; // 点的图片资源
-
     public int mPointWH; // 点的大小
 
     public int mMovablePointWH; // 可操作的点的大小
@@ -58,6 +54,10 @@ public class CirclePointConfig implements IConfig
     public int mRightMargin; // 最后一个点与右边缘的距离
 
     // =================================== 非必须参数 ============================= //
+
+    public int mZeroPointBmpResId; // 原点的图片资源
+
+    public int mPointBmpResId; // 点的图片资源
 
     /**
      * 可操作的点的颜色类型 {@link MovablePointColorType}

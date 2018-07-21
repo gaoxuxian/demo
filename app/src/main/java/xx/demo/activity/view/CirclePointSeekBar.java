@@ -41,7 +41,9 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
 
     private boolean mInit;
 
+    // 当前可以滑动的最大值
     private float mCanTouchMaxValue;
+    // 当前可以滑动的最小值
     private float mCanTouchMinValue;
 
     private SeekBarValueChangeListener mValueChangeListener;
@@ -114,6 +116,11 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
             mMovablePointX = pointF.x;
             mMovablePointY = pointF.y;
         }
+    }
+
+    public float getCurrentValue()
+    {
+        return mCurrentValue;
     }
 
     private String countValueText(CirclePointConfig config, float value)
@@ -281,7 +288,7 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
                 int maxValue = config.mPointSum - 1 - config.mZeroIndex;
                 float value = minValue + (maxValue - minValue) * percent;
 
-                boolean hasAchievedMaxOrMin = false;
+                boolean hasAchievedMaxOrMin = false; // 是否到达可滑动的最大值 或 最小值
                 if (value >= mCanTouchMaxValue)
                 {
                     value = (int) mCanTouchMaxValue;

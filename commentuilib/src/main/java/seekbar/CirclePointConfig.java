@@ -1,4 +1,4 @@
-package xx.demo.activity.view;
+package seekbar;
 
 import android.graphics.Color;
 

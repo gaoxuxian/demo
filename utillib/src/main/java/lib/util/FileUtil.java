@@ -2,6 +2,7 @@ package lib.util;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -986,5 +987,26 @@ public class FileUtil
 
     public static Bitmap getLocalVideoThumbnail(String filePath) {
         return getLocalVideoThumbnail(filePath, false);
+    }
+
+    //通过路径加载Assets中的文本内容
+    public static String getAssetsResource(Resources mRes, String path)
+    {
+        StringBuilder result = new StringBuilder();
+        try
+        {
+            InputStream is = mRes.getAssets().open(path);
+            int ch;
+            byte[] buffer = new byte[1024];
+            while (-1 != (ch = is.read(buffer)))
+            {
+                result.append(new String(buffer, 0, ch));
+            }
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+        return result.toString().replaceAll("\\r\\n", "\n");
     }
 }

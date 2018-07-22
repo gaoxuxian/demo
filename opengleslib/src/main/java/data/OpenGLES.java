@@ -70,5 +70,9 @@ public interface OpenGLES
      * 重点 ！！！！
      * 维基百科 -- 矩阵
      * https://zh.wikipedia.org/wiki/%E7%9F%A9%E9%98%B5#%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84
+     *
+     * 重点！！！！！
+     * glsl 语言
+     * https://www.jianshu.com/p/8a9fbd857188
      */
 }

@@ -49,11 +49,7 @@
         <activity
             android:name=".activity.media.PreviewCameraV2Activity"
             android:theme="@style/Theme.FullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.media.RecordActivity"
@@ -98,7 +94,13 @@
             android:theme="@style/Theme.FullScreen"></activity>
         <activity
             android:name=".gles.GlesActivity2"
-            android:label="@string/title_activity_gles2"></activity>
+            android:theme="@style/Theme.FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.view.SeekBarActivity"
             android:theme="@style/Theme.FullScreen">

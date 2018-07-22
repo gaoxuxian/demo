@@ -1,6 +1,9 @@
 package lib.opengles;
 
+import android.content.res.Resources;
 import android.opengl.Matrix;
+
+import java.io.InputStream;
 
 public class GLUtil
 {

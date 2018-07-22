@@ -1,4 +1,4 @@
-package xx.demo.activity.view;
+package seekbar;
 
 import android.animation.ArgbEvaluator;
 import android.content.Context;

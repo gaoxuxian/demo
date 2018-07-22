@@ -1,4 +1,4 @@
-package xx.demo.gles;
+package gles;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class GlesRender implements GLSurfaceView.Renderer
+public class GlesRender1 implements GLSurfaceView.Renderer
 {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config)

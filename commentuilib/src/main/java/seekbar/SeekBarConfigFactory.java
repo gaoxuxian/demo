@@ -1,4 +1,4 @@
-package xx.demo.activity.view;
+package seekbar;
 
 public class SeekBarConfigFactory
 {

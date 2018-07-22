@@ -1,17 +1,17 @@
-package xx.demo.gles;
+package gles;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-public class GlesView extends GLSurfaceView
+public class Gles1View extends GLSurfaceView
 {
-    private GlesRender mRender;
+    private GlesRender1 mRender;
 
-    public GlesView(Context context)
+    public Gles1View(Context context)
     {
         super(context);
 
-        mRender = new GlesRender();
+        mRender = new GlesRender1();
         setEGLContextClientVersion(2);
         setRenderer(mRender);
     }

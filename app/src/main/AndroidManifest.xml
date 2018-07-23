@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="xx.demo">
+<manifest package="xx.demo"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.SET_WALLPAPER" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_GPS" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_GPS"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true" />
+        android:required="true"/>
 
     <application
         android:name=".MyApplication"
@@ -30,81 +30,86 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.view.ShutterActivity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.view.ARActivity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.media.ExoActivity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.media.CameraActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.media.PreviewCameraActivity"
-            android:theme="@style/Theme.FullScreen"></activity>
-        <activity
-            android:name=".activity.media.PreviewCameraV2Activity"
             android:theme="@style/Theme.FullScreen">
 
         </activity>
         <activity
+            android:name=".activity.media.PreviewCameraV2Activity"
+            android:theme="@style/Theme.FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.media.RecordActivity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.JavaLockActivity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.media.GLESBaseActivity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
 
         <!-- gl es 基础代码流程演示 -->
         <activity
             android:name=".activity.media.GLESBaseV2Activity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.media.GLESBaseV3Activity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
 
         <!-- 对gl 基础代码进行了封装的写法 -->
         <activity
             android:name=".activity.media.GLESActivity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.media.GLESV2Activity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.Java8Activity"
             android:label="@string/title_activity_java8"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.ContentProviderActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.GesturesActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.view.HeightenActivity"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".gles.GlesActivity1"
-            android:theme="@style/Theme.FullScreen"></activity>
+            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".gles.GlesActivity2"
             android:theme="@style/Theme.FullScreen">
-
         </activity>
         <activity
             android:name=".activity.view.SeekBarActivity"
             android:theme="@style/Theme.FullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity
+            android:name=".gles.GlesActivity3"
+            android:label="@string/title_activity_gles3"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

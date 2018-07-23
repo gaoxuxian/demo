@@ -2,6 +2,7 @@ package xx.demo.activity.media;
 
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.FrameLayout;
 import java.io.IOException;
 import java.util.List;
 
+import lib.util.ShareData;
 import xx.demo.activity.BaseActivity;
 
 /**
@@ -29,7 +31,7 @@ public class PreviewCameraActivity extends BaseActivity implements SurfaceHolder
         mSurfaceView = new SurfaceView(parent.getContext());
         // surface view 生命周期监听
         mSurfaceView.getHolder().addCallback(this);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params = new FrameLayout.LayoutParams(ShareData.m_screenRealWidth, ShareData.m_screenRealWidth);
         parent.addView(mSurfaceView, params);
     }
 
@@ -43,13 +45,14 @@ public class PreviewCameraActivity extends BaseActivity implements SurfaceHolder
             try
             {
                 Camera.Parameters parameters = mCamera.getParameters();
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-                List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
-                for (Camera.Size size : supportedPreviewSizes)
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_EDOF);
+                List<String> supportedWhiteBalance = parameters.getSupportedWhiteBalance();
+                for (String str : supportedWhiteBalance)
                 {
-
+                    Log.d("xxx", "PreviewCameraActivity --> surfaceCreated: " + str);
                 }
-
+                parameters.setPreviewSize(1088, 1088);
+                mCamera.setParameters(parameters);
                 /**
                  * api 翻译：
                  * 1.可以多次添加buffer到queue，如果preview帧到达时该buffer可用就从queue取出来；如果不可用就丢弃该帧；

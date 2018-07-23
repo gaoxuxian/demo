@@ -5,6 +5,7 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.view.MotionEvent;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,20 +40,21 @@ public class CameraGLView extends GLSurfaceView implements GLSurfaceView.Rendere
             try
             {
                 mCameraDrawer.setCameraId(1);
-
+                mCamera.cancelAutoFocus();
                 Camera.Parameters parameters = mCamera.getParameters();
                 List<Camera.Size> sizeList = parameters.getSupportedPreviewSizes();
                 if (sizeList != null)
                 {
                     for (Camera.Size size : sizeList)
                     {
-                        if (size.height == 1080 && size.width == 1440)
+                        if (size.height == 1088 && size.width == 1088)
                         {
                             parameters.setPreviewSize(size.width, size.height);
                             break;
                         }
                     }
                 }
+                parameters.setMeteringAreas();
                 mCamera.setParameters(parameters);
                 mCameraDrawer.setDataSize(parameters.getPreviewSize().height, parameters.getPreviewSize().width);
 
@@ -97,5 +99,11 @@ public class CameraGLView extends GLSurfaceView implements GLSurfaceView.Rendere
             mCamera.release();
             mCamera = null;
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        return true;
     }
 }

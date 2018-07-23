@@ -23,9 +23,16 @@ public class PreviewCameraV2Activity extends BaseActivity
     }
 
     @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mCameraView.onResume();
+    }
+
+    @Override
     protected void onPause()
     {
-        mCameraView.onStop();
+        mCameraView.onPause();
         super.onPause();
     }
 

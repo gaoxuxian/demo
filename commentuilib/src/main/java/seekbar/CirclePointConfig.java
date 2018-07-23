@@ -61,7 +61,7 @@ public class CirclePointConfig implements IConfig
         int gradient = 1; // 渐变色
     }
 
-    private CirclePointConfig()
+    CirclePointConfig()
     {
 
     }

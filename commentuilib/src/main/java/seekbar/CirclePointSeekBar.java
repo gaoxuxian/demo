@@ -25,9 +25,11 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
     // 原点
     private Bitmap mZeroPointBmp;
     private Bitmap mPointBmp;
+    private Bitmap mMovablePointBmp;
+
     // 如果画图要叠加颜色
     private PorterDuffColorFilter[] mColorFilterArr;
-    // 可移动的点
+    // 可移动的点, 中心点的 x，y
     private float mMovablePointX;
     private float mMovablePointY;
 
@@ -75,7 +77,7 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
                     mColorFilterArr = new PorterDuffColorFilter[length];
                     for (int i = 0; i < length; i++)
                     {
-                        mColorFilterArr[i] = new PorterDuffColorFilter(config.mPointColorArr[i], PorterDuff.Mode.DST_IN);
+                        mColorFilterArr[i] = new PorterDuffColorFilter(config.mPointColorArr[i], PorterDuff.Mode.SRC_IN);
                     }
                 }
             }
@@ -83,6 +85,11 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
             if (config.mZeroPointDrawType == CirclePointConfig.PointDrawType.resource)
             {
                 mZeroPointBmp = BitmapFactory.decodeResource(getResources(), config.mZeroPointBmpResId);
+            }
+
+            if (config.mMovableDrawType == CirclePointConfig.PointDrawType.resource)
+            {
+                mMovablePointBmp = BitmapFactory.decodeResource(getResources(), config.mMovableBmpResId);
             }
         }
     }
@@ -168,8 +175,8 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
                     int max = config.mPointSum - 1 - config.mZeroIndex;
                     int min = 0 - config.mZeroIndex;
                     float percent = (value - min) / (float) (max - min);
-                    int realW = getMeasuredWidth() - config.mLeftMargin - config.mRightMargin - config.mPointWH;
-                    out.x = config.mLeftMargin + config.mPointWH / 2f + realW * percent;
+                    int realW = getMeasuredWidth() - config.mLeftMargin - config.mRightMargin - config.mPointW;
+                    out.x = config.mLeftMargin + config.mPointW / 2f + realW * percent;
                     out.y = getMeasuredHeight() / 2f - config.mPointsTranslationY;
                     if (config.mMovablePointColorType == CirclePointConfig.MovablePointColorType.gradient)
                     {
@@ -222,7 +229,7 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
                             index = config.mPointSum - 1;
                         }
 
-                        out.x = config.mLeftMargin + config.mPointWH * index + config.mDistanceBetweenPointAndPoint * index + config.mPointWH / 2f;
+                        out.x = config.mLeftMargin + config.mPointW * index + config.mDistanceBetweenPointAndPoint * index + config.mPointW / 2f;
                         out.y = getMeasuredHeight() / 2f - config.mPointsTranslationY;
 
                         if (config.mMovablePointColorType == CirclePointConfig.MovablePointColorType.gradient)
@@ -249,9 +256,9 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
 
         if (config != null)
         {
-            float minX = config.mLeftMargin + config.mPointWH / 2f;
-            float maxX = config.mLeftMargin + config.mPointWH * config.mPointSum + config.mDistanceBetweenPointAndPoint * (config.mPointSum - 1) - config.mPointWH / 2f;
-            int realW = getMeasuredWidth() - config.mLeftMargin - config.mRightMargin - config.mPointWH;
+            float minX = config.mLeftMargin + config.mPointW / 2f;
+            float maxX = config.mLeftMargin + config.mPointW * config.mPointSum + config.mDistanceBetweenPointAndPoint * (config.mPointSum - 1) - config.mPointW / 2f;
+            int realW = getMeasuredWidth() - config.mLeftMargin - config.mRightMargin - config.mPointW;
 
             if (x < minX)
             {
@@ -327,7 +334,7 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
                 }
                 if (hasAchievedMaxOrMin)
                 {
-                    out.x = config.mLeftMargin + config.mPointWH * (index + 1) + config.mDistanceBetweenPointAndPoint * index - config.mPointWH / 2f;
+                    out.x = config.mLeftMargin + config.mPointW * (index + 1) + config.mDistanceBetweenPointAndPoint * index - config.mPointW / 2f;
                     out.y = getMeasuredHeight() / 2f - config.mPointsTranslationY;
                 }
                 else
@@ -379,9 +386,9 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
             // 自动吸附
             float x = event.getX();
 
-            float minX = mConfig.mLeftMargin + mConfig.mPointWH / 2f;
-            float maxX = mConfig.mLeftMargin + mConfig.mPointWH * mConfig.mPointSum + mConfig.mDistanceBetweenPointAndPoint * (mConfig.mPointSum - 1) - mConfig.mPointWH / 2f;
-            int realW = getMeasuredWidth() - mConfig.mLeftMargin - mConfig.mRightMargin - mConfig.mPointWH;
+            float minX = mConfig.mLeftMargin + mConfig.mPointW / 2f;
+            float maxX = mConfig.mLeftMargin + mConfig.mPointW * mConfig.mPointSum + mConfig.mDistanceBetweenPointAndPoint * (mConfig.mPointSum - 1) - mConfig.mPointW / 2f;
+            int realW = getMeasuredWidth() - mConfig.mLeftMargin - mConfig.mRightMargin - mConfig.mPointW;
 
             if (x < minX)
             {
@@ -461,13 +468,29 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
             }
 
             // 再画可操作的点
-            drawMovablePoint(canvas, mConfig);
+            switch (mConfig.mMovableDrawType)
+            {
+                case CirclePointConfig.PointDrawType.resource:
+                {
+                    drawMovablePointByRes(canvas, mConfig);
+                    break;
+                }
+
+                case CirclePointConfig.PointDrawType.self:
+                {
+                    drawMovablePointBySelf(canvas, mConfig);
+                    break;
+                }
+            }
+
+            // 画文案
+            drawValueText(canvas, mConfig);
 
             canvas.restoreToCount(save);
         }
     }
 
-    private void drawMovablePoint(Canvas canvas, CirclePointConfig config)
+    private void drawMovablePointByRes(Canvas canvas, CirclePointConfig config)
     {
         if (config != null)
         {
@@ -489,6 +512,15 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
                 }
             }
             canvas.drawCircle(mMovablePointX, mMovablePointY, config.mMovablePointWH / 2f, mPaint);
+            canvas.restore();
+        }
+    }
+
+    private void drawValueText(Canvas canvas, CirclePointConfig config)
+    {
+        if (config != null)
+        {
+            canvas.save();
 
             if (config.mShowSelectedValue && !TextUtils.isEmpty(mValueText))
             {
@@ -509,18 +541,19 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
 
     private void drawZeroPointByRes(Canvas canvas, CirclePointConfig config)
     {
-        if (config != null)
+        if (config != null && mZeroPointBmp != null)
         {
             canvas.save();
             int viewH = getMeasuredHeight();
             int size = config.mPointSum;
-            float y = viewH / 2f - config.mPointsTranslationY - config.mPointWH / 2f;
             for (int i = 0; i < size; i++)
             {
-                if (i == config.mZeroIndex && mZeroPointBmp != null)
+                if (i == config.mZeroIndex)
                 {
-                    float x = config.mLeftMargin + config.mPointWH * i + config.mDistanceBetweenPointAndPoint * i;
-                    float scale = Math.min((float) config.mPointWH / mZeroPointBmp.getWidth(), (float) config.mPointWH / mZeroPointBmp.getHeight());
+                    float x = config.mLeftMargin + config.mPointW * i + config.mDistanceBetweenPointAndPoint * i;
+                    float scale = Math.min((float) config.mPointW / mZeroPointBmp.getWidth(), (float) config.mPointW / mZeroPointBmp.getHeight());
+                    float bmpH = mZeroPointBmp.getHeight() * scale;
+                    float y = viewH / 2f - config.mPointsTranslationY - bmpH / 2f;
                     mMatrix.reset();
                     mMatrix.postScale(scale, scale);
                     mMatrix.postTranslate(x, y);
@@ -540,33 +573,64 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
 
     private void drawPointByRes(Canvas canvas, CirclePointConfig config)
     {
-        if (config != null)
+        if (config != null && mPointBmp != null)
         {
             canvas.save();
             int viewH = getMeasuredHeight();
             int size = config.mPointSum;
             float x = 0;
-            float y = viewH / 2f - config.mPointsTranslationY - config.mPointWH / 2f;
+            float y = 0;
             for (int i = 0; i < size; i++)
             {
                 if (i == config.mZeroIndex) continue;
 
-                x = config.mLeftMargin + config.mPointWH * i + config.mDistanceBetweenPointAndPoint * i;
-                if (mPointBmp != null)
+                x = config.mLeftMargin + config.mPointW * i + config.mDistanceBetweenPointAndPoint * i;
+                float scale = (float) config.mPointW / mPointBmp.getWidth();
+                float bmpH = mPointBmp.getHeight() * scale;
+                y = viewH / 2f - config.mPointsTranslationY - bmpH / 2f;
+                mMatrix.reset();
+                mMatrix.postScale(scale, scale);
+                mMatrix.postTranslate(x, y);
+                mPaint.reset();
+                mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+                if (mColorFilterArr != null && i < mColorFilterArr.length)
                 {
-                    float scale = Math.min((float) config.mPointWH / mPointBmp.getWidth(), (float) config.mPointWH / mPointBmp.getHeight());
-                    mMatrix.reset();
-                    mMatrix.postScale(scale, scale);
-                    mMatrix.postTranslate(x, y);
-                    mPaint.reset();
-                    mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-                    if (mColorFilterArr != null && i < mColorFilterArr.length)
-                    {
-                        mPaint.setColorFilter(mColorFilterArr[i]);
-                    }
-                    canvas.drawBitmap(mPointBmp, mMatrix, mPaint);
+                    mPaint.setColorFilter(mColorFilterArr[i]);
+                }
+                canvas.drawBitmap(mPointBmp, mMatrix, mPaint);
+            }
+            canvas.restore();
+        }
+    }
+
+    private void drawMovablePointBySelf(Canvas canvas, CirclePointConfig config)
+    {
+        if (config != null && mMovablePointBmp != null && !mMovablePointBmp.isRecycled())
+        {
+            canvas.save();
+            mPaint.reset();
+            mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+            switch (config.mMovablePointColorType)
+            {
+                case CirclePointConfig.MovablePointColorType.fixed_one_color:
+                {
+                    mPaint.setColor(config.mMovablePointColor);
+                    break;
+                }
+
+                case CirclePointConfig.MovablePointColorType.gradient:
+                {
+                    mPaint.setColor(mMovablePointGradientColor);
+                    break;
                 }
             }
+            mMatrix.reset();
+            float x = mMovablePointX - config.mMovablePointWH / 2f;
+            float y = mMovablePointY - config.mMovablePointWH / 2f;
+            float scale = Math.min((float) config.mMovablePointWH / mMovablePointBmp.getWidth(), (float) config.mMovablePointWH / mMovablePointBmp.getHeight());
+            mMatrix.postScale(scale, scale);
+            mMatrix.postTranslate(x, y);
+            canvas.drawBitmap(mMovablePointBmp, mMatrix, mPaint);
             canvas.restore();
         }
     }
@@ -584,7 +648,7 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
             {
                 if (i == config.mZeroIndex) continue;
 
-                x = config.mLeftMargin + config.mPointWH * i + config.mDistanceBetweenPointAndPoint * i + config.mPointWH / 2f;
+                x = config.mLeftMargin + config.mPointW * i + config.mDistanceBetweenPointAndPoint * i + config.mPointW / 2f;
                 mPaint.reset();
                 mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
                 mPaint.setStyle(Paint.Style.FILL);
@@ -592,7 +656,7 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
                 {
                     mPaint.setColor(config.mPointColorArr[i]);
                 }
-                canvas.drawCircle(x, y, config.mPointWH / 2f, mPaint);
+                canvas.drawCircle(x, y, config.mPointW / 2f, mPaint);
             }
             canvas.restore();
         }
@@ -611,7 +675,7 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
             {
                 if (i != config.mZeroIndex) continue;
 
-                x = config.mLeftMargin + config.mPointWH * i + config.mDistanceBetweenPointAndPoint * i + config.mPointWH / 2f;
+                x = config.mLeftMargin + config.mPointW * i + config.mDistanceBetweenPointAndPoint * i + config.mPointW / 2f;
                 mPaint.reset();
                 mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
                 mPaint.setStyle(Paint.Style.FILL);
@@ -619,7 +683,7 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
                 {
                     mPaint.setColor(config.mPointColorArr[i]);
                 }
-                canvas.drawCircle(x, y, config.mPointWH / 2f, mPaint);
+                canvas.drawCircle(x, y, config.mPointW / 2f, mPaint);
                 break;
             }
             canvas.restore();
@@ -654,16 +718,27 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
         }
     }
 
+    /**
+     * 设置当前可以被滑动的最大值
+     * @param max 如果是双向 ：范围: 0 -> mConfig.mPointSum - mConfig.mZeroIndex
+     */
     public void setCanTouchMaxValue(float max)
     {
         mCanTouchMaxValue = max;
     }
 
+    /**
+     * 设置当前可以被滑动的最小值
+     * @param min 如果是双向:范围:(0 - mConfig.mZeroIndex) -> 0
+     */
     public void setCanTouchMinValue(float min)
     {
         mCanTouchMinValue = min;
     }
 
+    /**
+     * 将可以滑动的最大值小值恢复至默认
+     */
     public void resetCanTouchMaxMinValue()
     {
         mCanTouchMaxValue = Float.MAX_VALUE;

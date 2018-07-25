@@ -32,17 +32,11 @@
             android:name=".activity.MainActivity"
             android:theme="@style/Theme.FullScreen"/>
         <activity
-            android:name=".activity.view.ShutterActivity"
-            android:theme="@style/Theme.FullScreen"/>
-        <activity
             android:name=".activity.view.ARActivity"
             android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.media.ExoActivity"
             android:theme="@style/Theme.FullScreen"/>
-        <activity
-            android:name=".activity.media.CameraActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.media.PreviewCameraActivity"
             android:theme="@style/Theme.FullScreen">
@@ -51,15 +45,7 @@
         <activity
             android:name=".activity.media.PreviewCameraV2Activity"
             android:theme="@style/Theme.FullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.media.RecordActivity"
-            android:theme="@style/Theme.FullScreen"/>
         <activity
             android:name=".activity.JavaLockActivity"
             android:theme="@style/Theme.FullScreen"/>
@@ -101,6 +87,7 @@
         <activity
             android:name=".gles.GlesActivity2"
             android:theme="@style/Theme.FullScreen">
+
         </activity>
         <activity
             android:name=".activity.view.SeekBarActivity"
@@ -108,8 +95,12 @@
         </activity>
         <activity
             android:name=".gles.GlesActivity3"
-            android:label="@string/title_activity_gles3"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 

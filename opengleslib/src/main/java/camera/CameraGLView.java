@@ -54,7 +54,6 @@ public class CameraGLView extends GLSurfaceView implements GLSurfaceView.Rendere
                         }
                     }
                 }
-                parameters.setMeteringAreas();
                 mCamera.setParameters(parameters);
                 mCameraDrawer.setDataSize(parameters.getPreviewSize().height, parameters.getPreviewSize().width);
 

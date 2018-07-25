@@ -74,5 +74,36 @@ public interface OpenGLES
      * 重点！！！！！
      * glsl 语言
      * https://www.jianshu.com/p/8a9fbd857188
+     *
+     *
+     * 飘飘白云 博客，资料解释比较详细
+     * http://www.cnblogs.com/kesalin/archive/2012/12/06/3D_math.html
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     * =====================  透视投影的理解过程  =========================== 可以在 assets\glDemo\ 下结合demo效果去理解
+     *
+     * OpenGL Transformation (最全的资料，而且自带一些zip包 demo，可运行查看 open gl 的画图过程，不过是英文博客, 下面的资料大多是根据这份博客进行翻译解释)
+     * http://www.songho.ca/opengl/gl_transform.html
+     *
+     * 上述链接的前置博客(同一个博主)
+     * http://www.songho.ca/opengl/gl_projectionmatrix.html
+     *
+     * ~~~~~~~ 以下记录的与上述链接博客不是同一个博主，只是对上述博客的一些翻译、解释
+     *
+     * ~OpenGL---gluLookAt函数详解
+     * https://blog.csdn.net/ivan_ljf/article/details/8764737
+     *
+     * ~OpenGL学习脚印: 投影矩阵和视口变换矩阵(math-projection and viewport matrix)
+     * https://blog.csdn.net/wangdingqiaoit/article/details/51589825
+     *
+     * ~OpenGL 学习系列---投影矩阵 (解释了为什么 透视矩阵中 left 、bottom 一定要传 负数，right、top 一定是 正数)
+     * https://glumes.com/post/opengl/opengl-tutorial-projection-matrix/
      */
 }

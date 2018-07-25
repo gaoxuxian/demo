@@ -26,7 +26,7 @@ public class Gles2View extends GLSurfaceView implements GLSurfaceView.Renderer
         super(context);
 
         triangleCoords = new float[]{
-                        0.0f, 0.5f,
+                        -0.5f, 0.5f,
                         -0.5f, -0.5f,
                         0.5f, -0.5f,
                 };

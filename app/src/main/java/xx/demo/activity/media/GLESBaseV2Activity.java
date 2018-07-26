@@ -37,6 +37,7 @@ public class GLESBaseV2Activity extends BaseActivity
         mGlSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mGlSurfaceView.setRenderer(new MyImageRender(this)); // 画图片
         mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+//        params = new FrameLayout.LayoutParams(1024, 800);
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 //        params = new FrameLayout.LayoutParams(ShareData.m_screenRealWidth, (int) (ShareData.m_screenRealWidth * 0.5625f));
         parent.addView(mGlSurfaceView, params);
@@ -130,7 +131,7 @@ public class GLESBaseV2Activity extends BaseActivity
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config)
         {
-            GLES20.glClearColor(0, 0, 0, 0);
+            GLES20.glClearColor(1.0f, 0, 0, 1.0f);
             GLES20.glEnable(GLES20.GL_TEXTURE_2D);
 
             mProgram = GLES20.glCreateProgram();
@@ -184,38 +185,21 @@ public class GLESBaseV2Activity extends BaseActivity
             int h = mBitmap.getHeight();
             float sWH = w / (float) h;
             float sWidthHeight = width / (float) height;
+            float scaleX = (float) width / w;
+            float scaleY = (float) height / h;
 
-            if (width > height)
+            float scale = Math.min((float) width / w, (float) height / h);
+            if (sWH == sWidthHeight)
             {
-                if (sWH > sWidthHeight)
-                {
-                    /**
-                     * Matrix.frustumM(float[] m, int offset,
-                     *                 float left, float right, float bottom, float top,
-                     *                 float near, float far)
-                     *
-                     * 关于 透视投影 的 params 个人理解:
-                     * float[] m: 接收矩阵数据的数组
-                     * int offset: 从哪个下标开始写入数据
-                     * float left、right、bottom、top:
-                     */
-                    Matrix.frustumM(mProjectMatrix, 0, -sWidthHeight * sWH, sWidthHeight * sWH, -1, 1, 3, 5);
-                }
-                else
-                {
-                    Matrix.frustumM(mProjectMatrix, 0, -sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 5);
-                }
+                Matrix.frustumM(mProjectMatrix, 0, -1, 1, -1 / sWidthHeight, 1 / sWidthHeight, 3, 5);
             }
-            else
+            else if (scale == scaleX)
             {
-                if (sWH > sWidthHeight)
-                {
-                    Matrix.frustumM(mProjectMatrix, 0, -1, 1, -1 / sWidthHeight * sWH, 1 / sWidthHeight * sWH, 3, 5);
-                }
-                else
-                {
-                    Matrix.frustumM(mProjectMatrix, 0, -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 5);
-                }
+                Matrix.frustumM(mProjectMatrix, 0, -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 5);
+            }
+            else if (scale == scaleY)
+            {
+                Matrix.frustumM(mProjectMatrix, 0, -sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 5);
             }
             //设置相机位置
             Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 3.0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);

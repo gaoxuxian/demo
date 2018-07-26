@@ -3,33 +3,33 @@ package xx.demo.gles;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import gles.Gles3View;
+import gles.Gles4View;
 import xx.demo.activity.BaseActivity;
 
-public class GlesActivity3 extends BaseActivity
+public class GlesActivity4 extends BaseActivity
 {
-    private Gles3View view;
+
+    private Gles4View mView;
 
     @Override
     public void createChildren(FrameLayout parent, FrameLayout.LayoutParams params)
     {
-        view = new Gles3View(parent.getContext());
+        mView = new Gles4View(parent.getContext());
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//        params = new FrameLayout.LayoutParams(400, 1000);
-        parent.addView(view, params);
+        parent.addView(mView, params);
     }
 
     @Override
     protected void onPause()
     {
         super.onPause();
-        view.onPause();
+        mView.onPause();
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
-        view.onResume();
+        mView.onResume();
     }
 }

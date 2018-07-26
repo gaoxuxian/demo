@@ -10,5 +10,9 @@ public interface GLTips
      * 2、透视投影矩阵其实起到了换算点的作用 !
      *      以下是个人猜测：如果是 left、right 传入了指定比例 (-width / height, width / height)，top、bottom 是 1、-1，
      *      那么成像的时候，在 x 轴上的顶点坐标，跟顶点坐标数组定义的值一样，在 y 轴上的顶点坐标，可能跟顶点坐标数组中定义的值有区别，区别在与 传入的比例大小
+     *
+     * 3、透视投影矩阵中的参数: left、right、bottom、top
+     *    取值范围 x 轴：[-1, 0)、(0, 1]、 y 轴：[-1, 0)、(0, 1], 0 应该是不可取的，个人理解
+     *    其对应的是一个标准立方体，即规范化设备坐标系， 立方体中心坐标是 (0,0,0) {@link OpenGLES 注释中 透视投影的理解过程 -> OpenGL学习脚印: 投影矩阵和视口变换矩阵(math-projection and viewport matrix)}
      */
 }

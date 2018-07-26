@@ -40,7 +40,6 @@
         <activity
             android:name=".activity.media.PreviewCameraActivity"
             android:theme="@style/Theme.FullScreen">
-
         </activity>
         <activity
             android:name=".activity.media.PreviewCameraV2Activity"
@@ -56,7 +55,8 @@
         <!-- gl es 基础代码流程演示 -->
         <activity
             android:name=".activity.media.GLESBaseV2Activity"
-            android:theme="@style/Theme.FullScreen"/>
+            android:theme="@style/Theme.FullScreen">
+        </activity>
         <activity
             android:name=".activity.media.GLESBaseV3Activity"
             android:theme="@style/Theme.FullScreen"/>
@@ -87,7 +87,6 @@
         <activity
             android:name=".gles.GlesActivity2"
             android:theme="@style/Theme.FullScreen">
-
         </activity>
         <activity
             android:name=".activity.view.SeekBarActivity"
@@ -95,6 +94,11 @@
         </activity>
         <activity
             android:name=".gles.GlesActivity3"
+            android:theme="@style/Theme.FullScreen">
+
+        </activity>
+        <activity
+            android:name=".gles.GlesActivity4"
             android:theme="@style/Theme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

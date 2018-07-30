@@ -79,7 +79,7 @@ public class Gles4View extends GLSurfaceView implements GLSurfaceView.Renderer
 
         int vPosition = GLES20.glGetAttribLocation(program, "vPosition");
         GLES20.glEnableVertexAttribArray(vPosition);
-        GLES20.glVertexAttribPointer(vPosition, 3, GLES20.GL_FLOAT, false, 12, mSquareVertexBuffer);
+        GLES20.glVertexAttribPointer(vPosition, 3, GLES20.GL_FLOAT, false, 0, mSquareVertexBuffer);
 
         int vColor = GLES20.glGetUniformLocation(program, "vColor");
         GLES20.glUniform4fv(vColor, 1, square_fragment_color, 0);

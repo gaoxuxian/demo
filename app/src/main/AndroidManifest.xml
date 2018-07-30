@@ -56,11 +56,6 @@
         <activity
             android:name=".activity.media.GLESBaseV2Activity"
             android:theme="@style/Theme.FullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.media.GLESBaseV3Activity"
@@ -100,12 +95,24 @@
         <activity
             android:name=".gles.GlesActivity3"
             android:theme="@style/Theme.FullScreen">
-
         </activity>
         <activity
             android:name=".gles.GlesActivity4"
             android:theme="@style/Theme.FullScreen">
+        </activity>
+        <activity
+            android:name=".gles.GlesActivity5"
+            android:theme="@style/Theme.FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".gles.GlesActivity6"
+            android:label="@string/title_activity_gles6"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

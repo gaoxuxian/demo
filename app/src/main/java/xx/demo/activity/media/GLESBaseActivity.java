@@ -36,6 +36,8 @@ import xx.demo.activity.BaseActivity;
  * Shader 用来描述如何绘制(渲染)，GLSL 是 OpenGL 的编程语言，全称 OpenGL Shader Language，它的语法类似于 C 语言。
  * <p>
  * OpenGL 渲染需要两种 Shader：Vertex Shader 和 Fragment Shader。
+ *
+ * 一个顶点坐标包含的字节数 float --> 4 byte, int --> 4 byte, short --> 2 byte, long --> 8 byte, char --> 2 byte
  */
 public class GLESBaseActivity extends BaseActivity
 {
@@ -156,7 +158,7 @@ public class GLESBaseActivity extends BaseActivity
             (2) int size: 顶点是 几维坐标 (x,y,z) == 3
             (3) int type: 顶点坐标，每一个值x, y, z的数据类型
             (4) boolean normalized:
-            (5) int stride: 一个顶点坐标包含的字节数 float --> 4 byte, int --> 4 byte, short --> 2 byte, long --> 8 byte, char --> 2 byte
+            (5) int stride: 每个相邻顶点之间在数组中的间隔（字节数），缺省为0，表示顶点存储之间无间隔。
             (6) Buffer: java 层记录所有顶点数据的 缓冲区
              */
             GLES20.glVertexAttribPointer(vPosition, 3, GLES20.GL_FLOAT, false, 12, mVertexBuffer);

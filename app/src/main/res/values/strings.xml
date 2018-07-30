@@ -12,4 +12,6 @@
     <string name="title_activity_seek_bar">SeekBarActivity</string>
     <string name="title_activity_gles3">GlesActivity3</string>
     <string name="title_activity_gles4">GlesActivity4</string>
+    <string name="title_activity_gles5">GlesActivity5</string>
+    <string name="title_activity_gles6">GlesActivity6</string>
 </resources>

@@ -103,16 +103,20 @@
         <activity
             android:name=".gles.GlesActivity5"
             android:theme="@style/Theme.FullScreen">
+
+        </activity>
+        <activity
+            android:name=".gles.GlesActivity6"
+            android:theme="@style/Theme.FullScreen">
+        </activity>
+        <activity
+            android:name=".activity.view.PreviewActivity"
+            android:theme="@style/Theme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".gles.GlesActivity6"
-            android:label="@string/title_activity_gles6"
-            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

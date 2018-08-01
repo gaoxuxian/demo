@@ -72,6 +72,9 @@ public class PreviewViewV2 extends View
     private boolean mDoingAnim;
 
     private boolean mCancelWaterMarkClickEvent;
+    private boolean mCancelDoubleClickEvent;
+    private long mDoubleClickFirstTime;
+    private boolean mHasMoveEvent;
 
     public PreviewViewV2(Context context)
     {
@@ -102,8 +105,8 @@ public class PreviewViewV2 extends View
         {
             mConfig = new PreviewViewConfig();
             mConfig.mImageCenter = new Point();
-            mConfig.mImageCenter.x = getMeasuredWidth() /2;
-            mConfig.mImageCenter.y = getMeasuredHeight() /2;
+            mConfig.mImageCenter.x = getMeasuredWidth() / 2;
+            mConfig.mImageCenter.y = getMeasuredHeight() / 2;
         }
     }
 
@@ -130,7 +133,7 @@ public class PreviewViewV2 extends View
         if (isBitmapValid(mImgBmp) && isBitmapValid(mWaterMarkBmp))
         {
             float scale = Math.min((float) getMeasuredWidth() / mImgBmp.getWidth(), (float) getMeasuredHeight() / mImgBmp.getHeight());
-            float y = (float) mConfig.mImageCenter.y - mImgBmp.getHeight() * scale /2f;
+            float y = (float) mConfig.mImageCenter.y - mImgBmp.getHeight() * scale / 2f;
 
             mWaterMarkShape.mOwnMatrix.reset();
             float s = Math.min(mImgBmp.getWidth() * scale, mImgBmp.getHeight() * scale);
@@ -138,7 +141,7 @@ public class PreviewViewV2 extends View
             float dy = PhotoMark.getLogoBottom(s, false);
             float watermarkW = PhotoMark.getLogoW(s);
             float waterScale = watermarkW / mWaterMarkBmp.getWidth();
-            mWaterMarkShape.mOwnMatrix.postScale(waterScale,waterScale);
+            mWaterMarkShape.mOwnMatrix.postScale(waterScale, waterScale);
             y += mImgBmp.getHeight() * scale - dy - mWaterMarkBmp.getHeight() * waterScale;
             mWaterMarkShape.mOwnMatrix.postTranslate(dx, y);
         }
@@ -231,7 +234,7 @@ public class PreviewViewV2 extends View
             RectF imgRect = new RectF(0, 0, mWaterMarkBmp.getWidth(), mWaterMarkBmp.getHeight());
             RectF dst = new RectF();
             mWaterMarkShape.mCurrentStateMatrix.mapRect(dst, imgRect);
-            if (dst.contains(x,y))
+            if (dst.contains(x, y))
             {
                 return TouchArea.water_mark;
             }
@@ -242,7 +245,7 @@ public class PreviewViewV2 extends View
             RectF imgRect = new RectF(0, 0, mImgBmp.getWidth(), mImgBmp.getHeight());
             RectF dst = new RectF();
             mImgShape.mCurrentStateMatrix.mapRect(dst, imgRect);
-            if (dst.contains(x,y))
+            if (dst.contains(x, y))
             {
                 return TouchArea.image;
             }
@@ -262,91 +265,23 @@ public class PreviewViewV2 extends View
             mTempMatrix.mapRect(dst, viewRect);
 
             RectF temp = getInitImageRect();
-            float dstScale = 1f;
-            float scale = dst.width() / temp.width();
-            if (scale < mMinScale)
+            if (temp != null)
             {
-                dstScale = mMinScale / scale;
-            }
-            else if (scale > mMaxScale)
-            {
-                dstScale = mMaxScale / scale;
-            }
-
-            if (dstScale != 1)
-            {
-                srcMatrix.postScale(dstScale, dstScale, x, y);
-            }
-        }
-    }
-
-    private void compareImageBorder(Matrix srcMatrix)
-    {
-        if (isBitmapValid(mImgBmp) && mTempMatrix != null && srcMatrix != null)
-        {
-            mTempMatrix.reset();
-            mixMatrix(mTempMatrix, mImgShape.mOwnMatrix, srcMatrix);
-
-            RectF viewRect = new RectF(0, 0, mImgBmp.getWidth(), mImgBmp.getHeight());
-            RectF dst = new RectF();
-            mTempMatrix.mapRect(dst, viewRect);
-
-            // 存在误差，直接用整数
-            int w = Math.round(dst.width());
-
-            float dx = 0;
-            float dy = 0;
-            if (w >= getMeasuredWidth())
-            {
-                if (dst.left > 0)
+                float dstScale = 1f;
+                float scale = dst.width() / temp.width();
+                if (scale < mMinScale)
                 {
-                    dx = 0 - dst.left;
+                    dstScale = mMinScale / scale;
                 }
-                else if (dst.right + dx < getMeasuredWidth())
+                else if (scale > mMaxScale)
                 {
-                    dx = getMeasuredWidth() - dst.right;
+                    dstScale = mMaxScale / scale;
                 }
-            }
-            else
-            {
-                if (dst.left < 0)
-                {
-                    dx = 0 - dst.left;
-                }
-                else if (dst.right > getMeasuredWidth())
-                {
-                    dx = getMeasuredWidth() - dst.right;
-                }
-            }
 
-            int h = Math.round(dst.height());
-
-            if (h >= getMeasuredHeight())
-            {
-                if (dst.top > 0)
+                if (dstScale != 1)
                 {
-                    dy = 0 - dst.top;
+                    srcMatrix.postScale(dstScale, dstScale, x, y);
                 }
-                else if (dst.bottom < getMeasuredHeight())
-                {
-                    dy = getMeasuredHeight() - dst.bottom;
-                }
-            }
-            else
-            {
-                if (dst.top < 0)
-                {
-                    dy = 0 - dst.top;
-                }
-                else if (dst.bottom > getMeasuredHeight())
-                {
-                    dy = getMeasuredHeight() - dst.bottom;
-                }
-            }
-
-            if (dx != 0 || dy != 0)
-            {
-                srcMatrix.postTranslate(dx, dy);
             }
         }
     }
@@ -361,6 +296,10 @@ public class PreviewViewV2 extends View
                 case MotionEvent.ACTION_DOWN:
                 {
                     mCancelWaterMarkClickEvent = false;
+                    mCancelDoubleClickEvent = false;
+                    mHasMoveEvent = false;
+                    mDownX = event.getX(0);
+                    mDownY = event.getY(0);
                     mTouchArea = getTouchArea(event.getX(), event.getY());
                     if (mTouchArea == TouchArea.image)
                     {
@@ -370,8 +309,6 @@ public class PreviewViewV2 extends View
                         }
 
                         setStatusRecord(mOutsideMatrix);
-                        mDownX = event.getX(0);
-                        mDownY = event.getY(0);
                         update();
                     }
                     else if (mTouchArea == TouchArea.water_mark)
@@ -387,6 +324,9 @@ public class PreviewViewV2 extends View
 
                 case MotionEvent.ACTION_MOVE:
                 {
+                    float moveSpace = ImageUtil.Spacing(event.getX(0) - mDownX, event.getY(0) - mDownY);
+                    mHasMoveEvent = moveSpace > PixelPercentUtil.WidthPxxToPercent(30);
+
                     if (event.getPointerCount() >= 2)
                     {
                         if (mTouchArea == TouchArea.image)
@@ -401,7 +341,7 @@ public class PreviewViewV2 extends View
 
                             float downSpace = ImageUtil.Spacing(mPointer1DownX - mPointer2DownX, mPointer1DownY - mPointer2DownY);
 
-                            float moveSpace = ImageUtil.Spacing(event.getX(0) - event.getX(1), event.getY(0) - event.getY(1));
+                            moveSpace = ImageUtil.Spacing(event.getX(0) - event.getX(1), event.getY(0) - event.getY(1));
 
                             float scale = moveSpace / downSpace;
 
@@ -427,7 +367,7 @@ public class PreviewViewV2 extends View
                         }
                         else if (!mCancelWaterMarkClickEvent && mTouchArea == TouchArea.water_mark)
                         {
-                            float moveSpace = ImageUtil.Spacing(event.getX(0) - mDownX, event.getY(0) - mDownY);
+                            moveSpace = ImageUtil.Spacing(event.getX(0) - mDownX, event.getY(0) - mDownY);
                             mCancelWaterMarkClickEvent = moveSpace > PixelPercentUtil.WidthPxxToPercent(30);
                         }
                     }
@@ -440,6 +380,25 @@ public class PreviewViewV2 extends View
                 {
                     if (mTouchArea == TouchArea.image)
                     {
+                        if (!mHasMoveEvent)
+                        {
+                            if (System.currentTimeMillis() - mDoubleClickFirstTime <= 500)
+                            {
+                                mDoubleClickFirstTime = 0;
+                                doDoubleClickAnim(event.getX(), event.getY());
+                            }
+                            else
+                            {
+                                doImageResetAnimation();
+                                mDoubleClickFirstTime = System.currentTimeMillis();
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            mDoubleClickFirstTime = 0;
+                        }
+
                         doImageResetAnimation();
                     }
                     else if (!mCancelWaterMarkClickEvent && mTouchArea == TouchArea.water_mark)
@@ -472,6 +431,7 @@ public class PreviewViewV2 extends View
                         }
                     }
                     mCancelWaterMarkClickEvent = true;
+                    mHasMoveEvent = true;
                     break;
                 }
 
@@ -533,6 +493,160 @@ public class PreviewViewV2 extends View
             }
         }
         return !mEventLock;
+    }
+
+    protected void doDoubleClickAnim(float x, float y)
+    {
+        if (isBitmapValid(mImgBmp))
+        {
+            mixMatrix(mTempMatrix, mImgShape.mOwnMatrix, mOutsideMatrix, mImgShape.mExtraMatrix);
+
+            RectF viewRect = new RectF(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            RectF orgImgRect = new RectF(0, 0, mImgBmp.getWidth(), mImgBmp.getHeight());
+            RectF currentImgRect = new RectF();
+
+            mTempMatrix.mapRect(currentImgRect, orgImgRect);
+
+            RectF temp = getInitImageRect();
+            if (temp != null)
+            {
+                float scale = currentImgRect.width() / temp.width();
+
+                if (scale >= mMinScale && scale < mMaxScale)
+                {
+                    // 如果当前还没到最大倍数，就放大当前倍数(基于原始大小)的1倍
+                    float dstScale = 2f;
+
+                    if (dstScale * scale >= mMaxScale)
+                    {
+                        dstScale = mMaxScale / scale;
+                    }
+
+                    Matrix tempM = new Matrix();
+                    tempM.set(mOutsideMatrix);
+                    tempM.postScale(dstScale, dstScale, x, y);
+
+                    mixMatrix(mTempMatrix, mImgShape.mOwnMatrix, tempM, mImgShape.mExtraMatrix);
+                    mTempMatrix.mapRect(currentImgRect, orgImgRect);
+
+                    PointF imgCenter = new PointF();
+                    imgCenter.x = currentImgRect.left + currentImgRect.width() / 2f;
+                    imgCenter.y = currentImgRect.top + currentImgRect.height() / 2f;
+
+                    float dx = 0;
+                    float dy = 0;
+
+                    /*
+                        判断当前图片通过缩放后，是否已经超过view 的宽高
+                    */
+                    if (currentImgRect.width() >= getMeasuredWidth())
+                    {
+                        if (currentImgRect.left >= viewRect.left)
+                        {
+                            dx = viewRect.left - currentImgRect.left;
+                        }
+                        else if (currentImgRect.right <= viewRect.right)
+                        {
+                            dx = viewRect.right - currentImgRect.right;
+                        }
+                    }
+                    else
+                    {
+                        dx = mConfig.mImageCenter.x - imgCenter.x;
+
+                        if (currentImgRect.left + dx < viewRect.left)
+                        {
+                            dx = dx + viewRect.left - (currentImgRect.left + dx);
+                        }
+                        else if (currentImgRect.right + dx > viewRect.right)
+                        {
+                            dx = dx + viewRect.right - (currentImgRect.right + dx);
+                        }
+                    }
+
+                    if (currentImgRect.height() >= getMeasuredHeight())
+                    {
+                        if (currentImgRect.top >= viewRect.top)
+                        {
+                            dy = viewRect.top - currentImgRect.top;
+                        }
+                        else if (currentImgRect.bottom <= viewRect.bottom)
+                        {
+                            dy = viewRect.bottom - currentImgRect.bottom;
+                        }
+                    }
+                    else
+                    {
+                        dy = mConfig.mImageCenter.y - imgCenter.y;
+
+                        if (currentImgRect.top + dy < viewRect.top)
+                        {
+                            dy = dy + viewRect.top - (currentImgRect.top + dy);
+                        }
+                        else if (currentImgRect.bottom + dy > viewRect.bottom)
+                        {
+                            dx = dy + viewRect.bottom - (currentImgRect.bottom + dy);
+                        }
+                    }
+
+                    mTempMatrix.reset();
+                    mTempMatrix.set(mOutsideMatrix);
+
+                    ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+                    float finalDstScale = dstScale - 1f;
+                    float finalDy = dy;
+                    float finalDx = dx;
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+                    {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation)
+                        {
+                            float value = (float) animation.getAnimatedValue();
+                            mOutsideMatrix.reset();
+                            mOutsideMatrix.set(mTempMatrix);
+                            mOutsideMatrix.postScale(1f + finalDstScale * value, 1f + finalDstScale * value, x, y);
+                            mOutsideMatrix.postTranslate(finalDx * value, finalDy * value);
+                            invalidate();
+                        }
+                    });
+                    animator.setDuration(300);
+                    animator.start();
+                }
+                else if (scale >= mMaxScale)
+                {
+                    // 直接恢复原始大小
+                    final float dstScale = mMinScale / scale - 1f;
+                    Matrix tempM = new Matrix();
+                    tempM.set(mOutsideMatrix);
+                    tempM.postScale(1f + dstScale, 1f + dstScale, x, y);
+
+                    mixMatrix(mTempMatrix, mImgShape.mOwnMatrix, tempM, mImgShape.mExtraMatrix);
+
+                    mTempMatrix.mapRect(currentImgRect, orgImgRect);
+
+                    final float dx = mConfig.mImageCenter.x - (currentImgRect.left + currentImgRect.width() / 2f);
+                    final float dy = mConfig.mImageCenter.y - (currentImgRect.top + currentImgRect.height() / 2f);
+                    mTempMatrix.reset();
+                    mTempMatrix.set(mOutsideMatrix);
+                    ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+                    {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation)
+                        {
+                            float value = (float) animation.getAnimatedValue();
+                            mOutsideMatrix.reset();
+                            mOutsideMatrix.set(mTempMatrix);
+                            mOutsideMatrix.postScale(1f + dstScale * value, 1f + dstScale * value, x, y);
+                            mOutsideMatrix.postTranslate(dx * value, dy * value);
+                            invalidate();
+                        }
+                    });
+                    animator.setDuration(300);
+                    animator.start();
+                }
+            }
+        }
     }
 
     protected void doImageResetAnimation()
@@ -606,23 +720,6 @@ public class PreviewViewV2 extends View
                 }
             }
 
-            Matrix temp = new Matrix();
-            temp.set(mOutsideMatrix);
-            mOutsideMatrix.postTranslate(dx, dy);
-
-            mixMatrix(mTempMatrix, mImgShape.mOwnMatrix, mOutsideMatrix, mImgShape.mExtraMatrix);
-            currentImgRect.setEmpty();
-            mTempMatrix.mapRect(currentImgRect, orgImgRect);
-            PointF finalImgCenter = new PointF();
-            finalImgCenter.x = currentImgRect.left + currentImgRect.width() / 2f;
-            finalImgCenter.y = currentImgRect.top + currentImgRect.height() / 2f;
-
-            dx = finalImgCenter.x - currentImgCenter.x;
-            dy = finalImgCenter.y - currentImgCenter.y;
-
-            mOutsideMatrix.reset();
-            mOutsideMatrix.set(temp);
-
             final float x = dx;
             final float y = dy;
 
@@ -687,7 +784,7 @@ public class PreviewViewV2 extends View
         {
             float scale = Math.min((float) w / mImgBmp.getWidth(), (float) h / mImgBmp.getHeight());
             float x = (float) mConfig.mImageCenter.x - mImgBmp.getWidth() * scale / 2f;
-            float y = (float) mConfig.mImageCenter.y - mImgBmp.getHeight() * scale /2f;
+            float y = (float) mConfig.mImageCenter.y - mImgBmp.getHeight() * scale / 2f;
             mImgShape.mOwnMatrix.reset();
             mImgShape.mOwnMatrix.postScale(scale, scale);
             mImgShape.mOwnMatrix.postTranslate(x, y);
@@ -700,7 +797,7 @@ public class PreviewViewV2 extends View
                 float dy = PhotoMark.getLogoBottom(s, false);
                 float watermarkW = PhotoMark.getLogoW(s);
                 float waterScale = watermarkW / mWaterMarkBmp.getWidth();
-                mWaterMarkShape.mOwnMatrix.postScale(waterScale,waterScale);
+                mWaterMarkShape.mOwnMatrix.postScale(waterScale, waterScale);
                 x = dx;
                 y += mImgBmp.getHeight() * scale - dy - mWaterMarkBmp.getHeight() * waterScale;
                 mWaterMarkShape.mOwnMatrix.postTranslate(x, y);
@@ -739,11 +836,10 @@ public class PreviewViewV2 extends View
     }
 
     /**
-     *
      * @param dst
      * @param mixArr
      */
-    private void mixMatrix(Matrix dst, Matrix...mixArr)
+    private void mixMatrix(Matrix dst, Matrix... mixArr)
     {
         if (dst != null)
         {

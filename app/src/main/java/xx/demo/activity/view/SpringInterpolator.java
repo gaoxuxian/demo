@@ -3,6 +3,7 @@ package xx.demo.activity.view;
 import android.support.annotation.FloatRange;
 import android.view.animation.BaseInterpolator;
 
+// 弹性插值器
 public class SpringInterpolator extends BaseInterpolator
 {
     private float mFactor;

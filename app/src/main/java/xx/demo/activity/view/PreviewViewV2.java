@@ -6,7 +6,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -21,7 +20,8 @@ import lib.util.PixelPercentUtil;
 
 public class PreviewViewV2 extends View
 {
-    private ValueAnimator mResetAnim;
+    private ValueAnimator mKickBackAnim;
+    private ValueAnimator mDoubleClickAnim;
 
     private interface TouchArea
     {
@@ -34,7 +34,9 @@ public class PreviewViewV2 extends View
 
     private Matrix mStatusRecordMatrix;
 
-    private Matrix mTempMatrix;
+    private Matrix mTempMatrix; // 用于计算
+
+    private Matrix mAnimationMatrix; // 用于做动画
 
     private Shape mImgShape;
 
@@ -65,14 +67,13 @@ public class PreviewViewV2 extends View
     private int mTouchArea = TouchArea.none;
 
     private float mMinScale = 1f;
-    private float mMaxScale = 3f;
+    private float mMaxScale = 5f;
 
     private boolean mInitSetWaterMatrix;
 
-    private boolean mDoingAnim;
+    private boolean mDoingAnimation;
 
     private boolean mCancelWaterMarkClickEvent;
-    private boolean mCancelDoubleClickEvent;
     private long mDoubleClickFirstTime;
     private boolean mHasMoveEvent;
 
@@ -90,8 +91,12 @@ public class PreviewViewV2 extends View
         mWaterMarkShape = new Shape();
         mTempMatrix = new Matrix();
         mOutsideMatrix = new Matrix();
+        mAnimationMatrix = new Matrix();
         mStatusRecordMatrix = new Matrix();
         mPaint = new Paint();
+
+        mKickBackAnim = new ValueAnimator();
+        mDoubleClickAnim = new ValueAnimator();
     }
 
     public void setConfig(PreviewViewConfig config)
@@ -296,24 +301,19 @@ public class PreviewViewV2 extends View
                 case MotionEvent.ACTION_DOWN:
                 {
                     mCancelWaterMarkClickEvent = false;
-                    mCancelDoubleClickEvent = false;
                     mHasMoveEvent = false;
                     mDownX = event.getX(0);
                     mDownY = event.getY(0);
                     mTouchArea = getTouchArea(event.getX(), event.getY());
                     if (mTouchArea == TouchArea.image)
                     {
-                        if (mDoingAnim && mResetAnim != null)
-                        {
-                            mResetAnim.cancel();
-                        }
-
+                        cancelImageAnimation();
                         setStatusRecord(mOutsideMatrix);
                         update();
                     }
                     else if (mTouchArea == TouchArea.water_mark)
                     {
-                        if (mDoingAnim)
+                        if (mDoingAnimation)
                         {
                             mTouchArea = TouchArea.none;
                             break;
@@ -382,14 +382,15 @@ public class PreviewViewV2 extends View
                     {
                         if (!mHasMoveEvent)
                         {
-                            if (System.currentTimeMillis() - mDoubleClickFirstTime <= 500)
+                            if (System.currentTimeMillis() - mDoubleClickFirstTime <= 1000)
                             {
                                 mDoubleClickFirstTime = 0;
-                                doDoubleClickAnim(event.getX(), event.getY());
+                                cancelImageAnimation();
+                                doDoubleClickAnimation(event.getX(), event.getY());
                             }
                             else
                             {
-                                doImageResetAnimation();
+                                doImageKickBackAnimation();
                                 mDoubleClickFirstTime = System.currentTimeMillis();
                             }
                             break;
@@ -399,7 +400,7 @@ public class PreviewViewV2 extends View
                             mDoubleClickFirstTime = 0;
                         }
 
-                        doImageResetAnimation();
+                        doImageKickBackAnimation();
                     }
                     else if (!mCancelWaterMarkClickEvent && mTouchArea == TouchArea.water_mark)
                     {
@@ -432,6 +433,7 @@ public class PreviewViewV2 extends View
                     }
                     mCancelWaterMarkClickEvent = true;
                     mHasMoveEvent = true;
+                    mDoubleClickFirstTime = 0;
                     break;
                 }
 
@@ -495,7 +497,7 @@ public class PreviewViewV2 extends View
         return !mEventLock;
     }
 
-    protected void doDoubleClickAnim(float x, float y)
+    protected void doDoubleClickAnimation(float x, float y)
     {
         if (isBitmapValid(mImgBmp))
         {
@@ -510,12 +512,16 @@ public class PreviewViewV2 extends View
             RectF temp = getInitImageRect();
             if (temp != null)
             {
+                float dstScale = 1f;
+                float dx = 0;
+                float dy = 0;
+
                 float scale = currentImgRect.width() / temp.width();
 
-                if (scale >= mMinScale && scale < mMaxScale)
+                if (scale < mMaxScale)
                 {
                     // 如果当前还没到最大倍数，就放大当前倍数(基于原始大小)的1倍
-                    float dstScale = 2f;
+                    dstScale = 2f;
 
                     if (dstScale * scale >= mMaxScale)
                     {
@@ -533,19 +539,18 @@ public class PreviewViewV2 extends View
                     imgCenter.x = currentImgRect.left + currentImgRect.width() / 2f;
                     imgCenter.y = currentImgRect.top + currentImgRect.height() / 2f;
 
-                    float dx = 0;
-                    float dy = 0;
-
                     /*
                         判断当前图片通过缩放后，是否已经超过view 的宽高
                     */
                     if (currentImgRect.width() >= getMeasuredWidth())
                     {
-                        if (currentImgRect.left >= viewRect.left)
+                        dx = mConfig.mImageCenter.x - x;
+
+                        if (currentImgRect.left + dx >= viewRect.left)
                         {
                             dx = viewRect.left - currentImgRect.left;
                         }
-                        else if (currentImgRect.right <= viewRect.right)
+                        else if (currentImgRect.right + dx <= viewRect.right)
                         {
                             dx = viewRect.right - currentImgRect.right;
                         }
@@ -566,11 +571,13 @@ public class PreviewViewV2 extends View
 
                     if (currentImgRect.height() >= getMeasuredHeight())
                     {
-                        if (currentImgRect.top >= viewRect.top)
+                        dy = mConfig.mImageCenter.y - y;
+
+                        if (currentImgRect.top + dy >= viewRect.top)
                         {
                             dy = viewRect.top - currentImgRect.top;
                         }
-                        else if (currentImgRect.bottom <= viewRect.bottom)
+                        else if (currentImgRect.bottom + dy <= viewRect.bottom)
                         {
                             dy = viewRect.bottom - currentImgRect.bottom;
                         }
@@ -588,70 +595,69 @@ public class PreviewViewV2 extends View
                             dx = dy + viewRect.bottom - (currentImgRect.bottom + dy);
                         }
                     }
-
-                    mTempMatrix.reset();
-                    mTempMatrix.set(mOutsideMatrix);
-
-                    ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
-                    float finalDstScale = dstScale - 1f;
-                    float finalDy = dy;
-                    float finalDx = dx;
-                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-                    {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation)
-                        {
-                            float value = (float) animation.getAnimatedValue();
-                            mOutsideMatrix.reset();
-                            mOutsideMatrix.set(mTempMatrix);
-                            mOutsideMatrix.postScale(1f + finalDstScale * value, 1f + finalDstScale * value, x, y);
-                            mOutsideMatrix.postTranslate(finalDx * value, finalDy * value);
-                            invalidate();
-                        }
-                    });
-                    animator.setDuration(300);
-                    animator.start();
                 }
                 else if (scale >= mMaxScale)
                 {
                     // 直接恢复原始大小
-                    final float dstScale = mMinScale / scale - 1f;
+                    dstScale = mMinScale / scale;
                     Matrix tempM = new Matrix();
                     tempM.set(mOutsideMatrix);
-                    tempM.postScale(1f + dstScale, 1f + dstScale, x, y);
+                    tempM.postScale(dstScale, dstScale, x, y);
 
                     mixMatrix(mTempMatrix, mImgShape.mOwnMatrix, tempM, mImgShape.mExtraMatrix);
-
                     mTempMatrix.mapRect(currentImgRect, orgImgRect);
 
-                    final float dx = mConfig.mImageCenter.x - (currentImgRect.left + currentImgRect.width() / 2f);
-                    final float dy = mConfig.mImageCenter.y - (currentImgRect.top + currentImgRect.height() / 2f);
-                    mTempMatrix.reset();
-                    mTempMatrix.set(mOutsideMatrix);
-                    ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
-                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-                    {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation)
-                        {
-                            float value = (float) animation.getAnimatedValue();
-                            mOutsideMatrix.reset();
-                            mOutsideMatrix.set(mTempMatrix);
-                            mOutsideMatrix.postScale(1f + dstScale * value, 1f + dstScale * value, x, y);
-                            mOutsideMatrix.postTranslate(dx * value, dy * value);
-                            invalidate();
-                        }
-                    });
-                    animator.setDuration(300);
-                    animator.start();
+                    dx = mConfig.mImageCenter.x - (currentImgRect.left + currentImgRect.width() / 2f);
+                    dy = mConfig.mImageCenter.y - (currentImgRect.top + currentImgRect.height() / 2f);
                 }
+
+                mAnimationMatrix.reset();
+                mAnimationMatrix.set(mOutsideMatrix);
+                mDoubleClickAnim.setFloatValues(0f, 1f);
+                float finalDstScale = dstScale - 1f;
+                float finalDy = dy;
+                float finalDx = dx;
+                mDoubleClickAnim.addUpdateListener(animation -> {
+                    float value = (float) animation.getAnimatedValue();
+                    mOutsideMatrix.reset();
+                    mOutsideMatrix.set(mAnimationMatrix);
+                    mOutsideMatrix.postScale(1f + finalDstScale * value, 1f + finalDstScale * value, x, y);
+                    mOutsideMatrix.postTranslate(finalDx * value, finalDy * value);
+                    invalidate();
+                });
+                mDoubleClickAnim.addListener(new AnimatorListenerAdapter()
+                {
+                    @Override
+                    public void onAnimationStart(Animator animation)
+                    {
+                        mDoingAnimation = true;
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation)
+                    {
+                        mDoingAnimation = false;
+                        mDoubleClickAnim.removeAllUpdateListeners();
+                        mDoubleClickAnim.removeAllListeners();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation)
+                    {
+                        mDoingAnimation = false;
+                        mDoubleClickAnim.removeAllUpdateListeners();
+                        mDoubleClickAnim.removeAllListeners();
+                    }
+                });
+                mDoubleClickAnim.setDuration(300);
+                mDoubleClickAnim.start();
             }
         }
     }
 
-    protected void doImageResetAnimation()
+    protected void doImageKickBackAnimation()
     {
-        if (!mDoingAnim && isBitmapValid(mImgBmp) && mTempMatrix != null && mConfig != null)
+        if (!mDoingAnimation && isBitmapValid(mImgBmp) && mTempMatrix != null && mConfig != null)
         {
             mixMatrix(mTempMatrix, mImgShape.mOwnMatrix, mOutsideMatrix, mImgShape.mExtraMatrix);
 
@@ -723,49 +729,49 @@ public class PreviewViewV2 extends View
             final float x = dx;
             final float y = dy;
 
-            mTempMatrix.reset();
-            mTempMatrix.set(mOutsideMatrix);
+            mAnimationMatrix.reset();
+            mAnimationMatrix.set(mOutsideMatrix);
 
-            mResetAnim = ValueAnimator.ofFloat(0, 1);
+            mKickBackAnim.setFloatValues(0f, 1f);
             SpringInterpolator springInterpolator = new SpringInterpolator();
             springInterpolator.setFactorSize(0.8f);
-            mResetAnim.setInterpolator(springInterpolator);
-            mResetAnim.addUpdateListener(animation -> {
-                if (mDoingAnim)
+            mKickBackAnim.setInterpolator(springInterpolator);
+            mKickBackAnim.addUpdateListener(animation -> {
+                if (mDoingAnimation)
                 {
                     float value = (float) animation.getAnimatedValue();
                     float value_dx = x * value;
                     float value_dy = y * value;
 
                     mOutsideMatrix.reset();
-                    mOutsideMatrix.set(mTempMatrix);
+                    mOutsideMatrix.set(mAnimationMatrix);
                     mOutsideMatrix.postTranslate(value_dx, value_dy);
                     update();
                 }
             });
-            mResetAnim.addListener(new AnimatorListenerAdapter()
+            mKickBackAnim.addListener(new AnimatorListenerAdapter()
             {
                 @Override
                 public void onAnimationStart(Animator animation)
                 {
-                    mDoingAnim = true;
+                    mDoingAnimation = true;
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation)
                 {
-                    mDoingAnim = false;
+                    mDoingAnimation = false;
                 }
 
                 @Override
                 public void onAnimationCancel(Animator animation)
                 {
-                    mDoingAnim = false;
-                    mResetAnim.removeAllListeners();
+                    mDoingAnimation = false;
+                    mKickBackAnim.removeAllListeners();
                 }
             });
-            mResetAnim.setDuration(500);
-            mResetAnim.start();
+            mKickBackAnim.setDuration(500);
+            mKickBackAnim.start();
         }
     }
 
@@ -810,7 +816,7 @@ public class PreviewViewV2 extends View
     {
         int layer = canvas.saveLayer(null, null, Canvas.ALL_SAVE_FLAG);
 
-        canvas.drawColor(Color.BLACK);
+//        canvas.drawColor(Color.BLACK);
 
         if (isBitmapValid(mImgBmp))
         {
@@ -872,5 +878,21 @@ public class PreviewViewV2 extends View
         }
 
         return null;
+    }
+
+    private void cancelImageAnimation()
+    {
+        if (mDoingAnimation)
+        {
+            if (mKickBackAnim != null && (mKickBackAnim.isStarted() || mKickBackAnim.isRunning()))
+            {
+                mKickBackAnim.cancel();
+            }
+
+            if (mDoubleClickAnim != null && (mDoubleClickAnim.isRunning() || mDoubleClickAnim.isStarted()))
+            {
+                mDoubleClickAnim.cancel();
+            }
+        }
     }
 }

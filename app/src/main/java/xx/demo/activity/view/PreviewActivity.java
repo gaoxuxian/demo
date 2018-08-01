@@ -19,7 +19,7 @@ public class PreviewActivity extends BaseActivity
     public void createChildren(FrameLayout parent, FrameLayout.LayoutParams params)
     {
         mView = new PreviewViewV2(parent.getContext());
-        mView.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.heighten_test_bmp_2));
+        mView.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.heighten_test_bmp));
         mView.setWaterMark(BitmapFactory.decodeResource(getResources(), R.drawable.ic_watermark_big_3));
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         parent.addView(mView, params);

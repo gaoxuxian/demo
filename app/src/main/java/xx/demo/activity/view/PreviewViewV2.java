@@ -1,23 +1,28 @@
 package xx.demo.activity.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import lib.util.ImageUtil;
+import lib.util.PixelPercentUtil;
 
 public class PreviewViewV2 extends View
 {
+    private ValueAnimator mResetAnim;
+
     private interface TouchArea
     {
         int none = 0;
@@ -60,9 +65,13 @@ public class PreviewViewV2 extends View
     private int mTouchArea = TouchArea.none;
 
     private float mMinScale = 1f;
-    private float mMaxScale = 5f;
+    private float mMaxScale = 3f;
 
     private boolean mInitSetWaterMatrix;
+
+    private boolean mDoingAnim;
+
+    private boolean mCancelWaterMarkClickEvent;
 
     public PreviewViewV2(Context context)
     {
@@ -94,7 +103,7 @@ public class PreviewViewV2 extends View
             mConfig = new PreviewViewConfig();
             mConfig.mImageCenter = new Point();
             mConfig.mImageCenter.x = getMeasuredWidth() /2;
-            mConfig.mImageCenter.y = getMeasuredHeight() /3;
+            mConfig.mImageCenter.y = getMeasuredHeight() /2;
         }
     }
 
@@ -117,6 +126,27 @@ public class PreviewViewV2 extends View
             mInitSetWaterMatrix = true;
             return;
         }
+
+        if (isBitmapValid(mImgBmp) && isBitmapValid(mWaterMarkBmp))
+        {
+            float scale = Math.min((float) getMeasuredWidth() / mImgBmp.getWidth(), (float) getMeasuredHeight() / mImgBmp.getHeight());
+            float y = (float) mConfig.mImageCenter.y - mImgBmp.getHeight() * scale /2f;
+
+            mWaterMarkShape.mOwnMatrix.reset();
+            float s = Math.min(mImgBmp.getWidth() * scale, mImgBmp.getHeight() * scale);
+            float dx = PhotoMark.getLogoRight(s);
+            float dy = PhotoMark.getLogoBottom(s, false);
+            float watermarkW = PhotoMark.getLogoW(s);
+            float waterScale = watermarkW / mWaterMarkBmp.getWidth();
+            mWaterMarkShape.mOwnMatrix.postScale(waterScale,waterScale);
+            y += mImgBmp.getHeight() * scale - dy - mWaterMarkBmp.getHeight() * waterScale;
+            mWaterMarkShape.mOwnMatrix.postTranslate(dx, y);
+        }
+    }
+
+    public void update()
+    {
+        invalidate();
     }
 
     public void setWaterMarkTranslationY(int y)
@@ -330,17 +360,27 @@ public class PreviewViewV2 extends View
             {
                 case MotionEvent.ACTION_DOWN:
                 {
+                    mCancelWaterMarkClickEvent = false;
                     mTouchArea = getTouchArea(event.getX(), event.getY());
                     if (mTouchArea == TouchArea.image)
                     {
+                        if (mDoingAnim && mResetAnim != null)
+                        {
+                            mResetAnim.cancel();
+                        }
+
                         setStatusRecord(mOutsideMatrix);
                         mDownX = event.getX(0);
                         mDownY = event.getY(0);
-                        invalidate();
+                        update();
                     }
                     else if (mTouchArea == TouchArea.water_mark)
                     {
-                        Log.d("xxx", "PreviewViewV2 --> onTouchEvent: 点到水印了");
+                        if (mDoingAnim)
+                        {
+                            mTouchArea = TouchArea.none;
+                            break;
+                        }
                     }
                     break;
                 }
@@ -372,7 +412,7 @@ public class PreviewViewV2 extends View
                             float dy = moveY - downY;
 
                             mOutsideMatrix.postTranslate(dx, dy);
-                            invalidate();
+                            update();
                         }
                     }
                     else
@@ -383,7 +423,12 @@ public class PreviewViewV2 extends View
                             float dy = event.getY(0) - mDownY;
                             syncStatus(mOutsideMatrix);
                             mOutsideMatrix.postTranslate(dx, dy);
-                            invalidate();
+                            update();
+                        }
+                        else if (!mCancelWaterMarkClickEvent && mTouchArea == TouchArea.water_mark)
+                        {
+                            float moveSpace = ImageUtil.Spacing(event.getX(0) - mDownX, event.getY(0) - mDownY);
+                            mCancelWaterMarkClickEvent = moveSpace > PixelPercentUtil.WidthPxxToPercent(30);
                         }
                     }
                     break;
@@ -396,6 +441,14 @@ public class PreviewViewV2 extends View
                     if (mTouchArea == TouchArea.image)
                     {
                         doImageResetAnimation();
+                    }
+                    else if (!mCancelWaterMarkClickEvent && mTouchArea == TouchArea.water_mark)
+                    {
+                        mTouchArea = getTouchArea(event.getX(), event.getY());
+                        if (mTouchArea == TouchArea.water_mark)
+                        {
+                            Log.d("xxx", "PreviewViewV2 --> onTouchEvent: 水印点击事件");
+                        }
                     }
                     break;
                 }
@@ -418,6 +471,7 @@ public class PreviewViewV2 extends View
                             }
                         }
                     }
+                    mCancelWaterMarkClickEvent = true;
                     break;
                 }
 
@@ -473,7 +527,7 @@ public class PreviewViewV2 extends View
                             setStatusRecord(mOutsideMatrix);
                         }
                     }
-                    invalidate();
+                    update();
                     break;
                 }
             }
@@ -483,10 +537,11 @@ public class PreviewViewV2 extends View
 
     protected void doImageResetAnimation()
     {
-        if (isBitmapValid(mImgBmp) && mTempMatrix != null && mConfig != null)
+        if (!mDoingAnim && isBitmapValid(mImgBmp) && mTempMatrix != null && mConfig != null)
         {
             mixMatrix(mTempMatrix, mImgShape.mOwnMatrix, mOutsideMatrix, mImgShape.mExtraMatrix);
 
+            RectF viewRect = new RectF(0, 0, getMeasuredWidth(), getMeasuredHeight());
             RectF orgImgRect = new RectF(0, 0, mImgBmp.getWidth(), mImgBmp.getHeight());
             RectF currentImgRect = new RectF();
 
@@ -496,13 +551,64 @@ public class PreviewViewV2 extends View
             currentImgCenter.x = currentImgRect.left + currentImgRect.width() / 2f;
             currentImgCenter.y = currentImgRect.top + currentImgRect.height() / 2f;
 
-            float dx = mConfig.mImageCenter.x - currentImgCenter.x;
-            float dy = mConfig.mImageCenter.y - currentImgCenter.y;
+            float dx = 0;
+            float dy = 0;
+            /*
+                判断当前图片通过缩放后，是否已经超过view 的宽高
+             */
+            if (currentImgRect.width() >= getMeasuredWidth())
+            {
+                if (currentImgRect.left >= viewRect.left)
+                {
+                    dx = viewRect.left - currentImgRect.left;
+                }
+                else if (currentImgRect.right <= viewRect.right)
+                {
+                    dx = viewRect.right - currentImgRect.right;
+                }
+            }
+            else
+            {
+                dx = mConfig.mImageCenter.x - currentImgCenter.x;
+
+                if (currentImgRect.left + dx < viewRect.left)
+                {
+                    dx = dx + viewRect.left - (currentImgRect.left + dx);
+                }
+                else if (currentImgRect.right + dx > viewRect.right)
+                {
+                    dx = dx + viewRect.right - (currentImgRect.right + dx);
+                }
+            }
+
+            if (currentImgRect.height() >= getMeasuredHeight())
+            {
+                if (currentImgRect.top >= viewRect.top)
+                {
+                    dy = viewRect.top - currentImgRect.top;
+                }
+                else if (currentImgRect.bottom <= viewRect.bottom)
+                {
+                    dy = viewRect.bottom - currentImgRect.bottom;
+                }
+            }
+            else
+            {
+                dy = mConfig.mImageCenter.y - currentImgCenter.y;
+
+                if (currentImgRect.top + dy < viewRect.top)
+                {
+                    dy = dy + viewRect.top - (currentImgRect.top + dy);
+                }
+                else if (currentImgRect.bottom + dy > viewRect.bottom)
+                {
+                    dx = dy + viewRect.bottom - (currentImgRect.bottom + dy);
+                }
+            }
 
             Matrix temp = new Matrix();
             temp.set(mOutsideMatrix);
             mOutsideMatrix.postTranslate(dx, dy);
-            compareImageBorder(mOutsideMatrix);
 
             mixMatrix(mTempMatrix, mImgShape.mOwnMatrix, mOutsideMatrix, mImgShape.mExtraMatrix);
             currentImgRect.setEmpty();
@@ -523,11 +629,12 @@ public class PreviewViewV2 extends View
             mTempMatrix.reset();
             mTempMatrix.set(mOutsideMatrix);
 
-            ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-            {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation)
+            mResetAnim = ValueAnimator.ofFloat(0, 1);
+            SpringInterpolator springInterpolator = new SpringInterpolator();
+            springInterpolator.setFactorSize(0.8f);
+            mResetAnim.setInterpolator(springInterpolator);
+            mResetAnim.addUpdateListener(animation -> {
+                if (mDoingAnim)
                 {
                     float value = (float) animation.getAnimatedValue();
                     float value_dx = x * value;
@@ -536,11 +643,32 @@ public class PreviewViewV2 extends View
                     mOutsideMatrix.reset();
                     mOutsideMatrix.set(mTempMatrix);
                     mOutsideMatrix.postTranslate(value_dx, value_dy);
-                    invalidate();
+                    update();
                 }
             });
-            animator.setDuration(300);
-            animator.start();
+            mResetAnim.addListener(new AnimatorListenerAdapter()
+            {
+                @Override
+                public void onAnimationStart(Animator animation)
+                {
+                    mDoingAnim = true;
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation)
+                {
+                    mDoingAnim = false;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation)
+                {
+                    mDoingAnim = false;
+                    mResetAnim.removeAllListeners();
+                }
+            });
+            mResetAnim.setDuration(500);
+            mResetAnim.start();
         }
     }
 
@@ -585,6 +713,8 @@ public class PreviewViewV2 extends View
     {
         int layer = canvas.saveLayer(null, null, Canvas.ALL_SAVE_FLAG);
 
+        canvas.drawColor(Color.BLACK);
+
         if (isBitmapValid(mImgBmp))
         {
             mixMatrix(mImgShape.mCurrentStateMatrix, mImgShape.mOwnMatrix, mOutsideMatrix, mImgShape.mExtraMatrix);
@@ -593,16 +723,16 @@ public class PreviewViewV2 extends View
             mPaint.setAntiAlias(true);
             mPaint.setFilterBitmap(true);
             canvas.drawBitmap(mImgBmp, mImgShape.mCurrentStateMatrix, mPaint);
-        }
 
-        if (isBitmapValid(mWaterMarkBmp))
-        {
-            mixMatrix(mWaterMarkShape.mCurrentStateMatrix, mWaterMarkShape.mOwnMatrix, mOutsideMatrix, mWaterMarkShape.mExtraMatrix);
-            mPaint.reset();
-            mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-            mPaint.setAntiAlias(true);
-            mPaint.setFilterBitmap(true);
-            canvas.drawBitmap(mWaterMarkBmp, mWaterMarkShape.mCurrentStateMatrix, mPaint);
+            if (isBitmapValid(mWaterMarkBmp))
+            {
+                mixMatrix(mWaterMarkShape.mCurrentStateMatrix, mWaterMarkShape.mOwnMatrix, mOutsideMatrix, mWaterMarkShape.mExtraMatrix);
+                mPaint.reset();
+                mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+                mPaint.setAntiAlias(true);
+                mPaint.setFilterBitmap(true);
+                canvas.drawBitmap(mWaterMarkBmp, mWaterMarkShape.mCurrentStateMatrix, mPaint);
+            }
         }
 
         canvas.restoreToCount(layer);

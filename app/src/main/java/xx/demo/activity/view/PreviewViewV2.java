@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -14,6 +15,7 @@ import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
 
 import lib.util.ImageUtil;
 import lib.util.PixelPercentUtil;
@@ -69,13 +71,13 @@ public class PreviewViewV2 extends View
     private float mMinScale = 1f;
     private float mMaxScale = 5f;
 
-    private boolean mInitSetWaterMatrix;
-
     private boolean mDoingAnimation;
 
     private boolean mCancelWaterMarkClickEvent;
     private long mDoubleClickFirstTime;
     private boolean mHasMoveEvent;
+
+    private boolean mHasDetectEventIntercept;
 
     public PreviewViewV2(Context context)
     {
@@ -131,7 +133,6 @@ public class PreviewViewV2 extends View
 
         if (getMeasuredWidth() == 0 || getMeasuredHeight() == 0 || !isBitmapValid(mImgBmp))
         {
-            mInitSetWaterMatrix = true;
             return;
         }
 
@@ -291,6 +292,123 @@ public class PreviewViewV2 extends View
         }
     }
 
+    private void detectParentCanNotInterceptEvent(float dx, float dy, int touchArea)
+    {
+        if ((dx == 0 && dy == 0) || mHasDetectEventIntercept) return;
+
+        int xDirection = 0;
+        int yDirection = 0;
+
+        if (dx > dy)
+        {
+            xDirection = dx > 0 ? 1 : dx < 0 ? -1 : 0;
+        }
+        else
+        {
+            yDirection = dy > 0 ? 1 : dy < 0 ? -1 : 0;
+        }
+
+        if (touchArea == TouchArea.none)
+        {
+            ViewParent parent = getParent();
+            if (parent != null)
+            {
+                parent.requestDisallowInterceptTouchEvent(false);
+            }
+        }
+        else if (touchArea == TouchArea.image)
+        {
+            mixMatrix(mTempMatrix, mImgShape.mOwnMatrix, mOutsideMatrix, mImgShape.mExtraMatrix);
+
+            if (mTempMatrix != null)
+            {
+                RectF viewRect = new RectF(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                RectF orgImgRect = new RectF(0, 0, mImgBmp.getWidth(), mImgBmp.getHeight());
+                RectF currentImgRect = new RectF();
+
+                mTempMatrix.mapRect(currentImgRect, orgImgRect);
+
+                int currentImgW = Math.round(currentImgRect.width());
+                int currentImgH = Math.round(currentImgRect.height());
+
+                boolean hasDeal = false;
+
+                // 左 -- 右
+                if (xDirection > 0)
+                {
+                    ViewParent parent = getParent();
+                    if (parent != null)
+                    {
+                        if (currentImgW <= viewRect.width())
+                        {
+                            parent.requestDisallowInterceptTouchEvent(false);
+                        }
+                        else
+                        {
+                            parent.requestDisallowInterceptTouchEvent(Math.round(currentImgRect.left) < viewRect.left);
+                        }
+                        hasDeal = true;
+                    }
+                }
+                else if (xDirection < 0) // 右 -- 左
+                {
+                    ViewParent parent = getParent();
+                    if (parent != null)
+                    {
+                        if (currentImgW <= viewRect.width())
+                        {
+                            parent.requestDisallowInterceptTouchEvent(false);
+                        }
+                        else
+                        {
+                            parent.requestDisallowInterceptTouchEvent(Math.round(currentImgRect.right) > viewRect.right);
+                        }
+                        hasDeal = true;
+                    }
+                }
+
+                if (!hasDeal)
+                {
+                    // 上 -- 下
+                    if (yDirection > 0)
+                    {
+                        ViewParent parent = getParent();
+                        if (parent != null)
+                        {
+                            if (currentImgH <= viewRect.height())
+                            {
+                                parent.requestDisallowInterceptTouchEvent(false);
+                            }
+                            else
+                            {
+                                parent.requestDisallowInterceptTouchEvent(Math.round(currentImgRect.top) < viewRect.top);
+                            }
+                            hasDeal = true;
+                        }
+                    }
+                    else if (yDirection < 0) // 下 -- 上
+                    {
+                        ViewParent parent = getParent();
+                        if (parent != null)
+                        {
+                            if (currentImgH <= viewRect.height())
+                            {
+                                parent.requestDisallowInterceptTouchEvent(false);
+                            }
+                            else
+                            {
+                                parent.requestDisallowInterceptTouchEvent(Math.round(currentImgRect.bottom) > viewRect.bottom);
+                            }
+                            hasDeal = true;
+                        }
+                    }
+                }
+
+                mHasDetectEventIntercept = hasDeal;
+            }
+        }
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
@@ -300,7 +418,13 @@ public class PreviewViewV2 extends View
             {
                 case MotionEvent.ACTION_DOWN:
                 {
+                    ViewParent parent = getParent();
+                    if (parent != null)
+                    {
+                        parent.requestDisallowInterceptTouchEvent(true);
+                    }
                     mCancelWaterMarkClickEvent = false;
+                    mHasDetectEventIntercept = false;
                     mHasMoveEvent = false;
                     mDownX = event.getX(0);
                     mDownY = event.getY(0);
@@ -318,6 +442,12 @@ public class PreviewViewV2 extends View
                             mTouchArea = TouchArea.none;
                             break;
                         }
+
+                        if (parent != null)
+                        {
+                            parent.requestDisallowInterceptTouchEvent(false);
+                        }
+                        mHasDetectEventIntercept = true;
                     }
                     break;
                 }
@@ -343,13 +473,13 @@ public class PreviewViewV2 extends View
 
                             moveSpace = ImageUtil.Spacing(event.getX(0) - event.getX(1), event.getY(0) - event.getY(1));
 
+                            float dx = moveX - downX;
+                            float dy = moveY - downY;
+
                             float scale = moveSpace / downSpace;
 
                             mOutsideMatrix.postScale(scale, scale, downX, downY);
                             compareImageScale(downX, downY, mOutsideMatrix);
-
-                            float dx = moveX - downX;
-                            float dy = moveY - downY;
 
                             mOutsideMatrix.postTranslate(dx, dy);
                             update();
@@ -361,6 +491,7 @@ public class PreviewViewV2 extends View
                         {
                             float dx = event.getX(0) - mDownX;
                             float dy = event.getY(0) - mDownY;
+                            detectParentCanNotInterceptEvent(dx, dy, TouchArea.image);
                             syncStatus(mOutsideMatrix);
                             mOutsideMatrix.postTranslate(dx, dy);
                             update();
@@ -376,6 +507,33 @@ public class PreviewViewV2 extends View
 
                 case MotionEvent.ACTION_OUTSIDE:
                 case MotionEvent.ACTION_CANCEL:
+                {
+                    if (mTouchArea == TouchArea.image)
+                    {
+                        if (!mHasMoveEvent)
+                        {
+                            if (System.currentTimeMillis() - mDoubleClickFirstTime <= 1000)
+                            {
+                                mDoubleClickFirstTime = 0;
+                                cancelImageAnimation();
+                                doDoubleClickAnimation(event.getX(), event.getY());
+                            }
+                            else
+                            {
+                                doImageKickBackAnimation();
+                                mDoubleClickFirstTime = System.currentTimeMillis();
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            mDoubleClickFirstTime = 0;
+                        }
+
+                        doImageKickBackAnimation();
+                    }
+                    break;
+                }
                 case MotionEvent.ACTION_UP:
                 {
                     if (mTouchArea == TouchArea.image)
@@ -417,6 +575,13 @@ public class PreviewViewV2 extends View
                 {
                     if (mTouchArea == TouchArea.image)
                     {
+                        ViewParent parent = getParent();
+                        if (parent != null)
+                        {
+                            parent.requestDisallowInterceptTouchEvent(true);
+                        }
+                        mHasDetectEventIntercept = true;
+
                         if (event.getPointerCount() <= 2)
                         {
                             mPointer1DownX = event.getX(0);
@@ -781,13 +946,14 @@ public class PreviewViewV2 extends View
         super.onSizeChanged(w, h, oldw, oldh);
 
         initDefaultConfig();
-        setImageMatrix(w, h, oldw, oldh);
+        setImageInitMatrix(w, h, oldw, oldh);
     }
 
-    private void setImageMatrix(int w, int h, int oldw, int oldh)
+    private void setImageInitMatrix(int w, int h, int oldw, int oldh)
     {
-        if (isBitmapValid(mImgBmp))
+        if (mInit && isBitmapValid(mImgBmp))
         {
+            mInit = false;
             float scale = Math.min((float) w / mImgBmp.getWidth(), (float) h / mImgBmp.getHeight());
             float x = (float) mConfig.mImageCenter.x - mImgBmp.getWidth() * scale / 2f;
             float y = (float) mConfig.mImageCenter.y - mImgBmp.getHeight() * scale / 2f;
@@ -816,7 +982,7 @@ public class PreviewViewV2 extends View
     {
         int layer = canvas.saveLayer(null, null, Canvas.ALL_SAVE_FLAG);
 
-//        canvas.drawColor(Color.BLACK);
+        canvas.drawColor(Color.BLACK);
 
         if (isBitmapValid(mImgBmp))
         {

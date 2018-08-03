@@ -82,7 +82,8 @@ public interface OpenGLES
      *
      *
      *
-     *
+     * 各种坐标轴分析
+     * https://www.jianshu.com/p/355137fa2817
      *
      *
      *

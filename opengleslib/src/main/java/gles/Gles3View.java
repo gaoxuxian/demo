@@ -3,6 +3,7 @@ package gles;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 
 import java.nio.FloatBuffer;
 
@@ -28,9 +29,12 @@ public class Gles3View extends GLSurfaceView implements GLSurfaceView.Renderer
         super(context);
 
         isosceles_triangle_coords = new float[]{
-                        -0.5f, 0.5f, 0f,
-                        -0.5f, -0.5f, 0f,
-                        0.5f, -0.5f, 0f
+//                        -0.5f, 0.5f, 0f,
+//                        -0.5f, -0.5f, 0f,
+//                        0.5f, -0.5f, 0f
+                -1f, 1f, 0f,
+                -1f, -1f, 0f,
+                1f, -1f, 0f
                 };
 
         isosceles_triangle_color = new float[]{1.0f, 1.0f, 1.0f, 1.0f};
@@ -96,18 +100,20 @@ public class Gles3View extends GLSurfaceView implements GLSurfaceView.Renderer
 
         int vMatrix = GLES20.glGetUniformLocation(program, "vMatrix");
         float[] matrix = new float[16];
-        GLUtil.getFrustumM(matrix, width, height, width, height);
+        float sWidthHeight = width / (float) height;
+//        GLUtil.getFrustumM(matrix, width, height, width, height);
 
         /*
             frustumM(float[] m, int offset, // 用于接收矩阵信息的数组， offset 从哪里开始接收
             float left, float right, float bottom, float top, // 近平面左右下上部与中心点的距离
             float near, float far) // 近平面和元平面与摄像机观察点的距离
          */
-//        float[] f = new float[16];
-//        Matrix.frustumM(f, 0, -(float) width/(float) height, (float) width/(float) height, -1, 1, 3.0f, 10.0f);
-//        float[] m = new float[16];
-//        Matrix.setLookAtM(m, 0, 0f, 0f, 6.0f, 0f, 0f, 1.0f, 0f, 1.0f, 0.f);
-//        Matrix.multiplyMM(matrix, 0, f, 0, m, 0);
+        float[] f = new float[16];
+//        Matrix.frustumM(f, 0, -sWidthHeight, sWidthHeight, -1f, 1f, 3.0f, 5.0f);
+        Matrix.frustumM(f, 0, -1f, 1f, -1f / sWidthHeight, 1f / sWidthHeight, 3.0f, 5.0f);
+        float[] m = new float[16];
+        Matrix.setLookAtM(m, 0, 0f, 0f, 3.0f, 0f, 0f, 0f, 0f, 1f, 0f);
+        Matrix.multiplyMM(matrix, 0, f, 0, m, 0);
         GLES20.glUniformMatrix4fv(vMatrix, 1, false, matrix, 0);
     }
 

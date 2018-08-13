@@ -46,5 +46,53 @@ public interface GLTips
      *          float near: 近平面 在 z 轴的位置
      *          float far: 远平面 在 z 轴的位置
      *      }
+     *
+     * 5、https://blog.csdn.net/junzia/article/details/52830604 解释 GLSL 语言
+     * 其中，个人觉得比较重要的点:
+     *      5-1 需要注意的是，GLSL中的向量表示竖向量，所以与矩阵相乘进行变换时，矩阵在前，向量在后（与DirectX正好相反） 建议结合 {@link OpenGLES# 维基百科 -- 矩阵} 来理解
+     *      5-2
+     *          纹理采样函数
+     *          纹理采样函数有
+     *              texture2D、texture2DProj、texture2DLod、texture2DProjLod、textureCube、textureCubeLod、
+     *              texture3D、texture3DProj、texture3DLod、texture3DProjLod等。
+     *
+     *          texture表示纹理采样，2D表示对2D纹理采样，3D表示对3D纹理采样
+     *          Lod后缀，只适用于顶点着色器采样
+     *          Proj表示纹理坐标st会除以q
+     *          纹理采样函数中，3D在OpenGLES2.0并不是绝对支持。我们再次暂时不管3D纹理采样函数。重点只对texture2D函数进行说明。
+     *          texture2D拥有三个参数，第一个参数表示纹理采样器。第二个参数表示纹理坐标，可以是二维、三维、或者四维。第三个参数加入后只能在片元着色器中调用，且只对采样器为mipmap类型纹理时有效。
+     *
+     * 6、对画 texture2D 图片，透视矩阵的理解，
+     *
+     *      前提：假设 目前有一张图片(宽: 1080  高: 540) 需要显示在手机屏幕 (宽: 1080  高: 2160) 上,
+     *           顶点坐标(-1, 1, 0,
+     *                   1, 1, 0,
+     *                   1, -1, 0,
+     *                   -1, -1, 0)
+     *           sWH 是 图片的宽高比, sWidthHeight 是预览区域的宽高比 {@link lib.opengles.GLUtil#getFrustumM(float[], int, int, int, int)}
+     *
+     *      要求：图片不能被拉伸、压缩、变形
+     *
+     *      处理方法: 在网上看的资料，透视矩阵一般这样设置 Matrix.frustumM(projectMatrix, 0, -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 5);
+     *
+     *      问题(有疑惑的点): 为什么 近平面 宽是 2，高是 2 * sWH / sWidthHeight, 而不是 2 / sWidthHeight, 为什么要再 乘以一个 图片的宽高比 ？？？？？？
+     *
+     *      个人理解:
+     *      这里需要结合 三维世界坐标 和 归一化坐标 一起来推导：
+     *
+     *      由于上述方法是设置 三维世界坐标系 中，近平面 的宽高，那么此时 不能被确定的就是 三维世界坐标系 中 近平面 的真实高度, 那应该如何计算出需要的高度？
+     *      首先我们要考虑到，当前能固定下来、确定的数值是： a：图片的宽高比、b: 近平面(归一化坐标系中)的宽度,
+     *      那么我们可以先通过 已知条件 a b , 求 在归一化坐标系中 图片的高度 (由于归一化坐标是在标准立方体中心，下面方便计算，统一计算一半的图片高度，图片全高只需乘以2)
+     *      我们知道 在归一化坐标系中，y轴正方向向上，x轴正方向向右， 那么图片上半段的高度 NormalizedImageH，在归一化坐标系中，应该是 NormalizedImageH = 1 * 1 / sWH;
+     *      下一步，我们就可以得到 归一化坐标系中， 图片高度的占比 r = NormalizedImageH / 1;
+     *      这时，我们就需要将归一化坐标的占比 r 反推到 三维世界坐标去，从而求到 三维世界坐标系 中， 近平面的高度
+     *
+     *      具体做法：
+     *              假设 近平面 y轴正方向的长度是 NH，那么 r = 1 / NH, 所以 NormalizedImageH / 1 = 1 / NH
+     *              然后代入 NormalizedImageH = 1 * 1 / sWH, 有 1 / sWH = 1 / NH  所以 NH = sWH;
+     *
+     *      不过，以上结果并不是就是最终，由于 我们希望 OpenGL 画出来的区域宽高比，跟预览区域的宽高比 一致，那么就不用再做额外的变换，
+     *      即使归一化坐标系中， x、y、z 正方向都是1，但是 x:y 真实的比例，应该是 sWidthHeight
+     *      所以 NH 需要 乘以 1 / sWidthHeight
      */
 }

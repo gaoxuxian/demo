@@ -71,6 +71,11 @@ public interface OpenGLES
      * 维基百科 -- 矩阵
      * https://zh.wikipedia.org/wiki/%E7%9F%A9%E9%98%B5#%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84
      *
+     * 在中国大陆，横向的元素组称为“行”，纵向称为“列”，而在台湾则相反
+     * 矩阵乘法 ( 矩阵乘法不满足交换律。一般来说，矩阵A及B的乘积AB存在，但BA不一定存在，即使存在，大多数时候AB ≠ BA )
+     * 两个矩阵的乘法仅当第一个矩阵A的列数(column)和另一个矩阵B的行数(row)相等时才能定义。如A是m×n矩阵和B是n×p矩阵，它们的乘积AB是一个m×p矩阵
+     *
+     *
      * 重点！！！！！
      * glsl 语言
      * https://www.jianshu.com/p/8a9fbd857188

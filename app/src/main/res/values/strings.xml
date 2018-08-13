@@ -15,4 +15,5 @@
     <string name="title_activity_gles5">GlesActivity5</string>
     <string name="title_activity_gles6">GlesActivity6</string>
     <string name="title_activity_preview">PreviewActivity</string>
+    <string name="title_activity_gles7">GlesActivity7</string>
 </resources>

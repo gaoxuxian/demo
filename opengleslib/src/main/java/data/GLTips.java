@@ -94,5 +94,11 @@ public interface GLTips
      *      不过，以上结果并不是就是最终，由于 我们希望 OpenGL 画出来的区域宽高比，跟预览区域的宽高比 一致，那么就不用再做额外的变换，
      *      即使归一化坐标系中， x、y、z 正方向都是1，但是 x:y 真实的比例，应该是 sWidthHeight
      *      所以 NH 需要 乘以 1 / sWidthHeight
+     *
+     * 7、 继续 第6点 的补充， 对 画 texture2D 图片，矩阵的使用理解
+     *
+     *      依然是 第6点 的前提、要求
+     *
+     *      处理方法：写死透视矩阵的大小，然后额外用一个矩阵，对图片进行缩放、平移、旋转，个人感觉这种方法比较好理解 {@link gles.Gles7View#onSurfaceChanged}
      */
 }

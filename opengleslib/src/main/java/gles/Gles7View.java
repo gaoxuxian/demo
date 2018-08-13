@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
-import android.opengl.Matrix;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -24,6 +23,7 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
     private float[] picture_vertex_arr;
     private short[] picture_vertex_index_arr;
     private float[] picture_texture_index_arr;
+    private float[] picture_black_white_color;
 
     private FloatBuffer mPictureVertexBuffer;
     private ShortBuffer mPictureVertexIndexBuffer;
@@ -55,7 +55,11 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
                 0.0f, 1.0f
         };
 
-        mTextureBmp = BitmapFactory.decodeResource(getResources(), R.drawable.opengl_test_4);
+        picture_black_white_color = new float[]{
+                0.299f,0.587f,0.114f
+        };
+
+        mTextureBmp = BitmapFactory.decodeResource(getResources(), R.drawable.opengl_test_2);
 
         setEGLContextClientVersion(2);
         setRenderer(this);
@@ -100,6 +104,9 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
         int vCoordinate = GLES20.glGetAttribLocation(mProgram, "vCoordinate");
         GLES20.glEnableVertexAttribArray(vCoordinate);
         GLES20.glVertexAttribPointer(vCoordinate, 2, GLES20.GL_FLOAT, false, 0, mPictureTextureIndexBuffer);
+
+        int vChangeColor = GLES20.glGetUniformLocation(mProgram, "vChangeColor");
+        GLES20.glUniform3fv(vChangeColor, 1, picture_black_white_color, 0);
 
         int[] textures = new int[1];
         GLES20.glGenTextures(1, textures, 0);

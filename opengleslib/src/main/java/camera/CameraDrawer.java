@@ -8,7 +8,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import lib.opengles.CameraFilter;
-import lib.opengles.GLUtil;
+import util.GLUtil;
 
 public class CameraDrawer implements GLSurfaceView.Renderer
 {

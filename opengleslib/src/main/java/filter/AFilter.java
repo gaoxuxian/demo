@@ -6,17 +6,17 @@ import android.support.annotation.NonNull;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import lib.opengles.GLUtil;
-import lib.opengles.VaryTools;
+import util.GLUtil;
+import util.VaryTools;
 
 public abstract class AFilter implements IFilter
 {
     private int mSurfaceWidth;
     private int mSurfaceHeight;
 
-    protected int mGLProgram;
+    private int mGLProgram;
 
-    protected float[] mMatrix;
+    private float[] mMatrix;
 
     private Resources mResources;
 
@@ -34,15 +34,15 @@ public abstract class AFilter implements IFilter
     protected abstract void onInitBaseData();
 
     // 当 surface 被构建时，需要配置某些属性
-    protected abstract void onSurfaceCreateSet(GL10 gl, EGLConfig config);
+    protected abstract void onSurfaceCreateSet(EGLConfig config);
 
     protected abstract int onCreateProgram();
 
     // 当 surface size 发生变化时，需要重新配置某些属性
-    protected abstract void onSurfaceChangeSet(GL10 gl, int width, int height);
+    protected abstract void onSurfaceChangeSet(int width, int height);
 
     // 在画内容之前，需要配置某些属性
-    protected abstract void onBe4DrawSet(GL10 gl);
+    protected abstract void onBe4DrawSet();
 
     protected abstract void onDrawSelf();
 
@@ -76,6 +76,11 @@ public abstract class AFilter implements IFilter
         return mSurfaceHeight;
     }
 
+    public int getGLProgram()
+    {
+        return mGLProgram;
+    }
+
     private void setSurfaceSize(int w, int h)
     {
         mSurfaceHeight = h;
@@ -90,21 +95,26 @@ public abstract class AFilter implements IFilter
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
-        onSurfaceCreateSet(gl, config);
+        onSurfaceCreateSet(config);
         mGLProgram = onCreateProgram();
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height)
     {
-        onSurfaceChangeSet(gl, width, height);
         setSurfaceSize(width, height);
+        onSurfaceChangeSet(width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 gl)
     {
-        onBe4DrawSet(gl);
+        onBe4DrawSet();
         onDrawSelf();
+    }
+
+    public void onClear()
+    {
+        mResources = null;
     }
 }

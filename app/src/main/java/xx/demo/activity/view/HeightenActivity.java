@@ -21,7 +21,7 @@ public class HeightenActivity extends BaseActivity
     @Override
     public void createChildren(FrameLayout parent, FrameLayout.LayoutParams params)
     {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.heighten_test_bmp);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.opengl_test_6);
 
         mItemView = new HeightenView(parent.getContext());
         mItemView.setBitmap(bitmap);

@@ -10,9 +10,8 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import lib.opengles.ByteBufferUtil;
-import lib.opengles.GL20ShaderUtil;
-import lib.opengles.GLUtil;
+import util.ByteBufferUtil;
+import util.ShaderUtil;
 
 public class Gles3View extends GLSurfaceView implements GLSurfaceView.Renderer
 {
@@ -55,20 +54,12 @@ public class Gles3View extends GLSurfaceView implements GLSurfaceView.Renderer
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
         mIsoscelesTriangleBuffer = ByteBufferUtil.getNativeFloatBuffer(isosceles_triangle_coords);
-        if (mIsoscelesTriangleBuffer != null)
-        {
-            mIsoscelesTriangleBuffer.position(0);
-        }
 
         mIsoscelesTriangleColorBuffer = ByteBufferUtil.getNativeFloatBuffer(isosceles_triangle_color_arr);
-        if (mIsoscelesTriangleColorBuffer != null)
-        {
-            mIsoscelesTriangleColorBuffer.position(0);
-        }
 
-        int vertex_shader = GL20ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/Isosceles_triangle_vertex_shader");
+        int vertex_shader = ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/Isosceles_triangle_vertex_shader");
 
-        int fragment_shader = GL20ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/Isosceles_triangle_fragment_shader");
+        int fragment_shader = ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/Isosceles_triangle_fragment_shader");
 
         program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, vertex_shader);

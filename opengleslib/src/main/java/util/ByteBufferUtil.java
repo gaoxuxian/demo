@@ -1,4 +1,4 @@
-package lib.opengles;
+package util;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

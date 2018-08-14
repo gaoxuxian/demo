@@ -12,6 +12,8 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import util.GLUtil;
+
 public abstract class AFilter
 {
     private static boolean DEBUG = true;

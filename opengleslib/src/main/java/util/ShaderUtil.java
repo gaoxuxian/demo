@@ -1,4 +1,4 @@
-package lib.opengles;
+package util;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -7,7 +7,7 @@ import android.text.TextUtils;
 
 import lib.util.FileUtil;
 
-public class GL20ShaderUtil
+public class ShaderUtil
 {
     public static int getShader(int type, String resource)
     {

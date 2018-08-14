@@ -2,7 +2,6 @@ package xx.demo.activity.view;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -112,7 +111,7 @@ public class PreviewActivity extends BaseActivity
         parent.addView(layout, params);
         {
             mView = new PreviewViewV2(parent.getContext());
-            mView.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.heighten_test_bmp));
+            mView.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.opengl_test_6));
             mView.setWaterMark(BitmapFactory.decodeResource(getResources(), R.drawable.ic_watermark_big_3));
             params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             layout.addView(mView, params);

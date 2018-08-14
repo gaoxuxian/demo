@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import lib.opengles.ByteBufferUtil;
-import lib.opengles.GL20ShaderUtil;
-import lib.opengles.GLUtil;
+import util.ByteBufferUtil;
+import util.ShaderUtil;
+import util.GLUtil;
 
 public class Gles5View extends GLSurfaceView implements GLSurfaceView.Renderer
 {
@@ -62,13 +62,9 @@ public class Gles5View extends GLSurfaceView implements GLSurfaceView.Renderer
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
         mCircleVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(circle_vertex_arr);
-        if (mCircleVertexBuffer != null)
-        {
-            mCircleVertexBuffer.position(0);
-        }
 
-        int vertex_shader = GL20ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/circle_vertex_shader");
-        int fragment_shader = GL20ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/circle_fragment_shader");
+        int vertex_shader = ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/circle_vertex_shader");
+        int fragment_shader = ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/circle_fragment_shader");
 
         mGLProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(mGLProgram, vertex_shader);

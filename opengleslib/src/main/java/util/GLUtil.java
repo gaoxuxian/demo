@@ -1,4 +1,4 @@
-package lib.opengles;
+package util;
 
 import android.opengl.Matrix;
 

@@ -1,5 +1,7 @@
 package data;
 
+import util.GLUtil;
+
 public interface GLTips
 {
     /**
@@ -69,7 +71,7 @@ public interface GLTips
      *                   1, 1, 0,
      *                   1, -1, 0,
      *                   -1, -1, 0)
-     *           sWH 是 图片的宽高比, sWidthHeight 是预览区域的宽高比 {@link lib.opengles.GLUtil#getFrustumM(float[], int, int, int, int)}
+     *           sWH 是 图片的宽高比, sWidthHeight 是预览区域的宽高比 {@link GLUtil#getFrustumM(float[], int, int, int, int)}
      *
      *      要求：图片不能被拉伸、压缩、变形
      *

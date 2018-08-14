@@ -118,8 +118,12 @@
         </activity>
         <activity
             android:name=".gles.GlesActivity8"
-            android:label="图片处理"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.FullScreen">
+
+        </activity>
+        <activity
+            android:name=".gles.GlesActivity9"
+            android:theme="@style/Theme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -1,4 +1,4 @@
-package lib.opengles;
+package util;
 
 import android.opengl.Matrix;
 
@@ -20,12 +20,7 @@ public class VaryTools
         mMatrixCamera = new float[16];
         mMatrixProjection = new float[16];
 
-        mMatrixCurrent = new float[]{
-                1.0f, 0.0f, 0.0f, 0.0f,
-                0.0f, 1.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 1.0f, 0.0f,
-                0.0f, 0.0f, 0.0f, 1.0f
-        };
+        mMatrixCurrent = getOpenGLUnitMatrix();
     }
 
     //保护现场
@@ -85,5 +80,17 @@ public class VaryTools
         Matrix.multiplyMM(ans, 0, mMatrixCamera, 0, mMatrixCurrent, 0);
         Matrix.multiplyMM(ans, 0, mMatrixProjection, 0, ans, 0);
         return ans;
+    }
+
+    /**
+     * @return OpenGL 单位矩阵
+     */
+    public float[] getOpenGLUnitMatrix(){
+        return new float[]{
+                1.0f,0.0f,0.0f,0.0f,
+                0.0f,1.0f,0.0f,0.0f,
+                0.0f,0.0f,1.0f,0.0f,
+                0.0f,0.0f,0.0f,1.0f
+        };
     }
 }

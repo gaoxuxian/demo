@@ -9,8 +9,8 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import lib.opengles.ByteBufferUtil;
-import lib.opengles.GL20ShaderUtil;
+import util.ByteBufferUtil;
+import util.ShaderUtil;
 
 public class Gles2View extends GLSurfaceView implements GLSurfaceView.Renderer
 {
@@ -43,13 +43,9 @@ public class Gles2View extends GLSurfaceView implements GLSurfaceView.Renderer
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
         triangleVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(triangleCoords);
-        if (triangleVertexBuffer != null)
-        {
-            triangleVertexBuffer.position(0);
-        }
 
-        int vertex_shader = GL20ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/triangle_vertex_shader");
-        int fragment_shader = GL20ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/triangle_fragment_shader");
+        int vertex_shader = ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/triangle_vertex_shader");
+        int fragment_shader = ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/triangle_fragment_shader");
 
         mProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(mProgram, vertex_shader);

@@ -9,10 +9,9 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import filter.AFilter;
-import lib.opengles.ByteBufferUtil;
-import lib.opengles.GL20ShaderUtil;
-import lib.opengles.GLUtil;
-import lib.opengles.VaryTools;
+import util.ByteBufferUtil;
+import util.ShaderUtil;
+import util.VaryTools;
 
 public class Triangle extends AFilter
 {
@@ -83,7 +82,7 @@ public class Triangle extends AFilter
     }
 
     @Override
-    protected void onSurfaceCreateSet(GL10 gl, EGLConfig config)
+    protected void onSurfaceCreateSet(EGLConfig config)
     {
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     }
@@ -92,8 +91,8 @@ public class Triangle extends AFilter
     protected int onCreateProgram()
     {
         // 生成、加载 着色器
-        int vertex_shader = GL20ShaderUtil.getShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/Isosceles_triangle_vertex_shader");
-        int fragment_shader = GL20ShaderUtil.getShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/Isosceles_triangle_fragment_shader");
+        int vertex_shader = ShaderUtil.getShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/Isosceles_triangle_vertex_shader");
+        int fragment_shader = ShaderUtil.getShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/Isosceles_triangle_fragment_shader");
 
         // 生成 program
         int program = GLES20.glCreateProgram();
@@ -121,17 +120,18 @@ public class Triangle extends AFilter
     }
 
     @Override
-    protected void onSurfaceChangeSet(GL10 gl, int width, int height)
+    protected void onSurfaceChangeSet(int width, int height)
     {
         GLES20.glViewport(0, 0, width, height);
         float sWidthHeight = (float) width / height;
         VaryTools tools = getMatrixTools();
         tools.frustum(-1f, 1f, -1f / sWidthHeight, 1f / sWidthHeight, 3, 5);
         tools.setCamera(0, 0, 3, 0, 0, 0, 0, 1, 0);
+        setMatrix(tools.getFinalMatrix());
     }
 
     @Override
-    protected void onBe4DrawSet(GL10 gl)
+    protected void onBe4DrawSet()
     {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
     }
@@ -140,9 +140,8 @@ public class Triangle extends AFilter
     protected void onDrawSelf()
     {
         // 第一个 program
-        GLES20.glUseProgram(mGLProgram);
+        GLES20.glUseProgram(getGLProgram());
 
-        setMatrix(getMatrixTools().getFinalMatrix());
         GLES20.glUniformMatrix4fv(vMatrix, 1, false, getMatrix(), 0);
 
         GLES20.glEnableVertexAttribArray(vPosition);
@@ -156,7 +155,7 @@ public class Triangle extends AFilter
         // test 第二个 program
         GLES20.glUseProgram(program2);
 
-        GLES20.glUniformMatrix4fv(vMatrix2, 1, false, GLUtil.getOpenGLUnitMatrix(), 0);
+        GLES20.glUniformMatrix4fv(vMatrix2, 1, false, getMatrixTools().getOpenGLUnitMatrix(), 0);
 
         GLES20.glEnableVertexAttribArray(vPosition2);
         GLES20.glVertexAttribPointer(vPosition2, vPositionSize, GLES20.GL_FLOAT, false, 0, mVertexBuffer2);

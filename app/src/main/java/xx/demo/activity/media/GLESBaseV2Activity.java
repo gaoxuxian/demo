@@ -108,7 +108,7 @@ public class GLESBaseV2Activity extends BaseActivity
 
         public MyImageRender(Context context)
         {
-            mBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.gles20_test_img);
+            mBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.opengl_test_0);
 
             mVertexBuffer = ByteBuffer.allocateDirect(VERTEX.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(VERTEX);
             mVertexBuffer.position(0);

@@ -10,9 +10,9 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import lib.opengles.ByteBufferUtil;
-import lib.opengles.GL20ShaderUtil;
-import lib.opengles.GLUtil;
+import util.ByteBufferUtil;
+import util.ShaderUtil;
+import util.GLUtil;
 
 public class Gles4View extends GLSurfaceView implements GLSurfaceView.Renderer
 {
@@ -57,19 +57,11 @@ public class Gles4View extends GLSurfaceView implements GLSurfaceView.Renderer
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
         mSquareVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(square_vertex_arr);
-        if (mSquareVertexBuffer != null)
-        {
-            mSquareVertexBuffer.position(0);
-        }
 
         mSquareVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(square_vertex_index_arr);
-        if (mSquareVertexIndexBuffer != null)
-        {
-            mSquareVertexIndexBuffer.position(0);
-        }
 
-        int vertex_shader = GL20ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/square_vertex_shader");
-        int fragment_shader = GL20ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/square_fragment_shader");
+        int vertex_shader = ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/square_vertex_shader");
+        int fragment_shader = ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/square_fragment_shader");
 
         program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, vertex_shader);

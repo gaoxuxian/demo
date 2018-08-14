@@ -37,21 +37,6 @@ public class ImageFilter extends AFilter
         super(res);
     }
 
-    public void setTextureBitmap(Bitmap bitmap)
-    {
-        mTextureBmp = bitmap;
-    }
-
-    public void setRefresh()
-    {
-        mRefreshBmp = true;
-    }
-
-    private boolean isTextureBmpAvailable()
-    {
-        return mTextureBmp != null && !mTextureBmp.isRecycled();
-    }
-
     @Override
     protected void onInitBaseData()
     {
@@ -120,14 +105,6 @@ public class ImageFilter extends AFilter
         uploadBmpToGPU();
 
         return program;
-    }
-
-    private void uploadBmpToGPU()
-    {
-        if (isTextureBmpAvailable())
-        {
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mTextureBmp, 0);
-        }
     }
 
     @Override
@@ -200,6 +177,29 @@ public class ImageFilter extends AFilter
 
             GLES20.glDisableVertexAttribArray(vPosition);
             GLES20.glDisableVertexAttribArray(vCoordinate);
+        }
+    }
+
+    public void setTextureBitmap(Bitmap bitmap)
+    {
+        mTextureBmp = bitmap;
+    }
+
+    public void setRefresh()
+    {
+        mRefreshBmp = true;
+    }
+
+    private boolean isTextureBmpAvailable()
+    {
+        return mTextureBmp != null && !mTextureBmp.isRecycled();
+    }
+
+    private void uploadBmpToGPU()
+    {
+        if (isTextureBmpAvailable())
+        {
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mTextureBmp, 0);
         }
     }
 }

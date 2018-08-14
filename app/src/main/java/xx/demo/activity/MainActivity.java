@@ -25,6 +25,8 @@ public class MainActivity extends Activity
     private static final String CLASS_PACKAGE_MEDIA = ".media";
     private static final String CLASS_PACKAGE_VIEW = ".view";
 
+    private static final String GLES_CLASE_NAME = "xx.demo.gles";
+
     private ArrayList<HashMap<String, Object>> mActivityArr;
 
     FrameLayout mParent;
@@ -56,6 +58,12 @@ public class MainActivity extends Activity
                 {
                         CLASS_NAME + CLASS_PACKAGE_MEDIA + ".CameraActivity", "Camera Activity"
                 },
+                {
+                        GLES_CLASE_NAME + ".GlesActivity8", "一个 Filter 画多个 Program"
+                },
+                {
+                        GLES_CLASE_NAME + ".GlesActivity9", "一个 Filter 加载多张 2D 图片"
+                },
         };
 
         mActivityArr = new ArrayList<>();
@@ -84,7 +92,7 @@ public class MainActivity extends Activity
     private void initUI(Context context)
     {
         mParent = new FrameLayout(context);
-        mParent.setBackgroundColor(Color.RED);
+        mParent.setBackgroundColor(Color.WHITE);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mParent.setLayoutParams(params);
         setContentView(mParent);
@@ -95,10 +103,10 @@ public class MainActivity extends Activity
             params.gravity = Gravity.CENTER;
             mParent.addView(mContentView, params);
 
-            DottedLineView dottedLineView = new DottedLineView(context);
-            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            params.gravity = Gravity.CENTER;
-            mParent.addView(dottedLineView, params);
+//            DottedLineView dottedLineView = new DottedLineView(context);
+//            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            params.gravity = Gravity.CENTER;
+//            mParent.addView(dottedLineView, params);
         }
 
         initSimpleAdapter();

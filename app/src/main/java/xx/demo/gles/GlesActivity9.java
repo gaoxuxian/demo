@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import gles.Gles9View;
 import lib.util.ThreadUtil;
@@ -57,9 +56,8 @@ public class GlesActivity9 extends BaseActivity implements View.OnClickListener
 //                    ThreadUtil.runOnUiThreadDelay(mBmpShufflingRunnable, 1000);
 //                }
             };
+            ThreadUtil.runOnUiThreadDelay(mBmpShufflingRunnable, 1000);
         }
-
-        ThreadUtil.runOnUiThreadDelay(mBmpShufflingRunnable, 1000);
     }
 
     @Override

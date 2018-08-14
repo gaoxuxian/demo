@@ -1,6 +1,7 @@
 package lib.opengles;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.opengl.GLES20;
 import android.text.TextUtils;
 
@@ -34,5 +35,12 @@ public class GL20ShaderUtil
         if (TextUtils.isEmpty(assetsResPath)) return 0;
 
         return getShader(type, FileUtil.getAssetsResource(context.getResources(), assetsResPath));
+    }
+
+    public static int getShader(Resources res, int type, String assetsResPath)
+    {
+        if (TextUtils.isEmpty(assetsResPath)) return 0;
+
+        return getShader(type, FileUtil.getAssetsResource(res, assetsResPath));
     }
 }

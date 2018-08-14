@@ -11,13 +11,17 @@ public class ByteBufferUtil
     {
         if (dataArr == null || dataArr.length <= 0) return null;
 
-        return ByteBuffer.allocateDirect(dataArr.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(dataArr);
+        FloatBuffer buffer = ByteBuffer.allocateDirect(dataArr.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(dataArr);
+        buffer.position(0);
+        return buffer;
     }
 
     public static ShortBuffer getNativeShortBuffer(short[] dataArr)
     {
         if (dataArr == null || dataArr.length <= 0) return null;
 
-        return ByteBuffer.allocateDirect(dataArr.length * 2).order(ByteOrder.nativeOrder()).asShortBuffer().put(dataArr);
+        ShortBuffer buffer = ByteBuffer.allocateDirect(dataArr.length * 2).order(ByteOrder.nativeOrder()).asShortBuffer().put(dataArr);
+        buffer.position(0);
+        return buffer;
     }
 }

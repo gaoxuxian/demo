@@ -69,6 +69,7 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        GLES20.glEnable(GLES20.GL_TEXTURE_2D);
 
         mPictureVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(picture_vertex_arr);
         if (mPictureVertexBuffer != null)

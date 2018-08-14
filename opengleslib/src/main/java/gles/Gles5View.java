@@ -74,6 +74,7 @@ public class Gles5View extends GLSurfaceView implements GLSurfaceView.Renderer
         GLES20.glAttachShader(mGLProgram, vertex_shader);
         GLES20.glAttachShader(mGLProgram, fragment_shader);
         GLES20.glLinkProgram(mGLProgram);
+        GLES20.glValidateProgram(mGLProgram);
         GLES20.glUseProgram(mGLProgram);
 
         int vPosition = GLES20.glGetAttribLocation(mGLProgram, "vPosition");

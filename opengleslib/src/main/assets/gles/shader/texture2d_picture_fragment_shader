@@ -6,6 +6,5 @@ varying vec2 aCoordinate;
 
 void main(){
     vec4 nColor = texture2D(vTexture,aCoordinate);
-    float c = (nColor.r + nColor.g + nColor.b)/float(3);
-    gl_FragColor = vec4(c,c,c,nColor.a);
+    gl_FragColor = nColor;
 }

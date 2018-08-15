@@ -12,7 +12,7 @@ import xx.demo.activity.BaseActivity;
 
 public class GlesActivity9 extends BaseActivity implements View.OnClickListener
 {
-    private int mBmpType;
+    private int mBmpType = 5;
     private boolean mPauseShuffing;
 
     Gles9View mItemView;

@@ -70,7 +70,6 @@ public class ImageFilter extends AFilter
     protected void onSurfaceCreateSet(EGLConfig config)
     {
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-        GLES20.glEnable(GLES20.GL_TEXTURE_2D);
     }
 
     @Override
@@ -178,6 +177,14 @@ public class ImageFilter extends AFilter
             GLES20.glDisableVertexAttribArray(vPosition);
             GLES20.glDisableVertexAttribArray(vCoordinate);
         }
+    }
+
+    @Override
+    public void onClear()
+    {
+        super.onClear();
+
+        mTextureBmp = null;
     }
 
     public void setTextureBitmap(Bitmap bitmap)

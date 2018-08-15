@@ -1,6 +1,8 @@
 package util;
 
+import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.Log;
 
 public class GLUtil
 {
@@ -123,5 +125,14 @@ public class GLUtil
                 0.0f,0.0f,1.0f,0.0f,
                 0.0f,0.0f,0.0f,1.0f
         };
+    }
+
+    public static void checkGlError(String op) {
+        int error = GLES20.glGetError();
+        if (error != GLES20.GL_NO_ERROR) {
+            String msg = op + ": glError 0x" + Integer.toHexString(error);
+            Log.e("vv", msg);
+            throw new RuntimeException(msg);
+        }
     }
 }

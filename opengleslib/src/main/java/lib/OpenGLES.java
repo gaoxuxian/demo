@@ -1,4 +1,4 @@
-package data;
+package lib;
 
 /**
  * 记录学习 OpenGL ES 2.0 网络资料

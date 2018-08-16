@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import util.GLUtil;
 import util.VaryTools;
 
 public abstract class AFilter implements IFilter
@@ -26,7 +25,7 @@ public abstract class AFilter implements IFilter
     {
         mResources = res;
         mMatrixTools = new VaryTools();
-        mMatrix = GLUtil.getOpenGLUnitMatrix();
+        mMatrix = mMatrixTools.getOpenGLUnitMatrix();
         onInitBaseData();
     }
 

@@ -5,7 +5,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
-public class ByteBufferUtil
+public class BufferUtil
 {
     public static FloatBuffer getNativeFloatBuffer(float[] dataArr)
     {

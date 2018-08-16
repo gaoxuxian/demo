@@ -10,8 +10,8 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import util.ByteBufferUtil;
-import util.ShaderUtil;
+import util.BufferUtil;
+import util.GLES20Util;
 
 public class Gles3View extends GLSurfaceView implements GLSurfaceView.Renderer
 {
@@ -53,13 +53,13 @@ public class Gles3View extends GLSurfaceView implements GLSurfaceView.Renderer
     {
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-        mIsoscelesTriangleBuffer = ByteBufferUtil.getNativeFloatBuffer(isosceles_triangle_coords);
+        mIsoscelesTriangleBuffer = BufferUtil.getNativeFloatBuffer(isosceles_triangle_coords);
 
-        mIsoscelesTriangleColorBuffer = ByteBufferUtil.getNativeFloatBuffer(isosceles_triangle_color_arr);
+        mIsoscelesTriangleColorBuffer = BufferUtil.getNativeFloatBuffer(isosceles_triangle_color_arr);
 
-        int vertex_shader = ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/Isosceles_triangle_vertex_shader");
+        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/Isosceles_triangle_vertex_shader");
 
-        int fragment_shader = ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/Isosceles_triangle_fragment_shader");
+        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/Isosceles_triangle_fragment_shader");
 
         program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, vertex_shader);
@@ -92,7 +92,7 @@ public class Gles3View extends GLSurfaceView implements GLSurfaceView.Renderer
         int vMatrix = GLES20.glGetUniformLocation(program, "vMatrix");
         float[] matrix = new float[16];
         float sWidthHeight = width / (float) height;
-//        GLUtil.getFrustumM(matrix, width, height, width, height);
+//        GLES20Util.getFrustumM(matrix, width, height, width, height);
 
         /*
             frustumM(float[] m, int offset, // 用于接收矩阵信息的数组， offset 从哪里开始接收

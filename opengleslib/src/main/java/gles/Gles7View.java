@@ -13,9 +13,8 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import util.ByteBufferUtil;
-import util.ShaderUtil;
-import util.GLUtil;
+import util.BufferUtil;
+import util.GLES20Util;
 import lib.opengles.R;
 
 public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
@@ -69,16 +68,15 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-        GLES20.glEnable(GLES20.GL_TEXTURE_2D);
 
-        mPictureVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(picture_vertex_arr);
+        mPictureVertexBuffer = BufferUtil.getNativeFloatBuffer(picture_vertex_arr);
 
-        mPictureVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(picture_vertex_index_arr);
+        mPictureVertexIndexBuffer = BufferUtil.getNativeShortBuffer(picture_vertex_index_arr);
 
-        mPictureTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(picture_texture_index_arr);
+        mPictureTextureIndexBuffer = BufferUtil.getNativeFloatBuffer(picture_texture_index_arr);
 
-        int vertex_shader = ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
-        int fragment_shader = ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
+        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
 
         mProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(mProgram, vertex_shader);
@@ -124,7 +122,7 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
         if (mTextureBmp != null)
         {
             float[] matrix = new float[16];
-            GLUtil.getFrustumM(matrix, mTextureBmp.getWidth(), mTextureBmp.getHeight(), width, height);
+            GLES20Util.sGetFrustumM(matrix, mTextureBmp.getWidth(), mTextureBmp.getHeight(), width, height);
             int vMatrix = GLES20.glGetUniformLocation(mProgram, "vMatrix");
             GLES20.glUniformMatrix4fv(vMatrix, 1, false, matrix, 0);
         }
@@ -136,7 +134,7 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
 //        {
 //            float sWH = (float) width / height;
 //
-//            float[] matrix = GLUtil.getOpenGLUnitMatrix();
+//            float[] matrix = GLES20Util.getOpenGLUnitMatrix();
 //
 //            float[] frustumM = new float[16];
 //
@@ -169,7 +167,7 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
 //
 //            float[] viewPortM = new float[16];
 //
-//            float[] scale = GLUtil.getOpenGLUnitMatrix();
+//            float[] scale = GLES20Util.getOpenGLUnitMatrix();
 //
 //            float[] temp = new float[16];
 //

@@ -11,8 +11,8 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import util.ByteBufferUtil;
-import util.ShaderUtil;
+import util.BufferUtil;
+import util.GLES20Util;
 
 public class Gles6View extends GLSurfaceView implements GLSurfaceView.Renderer
 {
@@ -84,14 +84,14 @@ public class Gles6View extends GLSurfaceView implements GLSurfaceView.Renderer
         //开启深度测试
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
-        mCubeVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(cube_vertex_arr);
+        mCubeVertexBuffer = BufferUtil.getNativeFloatBuffer(cube_vertex_arr);
 
-        mCubeVertexColorBuffer = ByteBufferUtil.getNativeFloatBuffer(cube_vertex_color);
+        mCubeVertexColorBuffer = BufferUtil.getNativeFloatBuffer(cube_vertex_color);
 
-        mCubeVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(cube_vertex_index);
+        mCubeVertexIndexBuffer = BufferUtil.getNativeShortBuffer(cube_vertex_index);
 
-        int vertex_shader = ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/cube_vertex_shader");
-        int fragment_shader = ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/cube_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/cube_vertex_shader");
+        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/cube_fragment_shader");
 
         mGLProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(mGLProgram, vertex_shader);

@@ -84,13 +84,16 @@ public class VaryTools
 
     /**
      * @return OpenGL 单位矩阵
+     * <p>
+     * 1,0,0,0,
+     * 0,1,0,0,
+     * 0,0,1,0,
+     * 0,0,0,1
      */
-    public float[] getOpenGLUnitMatrix(){
-        return new float[]{
-                1.0f,0.0f,0.0f,0.0f,
-                0.0f,1.0f,0.0f,0.0f,
-                0.0f,0.0f,1.0f,0.0f,
-                0.0f,0.0f,0.0f,1.0f
-        };
+    public float[] getOpenGLUnitMatrix()
+    {
+        float[] out = new float[16];
+        Matrix.setIdentityM(out, 0);
+        return out;
     }
 }

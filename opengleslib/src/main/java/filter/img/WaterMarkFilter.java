@@ -11,8 +11,8 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 
 import filter.AFilter;
-import util.ByteBufferUtil;
-import util.ShaderUtil;
+import util.BufferUtil;
+import util.GLES20Util;
 import util.VaryTools;
 
 public class WaterMarkFilter extends AFilter
@@ -81,7 +81,7 @@ public class WaterMarkFilter extends AFilter
                 -1.0f, -1.0f, 0.0f
         };
 
-        mVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex);
+        mVertexBuffer = BufferUtil.getNativeFloatBuffer(vertex);
 
         float[] texture_index = new float[]{
                 0.0f, 0.0f,
@@ -90,14 +90,14 @@ public class WaterMarkFilter extends AFilter
                 0.0f, 1.0f
         };
 
-        mTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(texture_index);
+        mTextureIndexBuffer = BufferUtil.getNativeFloatBuffer(texture_index);
 
         short[] vertex_index = new short[]{
                 0, 1, 2,
                 0, 2, 3
         };
 
-        mVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(vertex_index);
+        mVertexIndexBuffer = BufferUtil.getNativeShortBuffer(vertex_index);
 
         float[] vertex_water = new float[]{
                 -1.0f, 1.0f, 0.0f,
@@ -106,7 +106,7 @@ public class WaterMarkFilter extends AFilter
                 -1.0f, -1.0f, 0.0f
         };
 
-        mWaterVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex_water);
+        mWaterVertexBuffer = BufferUtil.getNativeFloatBuffer(vertex_water);
 
         float[] texture_index_water = new float[]{
                 0.0f, 0.0f,
@@ -115,14 +115,14 @@ public class WaterMarkFilter extends AFilter
                 0.0f, 1.0f
         };
 
-        mWaterTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(texture_index_water);
+        mWaterTextureIndexBuffer = BufferUtil.getNativeFloatBuffer(texture_index_water);
 
         short[] vertex_index_water = new short[]{
                 0, 1, 2,
                 0, 2, 3
         };
 
-        mWaterVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(vertex_index_water);
+        mWaterVertexIndexBuffer = BufferUtil.getNativeShortBuffer(vertex_index_water);
     }
 
     @Override
@@ -134,27 +134,21 @@ public class WaterMarkFilter extends AFilter
     @Override
     protected int onCreateProgram()
     {
-        int vertex_shader = ShaderUtil.getShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
-        int fragment_shader = ShaderUtil.getShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
+        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
 
-        int program = GLES20.glCreateProgram();
-        GLES20.glAttachShader(program, vertex_shader);
-        GLES20.glAttachShader(program, fragment_shader);
-        GLES20.glLinkProgram(program);
+        int program = GLES20Util.sCreateAndLinkProgram(vertex_shader, fragment_shader);
 
         vPosition = GLES20.glGetAttribLocation(program, "vPosition");
         vCoordinate = GLES20.glGetAttribLocation(program, "vCoordinate");
         vMatrix = GLES20.glGetUniformLocation(program, "vMatrix");
         vTexture = GLES20.glGetUniformLocation(program, "vTexture");
 
-        vertex_shader = ShaderUtil.getShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
-        fragment_shader = ShaderUtil.getShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
+        vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
+        fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
 
         // 水印
-        mWaterMarkProgram = GLES20.glCreateProgram();
-        GLES20.glAttachShader(mWaterMarkProgram, vertex_shader);
-        GLES20.glAttachShader(mWaterMarkProgram, fragment_shader);
-        GLES20.glLinkProgram(mWaterMarkProgram);
+        mWaterMarkProgram = GLES20Util.sCreateAndLinkProgram(vertex_shader, fragment_shader);
 
         vPositionWater = GLES20.glGetAttribLocation(mWaterMarkProgram, "vPosition");
         vCoordinateWater = GLES20.glGetAttribLocation(mWaterMarkProgram, "vCoordinate");

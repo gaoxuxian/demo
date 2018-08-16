@@ -10,9 +10,8 @@ import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import util.ByteBufferUtil;
-import util.ShaderUtil;
-import util.GLUtil;
+import util.BufferUtil;
+import util.GLES20Util;
 
 public class Gles5View extends GLSurfaceView implements GLSurfaceView.Renderer
 {
@@ -61,10 +60,10 @@ public class Gles5View extends GLSurfaceView implements GLSurfaceView.Renderer
     {
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-        mCircleVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(circle_vertex_arr);
+        mCircleVertexBuffer = BufferUtil.getNativeFloatBuffer(circle_vertex_arr);
 
-        int vertex_shader = ShaderUtil.getShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/circle_vertex_shader");
-        int fragment_shader = ShaderUtil.getShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/circle_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/circle_vertex_shader");
+        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/circle_fragment_shader");
 
         mGLProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(mGLProgram, vertex_shader);
@@ -88,7 +87,7 @@ public class Gles5View extends GLSurfaceView implements GLSurfaceView.Renderer
 
         int vMatrix = GLES20.glGetUniformLocation(mGLProgram, "vMatrix");
         float[] matrix = new float[16];
-        GLUtil.getFrustumM(matrix, width, height, width, height);
+        GLES20Util.sGetFrustumM(matrix, width, height, width, height);
         GLES20.glUniformMatrix4fv(vMatrix, 1, false, matrix, 0);
     }
 

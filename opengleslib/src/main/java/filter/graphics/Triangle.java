@@ -6,11 +6,10 @@ import android.opengl.GLES20;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
 
 import filter.AFilter;
-import util.ByteBufferUtil;
-import util.ShaderUtil;
+import util.BufferUtil;
+import util.GLES20Util;
 import util.VaryTools;
 
 public class Triangle extends AFilter
@@ -52,7 +51,7 @@ public class Triangle extends AFilter
 
         vPositionSize = vertex.length / 3;
 
-        mVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex);
+        mVertexBuffer = BufferUtil.getNativeFloatBuffer(vertex);
 
         float[] color = new float[]{
                 0.0f, 1.0f, 0.0f, 1.0f,
@@ -62,7 +61,7 @@ public class Triangle extends AFilter
 
         aColorSize = color.length / 3;
 
-        mVertexColorBuffer = ByteBufferUtil.getNativeFloatBuffer(color);
+        mVertexColorBuffer = BufferUtil.getNativeFloatBuffer(color);
 
         float[] vertex2 = new float[]{
                 -1.0f, 1.0f, 0.0f,
@@ -70,7 +69,7 @@ public class Triangle extends AFilter
                 1.0f, 1.0f, 0.0f
         };
 
-        mVertexBuffer2 = ByteBufferUtil.getNativeFloatBuffer(vertex2);
+        mVertexBuffer2 = BufferUtil.getNativeFloatBuffer(vertex2);
 
         float[] color2 = new float[]{
                 1.0f, 0.0f, 0.0f, 1.0f,
@@ -78,7 +77,7 @@ public class Triangle extends AFilter
                 0.0f, 0.0f, 1.0f, 1.0f
         };
 
-        mVertexColorBuffer2 = ByteBufferUtil.getNativeFloatBuffer(color2);
+        mVertexColorBuffer2 = BufferUtil.getNativeFloatBuffer(color2);
     }
 
     @Override
@@ -91,14 +90,11 @@ public class Triangle extends AFilter
     protected int onCreateProgram()
     {
         // 生成、加载 着色器
-        int vertex_shader = ShaderUtil.getShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/Isosceles_triangle_vertex_shader");
-        int fragment_shader = ShaderUtil.getShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/Isosceles_triangle_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/Isosceles_triangle_vertex_shader");
+        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/Isosceles_triangle_fragment_shader");
 
         // 生成 program
-        int program = GLES20.glCreateProgram();
-        GLES20.glAttachShader(program, vertex_shader);
-        GLES20.glAttachShader(program, fragment_shader);
-        GLES20.glLinkProgram(program);
+        int program = GLES20Util.sCreateAndLinkProgram(vertex_shader, fragment_shader);
 
         // 获取句柄
         vPosition = GLES20.glGetAttribLocation(program, "vPosition");

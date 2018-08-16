@@ -11,8 +11,8 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 
 import filter.AFilter;
-import util.ByteBufferUtil;
-import util.ShaderUtil;
+import util.BufferUtil;
+import util.GLES20Util;
 import util.VaryTools;
 
 public class ImageFilter extends AFilter
@@ -47,14 +47,14 @@ public class ImageFilter extends AFilter
                 -1.0f, -1.0f, 0.0f
         };
 
-        mVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex);
+        mVertexBuffer = BufferUtil.getNativeFloatBuffer(vertex);
 
         short[] vertex_index = new short[]{
                 0, 1, 2,
                 0, 2, 3
         };
 
-        mVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(vertex_index);
+        mVertexIndexBuffer = BufferUtil.getNativeShortBuffer(vertex_index);
 
         float[] texture_index = new float[]{
                 0.0f, 0.0f,
@@ -63,7 +63,7 @@ public class ImageFilter extends AFilter
                 0.0f, 1.0f
         };
 
-        mTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(texture_index);
+        mTextureIndexBuffer = BufferUtil.getNativeFloatBuffer(texture_index);
     }
 
     @Override
@@ -75,8 +75,8 @@ public class ImageFilter extends AFilter
     @Override
     protected int onCreateProgram()
     {
-        int vertex_shader = ShaderUtil.getShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
-        int fragment_shader = ShaderUtil.getShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
+        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
 
         int program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, vertex_shader);

@@ -64,6 +64,9 @@ public class MainActivity extends Activity
                 {
                         GLES_CLASE_NAME + ".GlesActivity9", "一个 Filter 加载多张 2D 图片"
                 },
+                {
+                        GLES_CLASE_NAME + ".GlesActivity10", "2D 图片画水印"
+                },
         };
 
         mActivityArr = new ArrayList<>();

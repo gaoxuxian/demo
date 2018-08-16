@@ -21,24 +21,6 @@ public interface OpenGLES
      * http://blog.db-in.com/all-about-opengl-es-2-x-part-1/
      *
      *
-     * 重点!!!!!!
-     * 湖广午王 的博客 (有比较全面的 OpenGL ES20 的系列教程)
-     * http://blog.csdn.net/junzia/article/list
-     *
-     *
-     * GL ES 矩阵变换
-     * http://blog.csdn.net/jamesshaoya/article/details/54342241
-     *
-     *
-     * 重点!!!!!!
-     * 着色器 基础知识
-     * https://www.jianshu.com/p/eea423753fb0
-     *
-     *
-     * 简单解释了正交投影、透视投影
-     * http://www.cnblogs.com/ghj1976/archive/2012/04/27/2473624.html
-     *
-     *
      * 小码哥_WS 大神(很多 ffmpeg、OpenGL 资料)
      * http://blog.csdn.net/king1425
      *
@@ -59,38 +41,35 @@ public interface OpenGLES
      * OpenGL 顶点,坐标系,纹理坐标
      * http://blog.csdn.net/tom_221x/article/details/38454753
      *
-     * 重点 ！！！！ 关于矩阵变换的理解
-     * 关于 Android Matrix
-     * https://www.jianshu.com/p/42d8aceb3136
-     *
-     * 重点 ！！！！ 对于 齐次方程 等概念理解
-     * 什么是「齐次」，「非齐次」，「线性」，「非线性」？
-     * https://www.zhihu.com/question/19816504
-     *
-     * 重点 ！！！！
-     * 维基百科 -- 矩阵
-     * https://zh.wikipedia.org/wiki/%E7%9F%A9%E9%98%B5#%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84
-     *
-     * 在中国大陆，横向的元素组称为“行”，纵向称为“列”，而在台湾则相反
-     * 矩阵乘法 ( 矩阵乘法不满足交换律。一般来说，矩阵A及B的乘积AB存在，但BA不一定存在，即使存在，大多数时候AB ≠ BA )
-     * 两个矩阵的乘法仅当第一个矩阵A的列数(column)和另一个矩阵B的行数(row)相等时才能定义。如A是m×n矩阵和B是n×p矩阵，它们的乘积AB是一个m×p矩阵
-     *
-     *
-     * 重点！！！！！
-     * glsl 语言
-     * https://www.jianshu.com/p/8a9fbd857188
-     *
      *
      * 飘飘白云 博客，资料解释比较详细
      * http://www.cnblogs.com/kesalin/archive/2012/12/06/3D_math.html
      *
      *
+     * =====================   比较好的学习资料  ===========================
      *
+     *    重点!!!!!!
+     * 1、湖广午王 的博客 (有比较全面的 OpenGL ES20 的系列教程)
+     *    http://blog.csdn.net/junzia/article/list
      *
-     * 各种坐标轴分析
-     * https://www.jianshu.com/p/355137fa2817
+     *    重点 ！！！！ 对于 齐次方程 等概念理解
+     * 2、什么是「齐次」，「非齐次」，「线性」，「非线性」？
+     *    https://www.zhihu.com/question/19816504
      *
+     *    重点 ！！！！
+     * 3、维基百科 -- 矩阵
+     *    https://zh.wikipedia.org/wiki/%E7%9F%A9%E9%98%B5#%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84
+     * 3-1、
+     * -> 在中国大陆，横向的元素组称为“行”，纵向称为“列”，而在台湾则相反
+     * -> 矩阵乘法 ( 矩阵乘法不满足交换律。一般来说，矩阵A及B的乘积AB存在，但BA不一定存在，即使存在，大多数时候AB ≠ BA )
+     * -> 两个矩阵的乘法仅当第一个矩阵A的列数(column)和另一个矩阵B的行数(row)相等时才能定义。如A是m×n矩阵和B是n×p矩阵，它们的乘积AB是一个m×p矩阵
      *
+     *    重点！！！！！
+     * 4、GLSL 语言(OpenGL Shader Language)
+     *    https://www.jianshu.com/p/8a9fbd857188
+     *
+     *    着色器 基础知识
+     *    https://www.jianshu.com/p/eea423753fb0
      *
      *
      * =====================  透视投影的理解过程  =========================== 可以在 assets\glDemo\ 下结合demo效果去理解

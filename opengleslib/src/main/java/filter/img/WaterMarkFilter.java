@@ -217,6 +217,7 @@ public class WaterMarkFilter extends AFilter
 
             GLES20.glUseProgram(getGLProgram());
 
+            // 绘制底图前，重新激活纹理单元、绑定底图纹理id
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
             if (mRefresh)
@@ -263,6 +264,7 @@ public class WaterMarkFilter extends AFilter
             {
                 GLES20.glUseProgram(mWaterMarkProgram);
 
+                // 绘制水印前，重新激活纹理单元、绑定水印纹理id
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[1]);
                 if (mRefreshWater)
@@ -293,12 +295,6 @@ public class WaterMarkFilter extends AFilter
 
                     p = ((float) getSurfaceWidth() / 2 - 235 / 2f) * 2 / (float) getSurfaceWidth();
                     float x = p;
-
-                    float X = (getSurfaceWidth() - 235)/2.f/getSurfaceWidth() * 2f / scaleX;
-
-                    float s1 = getSurfaceHeight() / (float) getSurfaceWidth();
-                    float h = ((float) getSurfaceWidth() * s / 2 - 128 / 2f);
-                    float H = s1 * h / getSurfaceHeight() * 2 / scaleY;
 
                     tools.translate(-x / scaleX, -y / scaleY, 0);
                 }

@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.view.View;
 import android.view.ViewGroup;
 
-import lib.util.PixelPercentUtil;
+import util.PixelPercentUtil;
 
 /**
  * 快门

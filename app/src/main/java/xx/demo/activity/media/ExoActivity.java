@@ -16,8 +16,8 @@ import com.google.android.exoplayer2.source.MediaSource;
 
 import java.io.File;
 
-import lib.util.FileUtil;
-import lib.util.VideoUtil;
+import util.FileUtil;
+import util.VideoUtil;
 import lib.exoplayer.ExoPlayerUtil;
 import lib.exoplayer.ExoVideoView;
 

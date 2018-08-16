@@ -8,7 +8,7 @@ import android.support.v4.graphics.ColorUtils;
 import android.view.MotionEvent;
 import android.view.View;
 
-import lib.util.PixelPercentUtil;
+import util.PixelPercentUtil;
 
 /**
  * 四散阴影 seekbar

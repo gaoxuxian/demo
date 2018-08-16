@@ -22,7 +22,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
-import lib.util.PixelPercentUtil;
+import util.PixelPercentUtil;
 
 /**
  * 基于 ExoPlayer 封装的 VideoView

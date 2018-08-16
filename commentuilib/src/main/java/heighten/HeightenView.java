@@ -9,7 +9,7 @@ import android.graphics.Rect;
 import android.support.v4.graphics.ColorUtils;
 import android.view.View;
 
-import lib.util.PixelPercentUtil;
+import util.PixelPercentUtil;
 
 public class HeightenView extends View
 {

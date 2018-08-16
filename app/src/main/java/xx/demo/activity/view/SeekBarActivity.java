@@ -5,7 +5,7 @@ import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import lib.util.PixelPercentUtil;
+import util.PixelPercentUtil;
 import seekbar.CirclePointConfig;
 import seekbar.CirclePointSeekBar;
 import seekbar.IConfig;

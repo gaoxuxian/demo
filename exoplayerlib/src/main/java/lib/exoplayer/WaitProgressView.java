@@ -10,7 +10,7 @@ import android.graphics.PathMeasure;
 import android.graphics.RectF;
 import android.view.View;
 
-import lib.util.PixelPercentUtil;
+import util.PixelPercentUtil;
 
 /**
  * 模仿系统 progress view 效果，具体参数，可定制

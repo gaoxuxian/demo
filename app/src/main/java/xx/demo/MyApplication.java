@@ -1,8 +1,8 @@
 package xx.demo;
 
 import android.app.Application;
-import lib.util.ShareData;
-import lib.util.ThreadUtil;
+import util.ShareData;
+import util.ThreadUtil;
 
 /**
  * Created by Gxx on 2018/2/9.

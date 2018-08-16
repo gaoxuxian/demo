@@ -6,13 +6,12 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import java.io.IOException;
 import java.util.List;
 
-import lib.util.ShareData;
+import util.ShareData;
 import xx.demo.activity.BaseActivity;
 
 /**

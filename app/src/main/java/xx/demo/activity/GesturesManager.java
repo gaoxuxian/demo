@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import lib.util.PixelPercentUtil;
+import util.PixelPercentUtil;
 
 public class GesturesManager extends GestureDetector.SimpleOnGestureListener
 {

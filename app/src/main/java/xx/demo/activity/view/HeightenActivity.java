@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import heighten.HeightenView;
-import lib.util.PixelPercentUtil;
+import util.PixelPercentUtil;
 import xx.demo.R;
 import xx.demo.activity.BaseActivity;
 

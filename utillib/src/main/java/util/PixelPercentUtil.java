@@ -1,4 +1,4 @@
-package lib.util;
+package util;
 
 /**
  *

@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import gles.Gles9View;
-import lib.util.ThreadUtil;
+import util.ThreadUtil;
 import xx.demo.activity.BaseActivity;
 
 public class GlesActivity9 extends BaseActivity implements View.OnClickListener

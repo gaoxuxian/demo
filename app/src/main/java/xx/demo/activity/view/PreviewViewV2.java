@@ -17,8 +17,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
 
-import lib.util.ImageUtil;
-import lib.util.PixelPercentUtil;
+import util.ImageUtil;
+import util.PixelPercentUtil;
 
 public class PreviewViewV2 extends View
 {

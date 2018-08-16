@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import lib.util.PixelPercentUtil;
+import util.PixelPercentUtil;
 
 public class SimpleRcAdapter extends RecyclerView.Adapter implements View.OnClickListener
 {

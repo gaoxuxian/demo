@@ -1,4 +1,4 @@
-package lib.util;
+package util;
 
 import android.os.Handler;
 import android.os.Looper;

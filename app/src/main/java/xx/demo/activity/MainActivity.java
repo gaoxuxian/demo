@@ -56,9 +56,6 @@ public class MainActivity extends Activity
                         CLASS_NAME + CLASS_PACKAGE_MEDIA + ".ExoActivity", "Exo Activity"
                 },
                 {
-                        CLASS_NAME + CLASS_PACKAGE_MEDIA + ".CameraActivity", "Camera Activity"
-                },
-                {
                         GLES_CLASE_NAME + ".GlesActivity8", "一个 Filter 画多个 Program"
                 },
                 {

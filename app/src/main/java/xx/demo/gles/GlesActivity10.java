@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import gles.Gles10View;
-import lib.util.ThreadUtil;
+import util.ThreadUtil;
 import xx.demo.R;
 import xx.demo.activity.BaseActivity;
 

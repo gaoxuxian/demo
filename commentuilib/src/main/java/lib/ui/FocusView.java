@@ -11,7 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
 
-import lib.util.PixelPercentUtil;
+import util.PixelPercentUtil;
 
 /**
  * 聚焦

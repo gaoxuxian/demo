@@ -7,8 +7,6 @@ import android.opengl.Matrix;
 import android.text.TextUtils;
 import android.util.Log;
 
-import lib.util.FileUtil;
-
 public class GLES20Util
 {
     private final static String TAG = GLES20Util.class.getName();

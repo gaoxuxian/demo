@@ -1,4 +1,4 @@
-package lib.util;
+package util;
 
 import android.app.Activity;
 import android.app.Dialog;

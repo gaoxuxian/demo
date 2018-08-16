@@ -17,8 +17,8 @@ import android.support.v4.graphics.ColorUtils;
 import android.view.MotionEvent;
 import android.view.View;
 
-import lib.util.PixelPercentUtil;
-import lib.util.ShareData;
+import util.PixelPercentUtil;
+import util.ShareData;
 
 /**
  *

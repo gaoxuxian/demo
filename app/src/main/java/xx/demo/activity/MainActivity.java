@@ -64,6 +64,9 @@ public class MainActivity extends Activity
                 {
                         GLES_CLASE_NAME + ".GlesActivity10", "2D 图片画水印"
                 },
+                {
+                        GLES_CLASE_NAME + ".GlesActivity11", "OpenGL 绘制镜头数据"
+                },
         };
 
         mActivityArr = new ArrayList<>();

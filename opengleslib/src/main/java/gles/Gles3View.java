@@ -57,9 +57,9 @@ public class Gles3View extends GLSurfaceView implements GLSurfaceView.Renderer
 
         mIsoscelesTriangleColorBuffer = BufferUtil.getNativeFloatBuffer(isosceles_triangle_color_arr);
 
-        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/Isosceles_triangle_vertex_shader");
+        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "shader/default_vertex_shader.glsl");
 
-        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/Isosceles_triangle_fragment_shader");
+        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "shader/default_fragment_shader.glsl");
 
         program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, vertex_shader);

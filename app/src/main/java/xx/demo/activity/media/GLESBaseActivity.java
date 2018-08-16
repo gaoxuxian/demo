@@ -140,8 +140,8 @@ public class GLESBaseActivity extends BaseActivity
              */
 
             mShaderProgram = GLES20.glCreateProgram();
-            int vertex_shader = loadShader(GLES20.GL_VERTEX_SHADER, uRes(mContext.getResources(), "shader/default_vertex.txt"));
-            int fragment_shader = loadShader(GLES20.GL_FRAGMENT_SHADER, uRes(mContext.getResources(), "shader/default_fragment.txt"));
+            int vertex_shader = loadShader(GLES20.GL_VERTEX_SHADER, uRes(mContext.getResources(), "shader/default_vertex_shader.glsl"));
+            int fragment_shader = loadShader(GLES20.GL_FRAGMENT_SHADER, uRes(mContext.getResources(), "shader/default_fragment_shader.glsl"));
             GLES20.glAttachShader(mShaderProgram, vertex_shader);
             GLES20.glAttachShader(mShaderProgram, fragment_shader);
             GLES20.glLinkProgram(mShaderProgram);

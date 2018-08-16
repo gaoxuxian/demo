@@ -62,8 +62,8 @@ public class Gles5View extends GLSurfaceView implements GLSurfaceView.Renderer
 
         mCircleVertexBuffer = BufferUtil.getNativeFloatBuffer(circle_vertex_arr);
 
-        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/circle_vertex_shader");
-        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/circle_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "shader/default_vertex_shader.glsl");
+        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "shader/default_fragment_shader.glsl");
 
         mGLProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(mGLProgram, vertex_shader);

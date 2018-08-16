@@ -75,8 +75,8 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
 
         mPictureTextureIndexBuffer = BufferUtil.getNativeFloatBuffer(picture_texture_index_arr);
 
-        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
-        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "shader/simple2D/picture_vertex_shader.glsl");
+        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "shader/simple2D/picture_fragment_shader.glsl");
 
         mProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(mProgram, vertex_shader);

@@ -12,6 +12,9 @@ import util.BufferUtil;
 import util.GLES20Util;
 import util.VaryTools;
 
+/**
+ * 尝试一个 Filter 分别连接两个 program 去画 两个彩色三角形
+ */
 public class Triangle extends AFilter
 {
     private FloatBuffer mVertexBuffer;
@@ -90,8 +93,8 @@ public class Triangle extends AFilter
     protected int onCreateProgram()
     {
         // 生成、加载 着色器
-        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/Isosceles_triangle_vertex_shader");
-        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/Isosceles_triangle_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "shader/default_vertex_shader.glsl");
+        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "shader/default_fragment_shader.glsl");
 
         // 生成 program
         int program = GLES20Util.sCreateAndLinkProgram(vertex_shader, fragment_shader);

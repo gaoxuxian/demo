@@ -15,6 +15,9 @@ import util.BufferUtil;
 import util.GLES20Util;
 import util.VaryTools;
 
+/**
+ * 只画一个 Simple2D 的底图
+ */
 public class ImageFilter extends AFilter
 {
     private Bitmap mTextureBmp;
@@ -75,8 +78,8 @@ public class ImageFilter extends AFilter
     @Override
     protected int onCreateProgram()
     {
-        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
-        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "shader/simple2D/picture_vertex_shader.glsl");
+        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "shader/simple2D/picture_fragment_shader.glsl");
 
         int program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, vertex_shader);

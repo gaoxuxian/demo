@@ -59,8 +59,8 @@ public class Gles4View extends GLSurfaceView implements GLSurfaceView.Renderer
 
         mSquareVertexIndexBuffer = BufferUtil.getNativeShortBuffer(square_vertex_index_arr);
 
-        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "gles/shader/square_vertex_shader");
-        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/square_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "shader/default_vertex_shader.glsl");
+        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "shader/default_fragment_shader.glsl");
 
         program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, vertex_shader);

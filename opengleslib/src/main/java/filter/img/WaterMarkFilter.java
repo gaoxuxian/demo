@@ -15,6 +15,9 @@ import util.BufferUtil;
 import util.GLES20Util;
 import util.VaryTools;
 
+/**
+ * 不用 FBO 尝试画水印
+ */
 public class WaterMarkFilter extends AFilter
 {
     private FloatBuffer mVertexBuffer;
@@ -134,8 +137,8 @@ public class WaterMarkFilter extends AFilter
     @Override
     protected int onCreateProgram()
     {
-        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
-        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
+        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "shader/simple2D/picture_vertex_shader.glsl");
+        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "shader/simple2D/picture_fragment_shader.glsl");
 
         int program = GLES20Util.sCreateAndLinkProgram(vertex_shader, fragment_shader);
 
@@ -144,8 +147,8 @@ public class WaterMarkFilter extends AFilter
         vMatrix = GLES20.glGetUniformLocation(program, "vMatrix");
         vTexture = GLES20.glGetUniformLocation(program, "vTexture");
 
-        vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "gles/shader/texture2d_picture_vertex_shader");
-        fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "gles/shader/texture2d_picture_fragment_shader");
+        vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "shader/simple2D/picture_vertex_shader.glsl");
+        fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "shader/simple2D/picture_fragment_shader.glsl");
 
         // 水印
         mWaterMarkProgram = GLES20Util.sCreateAndLinkProgram(vertex_shader, fragment_shader);

@@ -44,8 +44,8 @@ public class Gles2View extends GLSurfaceView implements GLSurfaceView.Renderer
 
         triangleVertexBuffer = BufferUtil.getNativeFloatBuffer(triangleCoords);
 
-        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "shader/graphics/triangle/vertex_shader.glsl");
-        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "shader/graphics/triangle/fragment_shader.glsl");
+        int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "shader/graphics/triangle/default_vertex_shader.glsl");
+        int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "shader/graphics/triangle/default_fragment_shader.glsl");
 
         mProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(mProgram, vertex_shader);

@@ -71,6 +71,10 @@ public interface OpenGLES
      *    着色器 基础知识
      *    https://www.jianshu.com/p/eea423753fb0
      *
+     * 5、
+     *  GlSurface View 工作原理初理解
+     *  https://www.jianshu.com/p/2414c8c09843
+     *
      *
      * =====================  透视投影的理解过程  =========================== 可以在 assets\glDemo\ 下结合demo效果去理解
      *

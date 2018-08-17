@@ -101,8 +101,8 @@ public abstract class AFilter implements IFilter
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height)
     {
-        setSurfaceSize(width, height);
         onSurfaceChangeSet(width, height);
+        setSurfaceSize(width, height);
     }
 
     @Override

@@ -153,19 +153,6 @@ public class CameraPreviewFilter extends AFilter
                 float y = p * (float) getSurfaceHeight() / getSurfaceWidth() / scale;
 
                 tools.translate(0, y, 0);
-
-//                if (scale == (float) 16/9)
-//                {
-//
-//                }
-//                else if (scale == (float) 4/3)
-//                {
-//
-//                }
-//                else
-//                {
-//
-//                }
             }
 
             tools.rotate(-90, 0, 0, 1);

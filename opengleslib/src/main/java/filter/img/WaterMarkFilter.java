@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -158,6 +159,7 @@ public class WaterMarkFilter extends AFilter
         vMatrixWater = GLES20.glGetUniformLocation(mWaterMarkProgram, "vMatrix");
         vTextureWater = GLES20.glGetUniformLocation(mWaterMarkProgram, "vTexture");
 
+        textures = new int[2];
         GLES20.glGenTextures(2, textures, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
         //设置缩小过滤为使用纹理中坐标最接近的一个像素的颜色作为需要绘制的像素颜色
@@ -217,6 +219,7 @@ public class WaterMarkFilter extends AFilter
             // 绘制底图前，重新激活纹理单元、绑定底图纹理id
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
+
             if (mRefresh)
             {
                 mRefresh = false;
@@ -254,7 +257,7 @@ public class WaterMarkFilter extends AFilter
 
             GLES20.glDisableVertexAttribArray(vPosition);
             GLES20.glDisableVertexAttribArray(vCoordinate);
-
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
             tools.popMatrix();
 
             if (isTextureWaterBmpAvailable())
@@ -264,13 +267,13 @@ public class WaterMarkFilter extends AFilter
                 // 绘制水印前，重新激活纹理单元、绑定水印纹理id
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[1]);
+
                 if (mRefreshWater)
                 {
                     mRefreshWater = false;
                     uploadWaterBmpToGPU();
                 }
                 GLES20.glUniform1i(vTextureWater, 1);
-
                 tools = getMatrixTools();
 
                 tools.pushMatrix();
@@ -308,7 +311,7 @@ public class WaterMarkFilter extends AFilter
 
                 GLES20.glDisableVertexAttribArray(vPositionWater);
                 GLES20.glDisableVertexAttribArray(vCoordinateWater);
-
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
                 tools.popMatrix();
             }
         }

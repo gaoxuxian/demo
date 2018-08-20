@@ -67,6 +67,9 @@ public class MainActivity extends Activity
                 {
                         GLES_CLASE_NAME + ".GlesActivity11", "OpenGL 绘制镜头数据"
                 },
+                {
+                        GLES_CLASE_NAME + ".GlesActivity12", "OpenGL FBO 绘制图片"
+                },
         };
 
         mActivityArr = new ArrayList<>();

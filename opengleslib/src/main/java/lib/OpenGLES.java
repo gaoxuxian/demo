@@ -78,6 +78,12 @@ public interface OpenGLES
      *  GlSurface View 工作原理初理解
      *  https://www.jianshu.com/p/2414c8c09843
      *
+     * 6、天天P图 android 讲解混合模式的贴
+     *  https://cloud.tencent.com/developer/article/1132385
+     *
+     * 7、UV 坐标的理解
+     *  https://www.cnblogs.com/jiahuafu/p/5942228.html
+     *
      *
      * =====================  透视投影的理解过程  =========================== 可以在 assets\glDemo\ 下结合demo效果去理解
      *

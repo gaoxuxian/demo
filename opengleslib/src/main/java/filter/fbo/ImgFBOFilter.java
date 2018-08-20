@@ -136,6 +136,8 @@ public class ImgFBOFilter extends AFilter
             tools.pushMatrix();
             float y = mTextureBmp.getHeight() / (float) mTextureBmp.getWidth();
             tools.scale(1f, -y, 1f);
+
+            tools.translate(0, 1, 0);
             GLES20.glUniformMatrix4fv(vMatrix, 1, false, tools.getFinalMatrix(), 0);
 
             GLES20.glEnableVertexAttribArray(vPosition);

@@ -52,6 +52,9 @@ public interface OpenGLES
      * 1、湖广午王 的博客 (有比较全面的 OpenGL ES20 的系列教程)
      *    http://blog.csdn.net/junzia/article/list
      *
+     *    LearnOpenGL教程的中文翻译
+     *    https://learnopengl-cn.readthedocs.io/zh/latest/
+     *
      *    重点 ！！！！ 对于 齐次方程 等概念理解
      * 2、什么是「齐次」，「非齐次」，「线性」，「非线性」？
      *    https://www.zhihu.com/question/19816504

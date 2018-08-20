@@ -108,5 +108,13 @@ public interface GLTips
      *          三维空间的平移(由于矩阵内的值，并非通过矩阵互乘得到，是直接赋值到数组，所以平移的时候，要考虑之前是否有经过缩放操作)
      *          三维空间的旋转
      *          个人感觉这种方法比较好理解 {@link gles.Gles7View#onSurfaceChanged} or {@link WaterMarkFilter#onDrawSelf() 画底图和水印的算法}
+     *
+     * 8、 对 Frame Buffer Object (FBO) 的一些个人理解与记录：
+     *
+     *     在构建GLSurface View 的时候，其实已经帮我们默认配置好了一个 默认的 FBO, 一般绑定这个默认的 FBO 代码
+     *      GLES20.glBindFrameBuffer(GLES20.GL_FRAMEBUFFER, 0);
+     *
+     *     如果代码中，需要自己控制 FBO 去绘制图像，那么最终将图像绘制到屏幕的步骤是：先将图像内容绘制到新的 FBO 挂载的 texture1 上，然后将 FBO 切换成默认的，
+     *     再绑定 texture1 的id，将这张纹理再绘制一次，那么就能在屏幕上看到内容了
      */
 }

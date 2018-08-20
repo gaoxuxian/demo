@@ -1,15 +1,34 @@
 package xx.demo.gles;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
-public class GlesActivity12 extends AppCompatActivity
+import gles.Gles12View;
+import xx.demo.activity.BaseActivity;
+
+public class GlesActivity12 extends BaseActivity
 {
+    Gles12View mItemView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public void createChildren(FrameLayout parent, FrameLayout.LayoutParams params)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gles12);
+        mItemView = new Gles12View(parent.getContext());
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        parent.addView(mItemView, params);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mItemView.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mItemView.onPause();
     }
 }

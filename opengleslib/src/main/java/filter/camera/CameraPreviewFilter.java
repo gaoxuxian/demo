@@ -134,43 +134,63 @@ public class CameraPreviewFilter extends AFilter
 
             VaryTools tools = getMatrixTools();
 
-            tools.pushMatrix();
-
-            float scale = (float) mPreviewH / mPreviewW;
-
-            if (scale == 2)
+            for (int i = 0; i<4;i++)
             {
-                float scaleY = 2160f /1920f * 16f/9;
-                float scaleX = 2160f/1920f;
-                tools.scale(scaleX, scaleY, 1f);
+                tools.pushMatrix();
+
+                float scale = (float) mPreviewH / mPreviewW;
+
+                if (i == 0)
+                {
+                    GLES20.glViewport(0, 0, getSurfaceWidth()/2, getSurfaceHeight()/2);
+                }
+                else if (i == 1)
+                {
+                    GLES20.glViewport(getSurfaceWidth()/2, 0, getSurfaceWidth()/2, getSurfaceHeight()/2);
+                }
+                else if (i == 2)
+                {
+                    GLES20.glViewport(0, getSurfaceHeight()/2, getSurfaceWidth()/2, getSurfaceHeight()/2);
+                }
+                else
+                {
+                    GLES20.glViewport(getSurfaceWidth()/2, getSurfaceHeight()/2, getSurfaceWidth()/2, getSurfaceHeight()/2);
+                }
+
+                if (scale == 2)
+                {
+                    float scaleY = 2160f /1920f * 16f/9;
+                    float scaleX = 2160f/1920f;
+                    tools.scale(scaleX, scaleY, 1f);
+                }
+                else
+                {
+                    tools.scale(1f, scale, 1f);
+
+                    float dy = (getSurfaceHeight() - ((float) getSurfaceWidth() * scale)) / 2f;
+                    float p = dy * 2/ getSurfaceHeight();
+                    float y = p * (float) getSurfaceHeight() / getSurfaceWidth() / scale;
+
+                    tools.translate(0, y, 0);
+                }
+
+                tools.rotate(-90, 0, 0, 1);
+
+                GLES20.glUniformMatrix4fv(vMatrix, 1, false, tools.getFinalMatrix(), 0);
+
+                tools.popMatrix();
+
+                GLES20.glEnableVertexAttribArray(vPosition);
+                GLES20.glVertexAttribPointer(vPosition, 3, GLES20.GL_FLOAT, false, 0, mVertexBuffer);
+
+                GLES20.glEnableVertexAttribArray(vCoord);
+                GLES20.glVertexAttribPointer(vCoord, 2, GLES20.GL_FLOAT, false, 0, mTextureIndexBuffer);
+
+                GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, mVertexIndexBuffer);
+
+                GLES20.glDisableVertexAttribArray(vPosition);
+                GLES20.glDisableVertexAttribArray(vCoord);
             }
-            else
-            {
-                tools.scale(1f, scale, 1f);
-
-                float dy = (getSurfaceHeight() - ((float) getSurfaceWidth() * scale)) / 2f;
-                float p = dy * 2/ getSurfaceHeight();
-                float y = p * (float) getSurfaceHeight() / getSurfaceWidth() / scale;
-
-                tools.translate(0, y, 0);
-            }
-
-            tools.rotate(-90, 0, 0, 1);
-
-            GLES20.glUniformMatrix4fv(vMatrix, 1, false, tools.getFinalMatrix(), 0);
-
-            tools.popMatrix();
-
-            GLES20.glEnableVertexAttribArray(vPosition);
-            GLES20.glVertexAttribPointer(vPosition, 3, GLES20.GL_FLOAT, false, 0, mVertexBuffer);
-
-            GLES20.glEnableVertexAttribArray(vCoord);
-            GLES20.glVertexAttribPointer(vCoord, 2, GLES20.GL_FLOAT, false, 0, mTextureIndexBuffer);
-
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, mVertexIndexBuffer);
-
-            GLES20.glDisableVertexAttribArray(vPosition);
-            GLES20.glDisableVertexAttribArray(vCoord);
         }
     }
 }

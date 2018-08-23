@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
+import android.opengl.Matrix;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -58,7 +59,7 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
                 0.299f,0.587f,0.114f
         };
 
-        mTextureBmp = BitmapFactory.decodeResource(getResources(), R.drawable.opengl_test_2);
+        mTextureBmp = BitmapFactory.decodeResource(getResources(), R.drawable.opengl_test_4);
 
         setEGLContextClientVersion(2);
         setRenderer(this);
@@ -119,42 +120,42 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
         // 以下三种方式都可以达到图片不被拉伸、压缩的效果
 
         // 第一种方式: 直接在 透视矩阵 中 设置近平面的宽高, 达到压缩效果
-        if (mTextureBmp != null)
-        {
-            float[] matrix = new float[16];
-            GLES20Util.sGetFrustumM(matrix, mTextureBmp.getWidth(), mTextureBmp.getHeight(), width, height);
-            int vMatrix = GLES20.glGetUniformLocation(mProgram, "vMatrix");
-            GLES20.glUniformMatrix4fv(vMatrix, 1, false, matrix, 0);
-        }
+//        if (mTextureBmp != null)
+//        {
+//            float[] matrix = new float[16];
+//            GLES20Util.sGetFrustumM(matrix, mTextureBmp.getWidth(), mTextureBmp.getHeight(), width, height);
+//            int vMatrix = GLES20.glGetUniformLocation(mProgram, "vMatrix");
+//            GLES20.glUniformMatrix4fv(vMatrix, 1, false, matrix, 0);
+//        }
 
         // 以下两种方式，需要将 顶点坐标 范围，定义为[-1, 1], 因为计算的时候，在三维世界中，是基于某一个点，到原点的距离是 1
 
         // 第二种方式: 直接写死 近平面 的宽高, 后续通过 矩阵, 对图片做二次压缩
-//        if (mTextureBmp != null)
-//        {
-//            float sWH = (float) width / height;
-//
-//            float[] matrix = GLES20Util.getOpenGLUnitMatrix();
-//
-//            float[] frustumM = new float[16];
-//
-//            float[] viewPortM = new float[16];
-//
-//            float[] temp = new float[16];
-//
-//            Matrix.frustumM(frustumM, 0, -1f, 1f, -1f / sWH, 1f / sWH, 3, 5);
-//
-//            Matrix.setLookAtM(viewPortM, 0, 0, 0, 3.0f, 0, 0, 0, 0, 1, 0);
-//
-//            Matrix.scaleM(matrix, 0, 1f, mTextureBmp.getHeight() / (float) mTextureBmp.getWidth(), 1f);
-//
-//            Matrix.multiplyMM(temp, 0, viewPortM, 0, matrix, 0);
-//
-//            Matrix.multiplyMM(matrix, 0, frustumM, 0, temp, 0);
-//
-//            int vMatrix = GLES20.glGetUniformLocation(mProgram, "vMatrix");
-//            GLES20.glUniformMatrix4fv(vMatrix, 1, false, matrix, 0);
-//        }
+        if (mTextureBmp != null)
+        {
+            float sWH = (float) width / height;
+
+            float[] matrix = GLES20Util.sGetOpenGLUnitMatrix();
+
+            float[] frustumM = new float[16];
+
+            float[] viewPortM = new float[16];
+
+            float[] temp = new float[16];
+
+            Matrix.frustumM(frustumM, 0, -sWH, sWH, -1f, 1f, 3, 5);
+
+            Matrix.setLookAtM(viewPortM, 0, 0, 0, 3.0f, 0, 0, 0, 0, 1, 0);
+
+            Matrix.scaleM(matrix, 0, (float) mTextureBmp.getWidth()/mTextureBmp.getHeight() , 1f , 1f);
+
+            Matrix.multiplyMM(temp, 0, viewPortM, 0, matrix, 0);
+
+            Matrix.multiplyMM(matrix, 0, frustumM, 0, temp, 0);
+
+            int vMatrix = GLES20.glGetUniformLocation(mProgram, "vMatrix");
+            GLES20.glUniformMatrix4fv(vMatrix, 1, false, matrix, 0);
+        }
 
         // 第三种方式: 直接写死 近平面 的宽高, 后续通过 矩阵, 对图片做二次压缩 (只是对 第二种方式 矩阵融合顺序的调整)
 //        if (mTextureBmp != null)

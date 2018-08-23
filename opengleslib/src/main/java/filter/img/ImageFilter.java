@@ -126,22 +126,22 @@ public class ImageFilter extends AFilter
 
             if (scale == scaleX)
             {
-                tools.frustum(-1, 1, -sImgWH / sViewWH, sImgWH / sViewWH, 3, 5);
+                tools.frustum(-1, 1, -sImgWH / sViewWH, sImgWH / sViewWH, 3, 9);
             }
             else if (scale == scaleY)
             {
-                tools.frustum(-sViewWH / sImgWH, sViewWH / sImgWH, -1, 1, 3, 5);
+                tools.frustum(-sViewWH / sImgWH, sViewWH / sImgWH, -1, 1, 3, 9);
             }
         }
         else if (width <= height)
         {
-            tools.frustum(-1, 1, -1 / sViewWH, 1 / sViewWH, 3, 5);
+            tools.frustum(-1, 1, -1 / sViewWH, 1 / sViewWH, 3, 9);
         }
         else if (height > width)
         {
-            tools.frustum(-sViewWH, sViewWH, -1, 1, 3, 5);
+            tools.frustum(-sViewWH, sViewWH, -1, 1, 3, 9);
         }
-        tools.setCamera(0, 0, 3, 0, 0, 0, 0, 1, 0);
+        tools.setCamera(0, 0, 6, 0, 0, 0, 0, 1, 0);
         setMatrix(tools.getFinalMatrix());
     }
 
@@ -167,7 +167,12 @@ public class ImageFilter extends AFilter
 
             GLES20.glUniform1i(vTexture, 0);
 
-            GLES20.glUniformMatrix4fv(vMatrix, 1, false, getMatrix(), 0);
+            VaryTools tools = getMatrixTools();
+            tools.pushMatrix();
+//            tools.rotate(30, 0, 1, 0);
+
+            GLES20.glUniformMatrix4fv(vMatrix, 1, false, tools.getFinalMatrix(), 0);
+            tools.popMatrix();
 
             GLES20.glEnableVertexAttribArray(vPosition);
             GLES20.glEnableVertexAttribArray(vCoordinate);

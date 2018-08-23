@@ -84,6 +84,12 @@ public interface OpenGLES
      * 7、UV 坐标的理解
      *  https://www.cnblogs.com/jiahuafu/p/5942228.html
      *
+     * 8、EGL 相关信息、概念
+     *  8-1、https://woshijpf.github.io/android/2017/09/04/Android%E7%B3%BB%E7%BB%9F%E5%9B%BE%E5%BD%A2%E6%A0%88OpenGLES%E5%92%8CEGL%E4%BB%8B%E7%BB%8D.html
+     *
+     *  8-2、http://gad.qq.com/article/detail/14401
+     *
+     *
      *
      * =====================  透视投影的理解过程  =========================== 可以在 assets\glDemo\ 下结合demo效果去理解
      *

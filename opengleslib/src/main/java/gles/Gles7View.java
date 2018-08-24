@@ -141,17 +141,15 @@ public class Gles7View extends GLSurfaceView implements GLSurfaceView.Renderer
 
             float[] viewPortM = new float[16];
 
-            float[] temp = new float[16];
-
             Matrix.frustumM(frustumM, 0, -sWH, sWH, -1f, 1f, 3, 5);
 
             Matrix.setLookAtM(viewPortM, 0, 0, 0, 3.0f, 0, 0, 0, 0, 1, 0);
 
             Matrix.scaleM(matrix, 0, (float) mTextureBmp.getWidth()/mTextureBmp.getHeight() , 1f , 1f);
 
-            Matrix.multiplyMM(temp, 0, viewPortM, 0, matrix, 0);
+            Matrix.multiplyMM(matrix, 0, viewPortM, 0, matrix, 0);
 
-            Matrix.multiplyMM(matrix, 0, frustumM, 0, temp, 0);
+            Matrix.multiplyMM(matrix, 0, frustumM, 0, matrix, 0);
 
             int vMatrix = GLES20.glGetUniformLocation(mProgram, "vMatrix");
             GLES20.glUniformMatrix4fv(vMatrix, 1, false, matrix, 0);

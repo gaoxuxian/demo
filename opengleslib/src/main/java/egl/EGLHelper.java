@@ -7,6 +7,9 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
+import javax.microedition.khronos.opengles.GL10;
+
+import static android.opengl.EGL14.EGL_CONTEXT_CLIENT_VERSION;
 
 public class EGLHelper
 {
@@ -15,6 +18,7 @@ public class EGLHelper
     private EGLDisplay mEglDisplay;
     private EGLSurface mEglSurface;
     private EGLContext mEglContext;
+    public GL10 mGL;
 
     public static final int SURFACE_PBUFFER = 1;
     public static final int SURFACE_PIM = 2;
@@ -59,7 +63,13 @@ public class EGLHelper
                 };
         mEglSurface = createEglSurface(attrib_list);
 
-        mEglContext = mEgl.eglCreateContext(mEglDisplay, mEglConfig, shareContext, attributes);
+        //创建Context
+        int[] contextAttr=new int[]{
+                EGL_CONTEXT_CLIENT_VERSION,2,
+                EGL10.EGL_NONE
+        };
+
+        mEglContext = mEgl.eglCreateContext(mEglDisplay, mEglConfig, shareContext, contextAttr);
 
         makeCurrent();
 
@@ -69,7 +79,7 @@ public class EGLHelper
     public void makeCurrent()
     {
         mEgl.eglMakeCurrent(mEglDisplay, mEglSurface, mEglSurface, mEglContext);
-        mEgl = (EGL10) mEglContext.getGL();
+        mGL = (GL10) mEglContext.getGL();
     }
 
     private EGLSurface createEglSurface(int[] attrib_list)

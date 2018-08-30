@@ -13,7 +13,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 
 import filter.AFilter;
 import lib.opengles.R;
-import util.BufferUtil;
+import util.ByteBufferUtil;
 import util.GLES20Util;
 import util.VaryTools;
 
@@ -50,7 +50,7 @@ public class ImgFBOFilter extends AFilter
                 -1.0f, -1.0f, 0.0f
         };
 
-        mVertexBuffer = BufferUtil.getNativeFloatBuffer(vertex);
+        mVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex);
 
         float[] texture_index = new float[]{
                 0, 0,
@@ -59,14 +59,14 @@ public class ImgFBOFilter extends AFilter
                 0, 1
         };
 
-        mTextureIndexBuffer = BufferUtil.getNativeFloatBuffer(texture_index);
+        mTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(texture_index);
 
         short[] vertex_index = new short[]{
                 0, 1, 2,
                 0, 2, 3
         };
 
-        mVertexIndexBuffer = BufferUtil.getNativeShortBuffer(vertex_index);
+        mVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(vertex_index);
 
         mTextureArr = new int[2];
     }

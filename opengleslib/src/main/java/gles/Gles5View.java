@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import util.BufferUtil;
+import util.ByteBufferUtil;
 import util.GLES20Util;
 
 public class Gles5View extends GLSurfaceView implements GLSurfaceView.Renderer
@@ -60,7 +60,7 @@ public class Gles5View extends GLSurfaceView implements GLSurfaceView.Renderer
     {
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-        mCircleVertexBuffer = BufferUtil.getNativeFloatBuffer(circle_vertex_arr);
+        mCircleVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(circle_vertex_arr);
 
         int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "shader/default_vertex_shader.glsl");
         int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "shader/default_fragment_shader.glsl");

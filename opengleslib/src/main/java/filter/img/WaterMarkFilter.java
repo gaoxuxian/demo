@@ -11,7 +11,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 
 import filter.AFilter;
-import util.BufferUtil;
+import util.ByteBufferUtil;
 import util.GLES20Util;
 import util.VaryTools;
 
@@ -84,7 +84,7 @@ public class WaterMarkFilter extends AFilter
                 -1.0f, -1.0f, 0.0f
         };
 
-        mVertexBuffer = BufferUtil.getNativeFloatBuffer(vertex);
+        mVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex);
 
         float[] texture_index = new float[]{
                 0.0f, 0.0f,
@@ -93,14 +93,14 @@ public class WaterMarkFilter extends AFilter
                 0.0f, 1.0f
         };
 
-        mTextureIndexBuffer = BufferUtil.getNativeFloatBuffer(texture_index);
+        mTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(texture_index);
 
         short[] vertex_index = new short[]{
                 0, 1, 2,
                 0, 2, 3
         };
 
-        mVertexIndexBuffer = BufferUtil.getNativeShortBuffer(vertex_index);
+        mVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(vertex_index);
 
         float[] vertex_water = new float[]{
                 -1.0f, 1.0f, 0.0f,
@@ -109,7 +109,7 @@ public class WaterMarkFilter extends AFilter
                 -1.0f, -1.0f, 0.0f
         };
 
-        mWaterVertexBuffer = BufferUtil.getNativeFloatBuffer(vertex_water);
+        mWaterVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex_water);
 
         float[] texture_index_water = new float[]{
                 0.0f, 0.0f,
@@ -118,14 +118,14 @@ public class WaterMarkFilter extends AFilter
                 0.0f, 1.0f
         };
 
-        mWaterTextureIndexBuffer = BufferUtil.getNativeFloatBuffer(texture_index_water);
+        mWaterTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(texture_index_water);
 
         short[] vertex_index_water = new short[]{
                 0, 1, 2,
                 0, 2, 3
         };
 
-        mWaterVertexIndexBuffer = BufferUtil.getNativeShortBuffer(vertex_index_water);
+        mWaterVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(vertex_index_water);
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 
 import filter.AFilter;
-import util.BufferUtil;
+import util.ByteBufferUtil;
 import util.GLES20Util;
 import util.VaryTools;
 
@@ -56,13 +56,13 @@ public class CameraPreviewFilter extends AFilter
                 1.0f, -1.0f, 0.0f,
                 -1.0f, -1.0f, 0.0f
         };
-        mVertexBuffer = BufferUtil.getNativeFloatBuffer(vertex);
+        mVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex);
 
         short[] vertex_index = new short[]{
                 0, 1, 2,
                 0, 2, 3
         };
-        mVertexIndexBuffer = BufferUtil.getNativeShortBuffer(vertex_index);
+        mVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(vertex_index);
 
         float[] texture_index = new float[]{
                 0.0f, 0.0f,
@@ -70,7 +70,7 @@ public class CameraPreviewFilter extends AFilter
                 1.0f, 1.0f,
                 0.0f, 1.0f
         };
-        mTextureIndexBuffer = BufferUtil.getNativeFloatBuffer(texture_index);
+        mTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(texture_index);
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import util.BufferUtil;
+import util.ByteBufferUtil;
 import util.GLES20Util;
 
 public class Gles3View extends GLSurfaceView implements GLSurfaceView.Renderer
@@ -53,9 +53,9 @@ public class Gles3View extends GLSurfaceView implements GLSurfaceView.Renderer
     {
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-        mIsoscelesTriangleBuffer = BufferUtil.getNativeFloatBuffer(isosceles_triangle_coords);
+        mIsoscelesTriangleBuffer = ByteBufferUtil.getNativeFloatBuffer(isosceles_triangle_coords);
 
-        mIsoscelesTriangleColorBuffer = BufferUtil.getNativeFloatBuffer(isosceles_triangle_color_arr);
+        mIsoscelesTriangleColorBuffer = ByteBufferUtil.getNativeFloatBuffer(isosceles_triangle_color_arr);
 
         int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "shader/default_vertex_shader.glsl");
 

@@ -8,7 +8,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 
 import filter.AFilter;
-import util.BufferUtil;
+import util.ByteBufferUtil;
 import util.GLES20Util;
 import util.VaryTools;
 
@@ -54,7 +54,7 @@ public class Triangle extends AFilter
 
         vPositionSize = vertex.length / 3;
 
-        mVertexBuffer = BufferUtil.getNativeFloatBuffer(vertex);
+        mVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex);
 
         float[] color = new float[]{
                 0.0f, 1.0f, 0.0f, 1.0f,
@@ -64,7 +64,7 @@ public class Triangle extends AFilter
 
         aColorSize = color.length / 3;
 
-        mVertexColorBuffer = BufferUtil.getNativeFloatBuffer(color);
+        mVertexColorBuffer = ByteBufferUtil.getNativeFloatBuffer(color);
 
         float[] vertex2 = new float[]{
                 -1.0f, 1.0f, 0.0f,
@@ -72,7 +72,7 @@ public class Triangle extends AFilter
                 1.0f, 1.0f, 0.0f
         };
 
-        mVertexBuffer2 = BufferUtil.getNativeFloatBuffer(vertex2);
+        mVertexBuffer2 = ByteBufferUtil.getNativeFloatBuffer(vertex2);
 
         float[] color2 = new float[]{
                 1.0f, 0.0f, 0.0f, 1.0f,
@@ -80,7 +80,7 @@ public class Triangle extends AFilter
                 0.0f, 0.0f, 1.0f, 1.0f
         };
 
-        mVertexColorBuffer2 = BufferUtil.getNativeFloatBuffer(color2);
+        mVertexColorBuffer2 = ByteBufferUtil.getNativeFloatBuffer(color2);
     }
 
     @Override

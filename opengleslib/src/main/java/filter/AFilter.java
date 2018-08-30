@@ -80,6 +80,11 @@ public abstract class AFilter implements IFilter
         return mGLProgram;
     }
 
+    public void setGLProgram(int program)
+    {
+        mGLProgram = program;
+    }
+
     private void setSurfaceSize(int w, int h)
     {
         mSurfaceHeight = h;

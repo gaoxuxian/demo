@@ -10,7 +10,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import util.BufferUtil;
+import util.ByteBufferUtil;
 import util.GLES20Util;
 
 public class Gles4View extends GLSurfaceView implements GLSurfaceView.Renderer
@@ -55,9 +55,9 @@ public class Gles4View extends GLSurfaceView implements GLSurfaceView.Renderer
     {
         GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-        mSquareVertexBuffer = BufferUtil.getNativeFloatBuffer(square_vertex_arr);
+        mSquareVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(square_vertex_arr);
 
-        mSquareVertexIndexBuffer = BufferUtil.getNativeShortBuffer(square_vertex_index_arr);
+        mSquareVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(square_vertex_index_arr);
 
         int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "shader/default_vertex_shader.glsl");
         int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "shader/default_fragment_shader.glsl");

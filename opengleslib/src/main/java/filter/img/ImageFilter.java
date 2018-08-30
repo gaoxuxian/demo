@@ -11,7 +11,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 
 import filter.AFilter;
-import util.BufferUtil;
+import util.ByteBufferUtil;
 import util.GLES20Util;
 import util.VaryTools;
 
@@ -50,14 +50,14 @@ public class ImageFilter extends AFilter
                 -1.0f, -1.0f, 0.0f
         };
 
-        mVertexBuffer = BufferUtil.getNativeFloatBuffer(vertex);
+        mVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex);
 
         short[] vertex_index = new short[]{
                 0, 1, 2,
                 0, 2, 3
         };
 
-        mVertexIndexBuffer = BufferUtil.getNativeShortBuffer(vertex_index);
+        mVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(vertex_index);
 
         float[] texture_index = new float[]{
                 0.0f, 0.0f,
@@ -66,7 +66,7 @@ public class ImageFilter extends AFilter
                 0.0f, 1.0f
         };
 
-        mTextureIndexBuffer = BufferUtil.getNativeFloatBuffer(texture_index);
+        mTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(texture_index);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class ImageFilter extends AFilter
     }
 
     @Override
-    protected void onSurfaceChangeSet(int width, int height)
+    public void onSurfaceChangeSet(int width, int height)
     {
         mRefreshBmp = false;
         GLES20.glViewport(0, 0, width, height);
@@ -159,7 +159,7 @@ public class ImageFilter extends AFilter
     }
 
     @Override
-    protected void onDrawSelf()
+    public void onDrawSelf()
     {
         if (isTextureBmpAvailable())
         {

@@ -11,7 +11,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import util.BufferUtil;
+import util.ByteBufferUtil;
 import util.GLES20Util;
 
 public class Gles6View extends GLSurfaceView implements GLSurfaceView.Renderer
@@ -84,11 +84,11 @@ public class Gles6View extends GLSurfaceView implements GLSurfaceView.Renderer
         //开启深度测试
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
-        mCubeVertexBuffer = BufferUtil.getNativeFloatBuffer(cube_vertex_arr);
+        mCubeVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(cube_vertex_arr);
 
-        mCubeVertexColorBuffer = BufferUtil.getNativeFloatBuffer(cube_vertex_color);
+        mCubeVertexColorBuffer = ByteBufferUtil.getNativeFloatBuffer(cube_vertex_color);
 
-        mCubeVertexIndexBuffer = BufferUtil.getNativeShortBuffer(cube_vertex_index);
+        mCubeVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(cube_vertex_index);
 
         int vertex_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_VERTEX_SHADER, "shader/default_vertex_shader.glsl");
         int fragment_shader = GLES20Util.sGetShader(getContext(), GLES20.GL_FRAGMENT_SHADER, "shader/default_fragment_shader.glsl");

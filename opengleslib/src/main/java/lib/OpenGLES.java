@@ -89,6 +89,8 @@ public interface OpenGLES
      *
      *  8-2、http://gad.qq.com/article/detail/14401
      *
+     * 9、滤镜-Color Lookup Table(ColorLUT)技术
+     *  https://blog.csdn.net/danffer1985/article/details/78692992
      *
      *
      * =====================  透视投影的理解过程  =========================== 可以在 assets\glDemo\ 下结合demo效果去理解

@@ -58,7 +58,7 @@ public class Gles11View extends GLSurfaceView implements GLSurfaceView.Renderer
     {
         try
         {
-            mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
+            mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
         }
         catch (Exception e)
         {

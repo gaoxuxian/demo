@@ -3,17 +3,10 @@ package xx.demo.activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.support.v8.renderscript.Allocation;
-import android.support.v8.renderscript.RenderScript;
-import android.support.v8.renderscript.ScriptIntrinsicBlur;
 import android.support.v8.renderscript.Short4;
-import android.support.v8.renderscript.Type;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -22,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import seekbar.CirclePointConfig;
@@ -32,7 +24,6 @@ import seekbar.SeekBarConfigFactory;
 import util.BlurUtil;
 import util.PixelPercentUtil;
 import xx.demo.R;
-import xx.demo.rs.ScriptC_tint;
 
 public class RenderScriptTestActivity extends BaseActivity
 {
@@ -154,87 +145,10 @@ public class RenderScriptTestActivity extends BaseActivity
 
     public Bitmap blur(Context context, Bitmap src, float radius, String color)
     {
-        Bitmap dst = null;
-
         PointF center = new PointF(0.5f, 0.5f);
 
         RectF rect = new RectF(0, (2160 - 500) / (float)2160, 1, (2160 - 200) / (float) 2160);
 
-        dst = BlurUtil.sBlurEffectRectFPart(context, src, radius, close ? null : color, 1/8f, rect);
-
-        if (dst == null && src != null && !src.isRecycled())
-        {
-            if (radius <= 0)
-            {
-                return src;
-            }
-
-            int width = src.getWidth();
-            int height = src.getHeight();
-
-            dst = Bitmap.createBitmap(1080 / 8, 300/8, Bitmap.Config.ARGB_8888);
-
-            // dst = src.copy(src.getConfig(), true);
-
-            Canvas canvas = new Canvas(dst);
-            Matrix matrix = new Matrix();
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-            // paint.setAlpha((int) (255 * 0.6f));
-            matrix.postTranslate(0, - (2160 - 500));
-            matrix.postScale(1f/8f, 1f/8f);
-            canvas.drawBitmap(src, matrix, paint);
-
-            RenderScript rs = RenderScript.create(context);
-
-            Allocation in = Allocation.createFromBitmap(rs, dst);
-
-            Type t = Type.createXY(rs, in.getElement(), 1080/8, 300/8);
-
-            Allocation temp1 = Allocation.createTyped(rs, t);
-
-            Allocation temp2 = Allocation.createTyped(rs, t);
-
-            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs, temp1.getElement());
-            blur.setInput(in);
-            blur.setRadius(radius);
-            blur.forEach(temp1);
-
-            if (!close)
-            {
-                ScriptC_tint tint = new ScriptC_tint(rs);
-                tint.set_maskColor(convertColor2Short4("#40000000"));
-                tint.forEach_mask(temp1, temp2);
-                temp2.copyTo(dst);
-
-                in.destroy();
-                temp1.destroy();
-                temp2.destroy();
-                // intrinsicResize.destroy();
-                blur.destroy();
-                tint.destroy();
-            }
-            else
-            {
-                temp1.copyTo(dst);
-
-                in.destroy();
-                // intrinsicResize.destroy();
-                temp1.destroy();
-                temp2.destroy();
-                blur.destroy();
-            }
-        }
-
-        return dst;
-    }
-
-    private static Short4 convertColor2Short4(String color)
-    {
-        int c = Color.parseColor(color);
-        short b = (short) (c & 0xFF);
-        short g = (short) ((c >> 8) & 0xFF);
-        short r = (short) ((c >> 16) & 0xFF);
-        short a = (short) ((c >> 24) & 0xFF);
-        return new Short4(r, g, b, a);
+        return BlurUtil.sBlurEffectRectFPart(context, src, radius, close ? null : color, 1/8f, rect);
     }
 }

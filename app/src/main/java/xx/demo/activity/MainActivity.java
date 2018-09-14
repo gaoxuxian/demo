@@ -70,6 +70,12 @@ public class MainActivity extends Activity
                 {
                         GLES_CLASE_NAME + ".GlesActivity12", "OpenGL FBO 绘制图片"
                 },
+                {
+                        GLES_CLASE_NAME + ".GlesActivity13", "EGL 后台处理图片"
+                },
+                {
+                        CLASS_NAME + ".RenderScriptTestActivity", "测试 RenderScript 毛玻璃效果"
+                }
         };
 
         mActivityArr = new ArrayList<>();

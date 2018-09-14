@@ -101,6 +101,8 @@ public class CirclePointConfig implements IConfig
 
     // =================================== 非必须参数 ============================= //
 
+    public int mBgColor = Color.BLACK; // View 背景色
+
     public int mZeroPointBmpResId; // 原点的图片资源
 
     public int mPointBmpResId; // 点的图片资源

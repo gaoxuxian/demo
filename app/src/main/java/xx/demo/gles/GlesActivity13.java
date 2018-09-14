@@ -1,6 +1,8 @@
 package xx.demo.gles;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -43,8 +45,11 @@ public class GlesActivity13 extends BaseActivity
                 {
                     Gles20BackEnv env = new Gles20BackEnv();
                     env.setFilter(new EGLFilter(getResources()));
-                    env.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.opengl_test_5));
-                    mItemView.setImageBitmap(env.getOutputBitmap());
+                    env.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.opengl_test_4));
+                    Log.d("xxx", "run: 开始读像素 == "+System.currentTimeMillis());
+                    Bitmap outputBitmap = env.getOutputBitmap();
+                    Log.d("xxx", "run: 结束读像素 == "+System.currentTimeMillis());
+                    mItemView.setImageBitmap(outputBitmap);
                 }
             }, 1000);
         }

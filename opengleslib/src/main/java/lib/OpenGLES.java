@@ -111,5 +111,11 @@ public interface OpenGLES
      *
      * ~OpenGL 学习系列---投影矩阵 (解释了为什么 透视矩阵中 left 、bottom 一定要传 负数，right、top 一定是 正数)
      * https://glumes.com/post/opengl/opengl-tutorial-projection-matrix/
+     *
+     *
+     * ==================== 额外的一些知识 ( 踩坑过程遇到 ) =============================
+     *
+     * OGL纹理之纹理替换glTexSubImage2D/glCopyTexSubImage2D/纹理矩形
+     * https://blog.csdn.net/Blues1021/article/details/52311621
      */
 }

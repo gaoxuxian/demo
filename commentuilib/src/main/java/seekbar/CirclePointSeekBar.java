@@ -434,7 +434,7 @@ public class CirclePointSeekBar extends SemiFinishedSeekBar<CirclePointConfig>
         {
             int save = canvas.saveLayer(null, null, Canvas.ALL_SAVE_FLAG);
 
-            canvas.drawColor(Color.BLACK);
+            canvas.drawColor(mConfig.mBgColor);
             // 先画点
             switch (mConfig.mPointDrawType)
             {

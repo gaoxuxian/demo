@@ -3,6 +3,7 @@ package gles;
 import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.hardware.camera2.CameraManager;
 import android.opengl.GLSurfaceView;
 
 import java.util.List;
@@ -11,6 +12,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import filter.camera.CameraPreviewFilter;
+
+import static android.hardware.Camera.Parameters.WHITE_BALANCE_AUTO;
 
 public class Gles11View extends GLSurfaceView implements GLSurfaceView.Renderer
 {
@@ -95,6 +98,9 @@ public class Gles11View extends GLSurfaceView implements GLSurfaceView.Renderer
                 parameters.setPreviewSize(1920, 1080);
                 mCameraFilter.setPreviewSize(1080, 2160);
             }
+
+            parameters.setWhiteBalance(WHITE_BALANCE_AUTO);
+            parameters.setAutoExposureLock(false);
 
             mCamera.setParameters(parameters);
             try

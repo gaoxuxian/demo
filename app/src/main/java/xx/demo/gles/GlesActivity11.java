@@ -1,8 +1,16 @@
 package xx.demo.gles;
 
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Build;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+
+import java.util.List;
 
 import gles.Gles11View;
 import util.ShareData;
@@ -11,7 +19,7 @@ import xx.demo.activity.BaseActivity;
 public class GlesActivity11 extends BaseActivity
 {
     private Gles11View mItemView;
-    private float mPreviewProportion = (float) 16/9;
+    private float mPreviewProportion = (float) 4/3;
 
     @Override
     public void createChildren(FrameLayout parent, FrameLayout.LayoutParams params)
@@ -56,10 +64,13 @@ public class GlesActivity11 extends BaseActivity
         super.onPause();
     }
 
+    private int time;
     @Override
     protected void onResume()
     {
         super.onResume();
         mItemView.onResume();
+
+        Log.d("xxx", "onResume: 手机型号 == " + Build.MODEL);
     }
 }

@@ -92,6 +92,19 @@ public interface OpenGLES
      * 9、滤镜-Color Lookup Table(ColorLUT)技术
      *  https://blog.csdn.net/danffer1985/article/details/78692992
      *
+     * 10、找 LUT 原图时，找到的一些资料
+     *  https://zhuanlan.zhihu.com/p/43241990
+     *
+     *  https://www.jianshu.com/p/7d25add74831
+     *
+     *  https://blog.csdn.net/u010468553/article/details/79456447
+     *
+     *  http://www.crazysurfboy.com/2016/04/11/GPUImageLookupTable/
+     *
+     *  https://www.cnblogs.com/Anita9002/p/8426711.html
+     *
+     *  https://zhuanlan.zhihu.com/p/26644905 -- 有 shader 算法
+     *
      *
      * =====================  透视投影的理解过程  =========================== 可以在 assets\glDemo\ 下结合demo效果去理解
      *

@@ -1,9 +1,17 @@
 package xx.demo.gles;
 
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.os.Handler;
+import android.view.PixelCopy;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import gles.Gles12View;
+import util.ThreadUtil;
 import xx.demo.activity.BaseActivity;
 
 public class GlesActivity12 extends BaseActivity

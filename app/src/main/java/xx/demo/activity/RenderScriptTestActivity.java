@@ -147,8 +147,8 @@ public class RenderScriptTestActivity extends BaseActivity
     {
         PointF center = new PointF(0.5f, 0.5f);
 
-        RectF rect = new RectF(0, (2160 - 500) / (float)2160, 1, (2160 - 200) / (float) 2160);
+        // RectF rect = new RectF(0, (2160 - 500) / (float)2160, 1, (2160 - 200) / (float) 2160);
 
-        return BlurUtil.sBlurEffectRectFPart(context, src, radius, close ? null : color, 1/8f, rect);
+        return BlurUtil.sBlurEffectOrder(context, src, radius, close ? null : color, 1/8f);
     }
 }

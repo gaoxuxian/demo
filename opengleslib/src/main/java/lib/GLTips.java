@@ -88,7 +88,7 @@ public interface GLTips
      *      首先我们要考虑到，当前的已知条件是：
      *           a：图片的宽高比 sWH
      *           b: 近平面(归一化坐标系中)的宽度 x, 近平面(归一化坐标系中)的高度 y
-     *           c: 归一化坐标系中 x:y = sWidthHeight
+     *           c: 归一化坐标系中 x:y = sWidthHeight (一般情况下)
      *
      *      变量：
      *          1、归一化坐标系中，图片在y轴正方向的高度 Iyh;

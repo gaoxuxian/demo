@@ -217,7 +217,7 @@ public class ImgFBOFilter extends AFilter
     }
 
     private void deleteEnvi() {
-        GLES20.glDeleteTextures(2, mTextureArr, 0);
-        GLES20.glDeleteFramebuffers(1, mFrameBufferArr, 0);
+        // GLES20.glDeleteTextures(2, mTextureArr, 0);
+        // GLES20.glDeleteFramebuffers(1, mFrameBufferArr, 0);
     }
 }

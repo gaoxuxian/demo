@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PointF;
-import android.graphics.RectF;
-import android.support.v8.renderscript.Short4;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;

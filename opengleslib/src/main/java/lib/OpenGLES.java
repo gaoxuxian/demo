@@ -55,6 +55,9 @@ public interface OpenGLES
      *    LearnOpenGL教程的中文翻译
      *    https://learnopengl-cn.readthedocs.io/zh/latest/
      *
+     *    游戏GL 教程
+     *    https://glumes.com/categories/opengl/page/3/
+     *
      *    重点 ！！！！ 对于 齐次方程 等概念理解
      * 2、什么是「齐次」，「非齐次」，「线性」，「非线性」？
      *    https://www.zhihu.com/question/19816504
@@ -99,11 +102,25 @@ public interface OpenGLES
      *
      *  https://blog.csdn.net/u010468553/article/details/79456447
      *
-     *  http://www.crazysurfboy.com/2016/04/11/GPUImageLookupTable/
-     *
      *  https://www.cnblogs.com/Anita9002/p/8426711.html
      *
      *  https://zhuanlan.zhihu.com/p/26644905 -- 有 shader 算法
+     *
+     *  11、自定义滤镜，类似抖音效果，有shader算法讲解
+     *   http://z-xj.com/2017/09/30/%E8%87%AA%E5%AE%9A%E4%B9%89GPUImageFilter%E6%BB%A4%E9%95%9C%EF%BC%88%E7%B1%BB%E4%BC%BC%E6%8A%96%E9%9F%B3%E6%95%88%E6%9E%9C%EF%BC%89/
+     *
+     *  12、有各种滤镜效果
+     *   https://www.kancloud.cn/trent/hotoimagefilter/102795
+     *
+     *  13、图片处理大神blog
+     *   https://blog.csdn.net/Trent1985/article/details/81164425
+     *
+     *  14、快速模糊算法(暂时看不懂)
+     *   http://www.cnblogs.com/Imageshop/p/6849611.html
+     *
+     *  15、图像处理课题研究、图像滤镜艺术
+     *   https://www.kancloud.cn/trent/imagesharp/100473
+     *   https://www.kancloud.cn/trent/hotoimagefilter/102807
      *
      *
      * =====================  透视投影的理解过程  =========================== 可以在 assets\glDemo\ 下结合demo效果去理解

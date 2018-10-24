@@ -1,10 +1,6 @@
 package xx.demo.gles;
 
 import android.graphics.Bitmap;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -13,17 +9,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import java.util.List;
-
 import gles.Gles11View;
-import util.ShareData;
+import util.PxUtil;
 import util.ThreadUtil;
 import xx.demo.activity.BaseActivity;
 
 public class GlesActivity11 extends BaseActivity
 {
     private Gles11View mItemView;
-    private float mPreviewProportion = (float) ShareData.m_screenRealHeight / ShareData.m_screenRealWidth;
+    private float mPreviewProportion = (float) PxUtil.sScreenRealHeight / PxUtil.sScreenRealWidth;
 
     @Override
     public void createChildren(FrameLayout parent, FrameLayout.LayoutParams params)
@@ -31,13 +25,13 @@ public class GlesActivity11 extends BaseActivity
         mItemView = new Gles11View(parent.getContext());
         mItemView.setPreviewProportion(mPreviewProportion);
         mItemView.startPreview();
-        params = new FrameLayout.LayoutParams(ShareData.m_screenRealWidth, ShareData.m_screenRealHeight);
+        params = new FrameLayout.LayoutParams(PxUtil.sScreenRealWidth, PxUtil.sScreenRealHeight);
         parent.addView(mItemView, params);
 
         Button btn = new Button(parent.getContext());
         btn.setText("切换预览比例");
         btn.setOnClickListener(v -> {
-            if (mPreviewProportion == (float) ShareData.m_screenRealHeight / ShareData.m_screenRealWidth)
+            if (mPreviewProportion == (float) PxUtil.sScreenRealHeight / PxUtil.sScreenRealWidth)
             {
                 mPreviewProportion = (float) 16/9;
             }
@@ -51,7 +45,7 @@ public class GlesActivity11 extends BaseActivity
             }
             else if (mPreviewProportion == 1)
             {
-                mPreviewProportion = (float) ShareData.m_screenRealHeight / ShareData.m_screenRealWidth;
+                mPreviewProportion = (float) PxUtil.sScreenRealHeight / PxUtil.sScreenRealWidth;
             }
             mItemView.setPreviewProportion(mPreviewProportion);
             mItemView.restartCamera();

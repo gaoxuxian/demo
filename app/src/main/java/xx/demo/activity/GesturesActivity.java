@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import util.ShareData;
+import util.PxUtil;
 
 public class GesturesActivity extends BaseActivity
 {
@@ -36,25 +36,25 @@ public class GesturesActivity extends BaseActivity
             @Override
             public int getLeftToRightMinSize()
             {
-                return ShareData.m_screenRealWidth / 3;
+                return PxUtil.sScreenRealWidth / 3;
             }
 
             @Override
             public int getRightToLeftMinSize()
             {
-                return ShareData.m_screenRealWidth / 3;
+                return PxUtil.sScreenRealWidth / 3;
             }
 
             @Override
             public int getTopToBottomMinSize()
             {
-                return ShareData.m_screenRealHeight / 3;
+                return PxUtil.sScreenRealHeight / 3;
             }
 
             @Override
             public int getBottomToTopMinSize()
             {
-                return ShareData.m_screenRealHeight / 3;
+                return PxUtil.sScreenRealHeight / 3;
             }
         });
         mGesturesManager.setGesturesListener(new GesturesManager.GesturesListener()
@@ -76,14 +76,14 @@ public class GesturesActivity extends BaseActivity
                         {
                             if (mLeftView != null)
                             {
-                                float x = -ShareData.m_screenRealWidth + distance;
+                                float x = -PxUtil.sScreenRealWidth + distance;
                                 if (x > 0)
                                 {
                                     x = 0;
                                 }
-                                else if (x < -ShareData.m_screenRealWidth)
+                                else if (x < -PxUtil.sScreenRealWidth)
                                 {
-                                    x = -ShareData.m_screenRealWidth;
+                                    x = -PxUtil.sScreenRealWidth;
                                 }
                                 mLeftView.setTranslationX(x);
                             }
@@ -110,9 +110,9 @@ public class GesturesActivity extends BaseActivity
                                 {
                                     x = 0;
                                 }
-                                else if (x < -ShareData.m_screenRealWidth)
+                                else if (x < -PxUtil.sScreenRealWidth)
                                 {
-                                    x = -ShareData.m_screenRealWidth;
+                                    x = -PxUtil.sScreenRealWidth;
                                 }
                                 mLeftView.setTranslationX(x);
                             }
@@ -136,9 +136,9 @@ public class GesturesActivity extends BaseActivity
                                 {
                                     y = 0;
                                 }
-                                else if (y > ShareData.m_screenRealHeight)
+                                else if (y > PxUtil.sScreenRealHeight)
                                 {
-                                    y = ShareData.m_screenRealHeight;
+                                    y = PxUtil.sScreenRealHeight;
                                 }
                                 mBottomView.setTranslationY(y);
                             }
@@ -158,14 +158,14 @@ public class GesturesActivity extends BaseActivity
                         {
                             if (mBottomView != null)
                             {
-                                float y = ShareData.m_screenRealHeight + distance;
+                                float y = PxUtil.sScreenRealHeight + distance;
                                 if (y < 0)
                                 {
                                     y = 0;
                                 }
-                                else if (y > ShareData.m_screenRealHeight)
+                                else if (y > PxUtil.sScreenRealHeight)
                                 {
-                                    y = ShareData.m_screenRealHeight;
+                                    y = PxUtil.sScreenRealHeight;
                                 }
                                 mBottomView.setTranslationY(y);
                             }
@@ -208,7 +208,7 @@ public class GesturesActivity extends BaseActivity
                             {
                                 if (mLeftView != null)
                                 {
-                                    ObjectAnimator animator = ObjectAnimator.ofFloat(mLeftView, "translationX", mLeftView.getTranslationX(), -ShareData.m_screenRealWidth);
+                                    ObjectAnimator animator = ObjectAnimator.ofFloat(mLeftView, "translationX", mLeftView.getTranslationX(), -PxUtil.sScreenRealWidth);
                                     animator.setDuration(300);
                                     animator.start();
                                     mShowType = ShowType.TYPE_NONE;
@@ -234,7 +234,7 @@ public class GesturesActivity extends BaseActivity
                             {
                                 if (mLeftView != null)
                                 {
-                                    ObjectAnimator animator = ObjectAnimator.ofFloat(mLeftView, "translationX", mLeftView.getTranslationX(), -ShareData.m_screenRealWidth);
+                                    ObjectAnimator animator = ObjectAnimator.ofFloat(mLeftView, "translationX", mLeftView.getTranslationX(), -PxUtil.sScreenRealWidth);
                                     animator.setDuration(300);
                                     animator.start();
                                     mShowType = ShowType.TYPE_NONE;
@@ -273,7 +273,7 @@ public class GesturesActivity extends BaseActivity
                             {
                                 if (mBottomView != null)
                                 {
-                                    ObjectAnimator animator = ObjectAnimator.ofFloat(mBottomView, "translationY", mBottomView.getTranslationY(), ShareData.m_screenRealHeight);
+                                    ObjectAnimator animator = ObjectAnimator.ofFloat(mBottomView, "translationY", mBottomView.getTranslationY(), PxUtil.sScreenRealHeight);
                                     animator.setDuration(300);
                                     animator.start();
                                     mShowType = ShowType.TYPE_NONE;
@@ -323,7 +323,7 @@ public class GesturesActivity extends BaseActivity
                             {
                                 if (mBottomView != null)
                                 {
-                                    ObjectAnimator animator = ObjectAnimator.ofFloat(mBottomView, "translationY", mBottomView.getTranslationY(), ShareData.m_screenRealHeight);
+                                    ObjectAnimator animator = ObjectAnimator.ofFloat(mBottomView, "translationY", mBottomView.getTranslationY(), PxUtil.sScreenRealHeight);
                                     animator.setDuration(300);
                                     animator.start();
                                     mShowType = ShowType.TYPE_NONE;

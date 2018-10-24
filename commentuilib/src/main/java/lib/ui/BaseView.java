@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.view.View;
 import android.view.ViewGroup;
 
-import util.PixelPercentUtil;
+import util.PxUtil;
 
 /**
  * 快门
@@ -31,7 +31,7 @@ public abstract class BaseView<T extends BaseConfig> extends View
     {
         this(context);
 
-        mDefWH = def_wh > 0 ? def_wh : PixelPercentUtil.WidthPxToPercent(150);
+        mDefWH = def_wh > 0 ? def_wh : PxUtil.sWidthPxIn1080p(225);
 
         mPaint = new Paint();
 

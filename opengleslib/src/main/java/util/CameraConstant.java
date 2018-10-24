@@ -11,7 +11,7 @@ public class CameraConstant
         float s_1_1 = (float) 1;
         float s_4_3 = (float) 4 / 3;
         float s_16_9 = (float) 16 / 9;
-        float s_full_screen = (float) ShareData.m_screenRealWidth / ShareData.m_screenRealHeight;
+        float s_full_screen = (float) PxUtil.sScreenRealWidth / PxUtil.sScreenRealHeight;
 
         float[] s_all_size_arr = new float[]{
                 s_9_16, s_3_4, s_1_1, s_4_3, s_16_9, s_full_screen

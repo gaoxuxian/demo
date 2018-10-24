@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import java.io.IOException;
 import java.util.List;
 
-import util.ShareData;
+import util.PxUtil;
 import xx.demo.activity.BaseActivity;
 
 /**
@@ -30,7 +30,7 @@ public class PreviewCameraActivity extends BaseActivity implements SurfaceHolder
         mSurfaceView = new SurfaceView(parent.getContext());
         // surface view 生命周期监听
         mSurfaceView.getHolder().addCallback(this);
-        params = new FrameLayout.LayoutParams(ShareData.m_screenRealWidth, ShareData.m_screenRealWidth);
+        params = new FrameLayout.LayoutParams(PxUtil.sScreenRealWidth, PxUtil.sScreenRealWidth);
         parent.addView(mSurfaceView, params);
     }
 

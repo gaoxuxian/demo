@@ -1,7 +1,8 @@
 package xx.demo;
 
 import android.app.Application;
-import util.ShareData;
+
+import util.PxUtil;
 import util.ThreadUtil;
 
 /**
@@ -14,7 +15,7 @@ public class MyApplication extends Application
     public void onCreate()
     {
         super.onCreate();
-        ShareData.InitData(this);
+        PxUtil.init(this);
         ThreadUtil.init();
     }
 }

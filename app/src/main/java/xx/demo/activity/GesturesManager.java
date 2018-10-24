@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import util.PixelPercentUtil;
+import util.PxUtil;
 
 public class GesturesManager extends GestureDetector.SimpleOnGestureListener
 {
@@ -68,7 +68,7 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
     public GesturesManager(Context context)
     {
         mDetector = new GestureDetector(context, this);
-        mMinMoveInterceptSize = PixelPercentUtil.WidthPxxToPercent(30);
+        mMinMoveInterceptSize = PxUtil.sWidthPxIn1080p(30);
     }
 
     @Override

@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import heighten.HeightenView;
-import util.PixelPercentUtil;
+import util.PxUtil;
 import xx.demo.R;
 import xx.demo.activity.BaseActivity;
 
@@ -26,8 +26,8 @@ public class HeightenActivity extends BaseActivity
         mItemView = new HeightenView(parent.getContext());
         mItemView.setBitmap(bitmap);
         mItemView.setBackgroundColor(Color.GRAY);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PixelPercentUtil.HeightPxxToPercent(1440));
-        params.topMargin = PixelPercentUtil.HeightPxxToPercent(100);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PxUtil.sHeightPxIn1080p(1440));
+        params.topMargin = PxUtil.sHeightPxIn1080p(100);
         parent.addView(mItemView, params);
 
         Button btn = new Button(parent.getContext());

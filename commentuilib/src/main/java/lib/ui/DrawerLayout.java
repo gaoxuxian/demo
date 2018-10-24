@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import util.PixelPercentUtil;
+import util.PxUtil;
 
 public class DrawerLayout extends LinearLayout implements View.OnClickListener
 {
@@ -60,12 +60,12 @@ public class DrawerLayout extends LinearLayout implements View.OnClickListener
         mContentList = new RecyclerView(context);
         mContentList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));
         mContentList.setAdapter(new MyAdapter());
-        LinearLayout.LayoutParams lp = new LayoutParams(PixelPercentUtil.WidthPxxToPercent(250), PixelPercentUtil.HeightPxxToPercent(600));
+        LinearLayout.LayoutParams lp = new LayoutParams(PxUtil.sWidthPxIn1080p(250), PxUtil.sWidthPxIn1080p(600));
         this.addView(mContentList, lp);
 
         mDrawerView = new FrameLayout(context);
         mDrawerView.setOnClickListener(this);
-        lp = new LayoutParams(PixelPercentUtil.WidthPxxToPercent(250), PixelPercentUtil.HeightPxxToPercent(130));
+        lp = new LayoutParams(PxUtil.sWidthPxIn1080p(250), PxUtil.sWidthPxIn1080p(130));
         this.addView(mDrawerView, lp);
         {
             mDrawerTextView = new TextView(context);
@@ -88,7 +88,7 @@ public class DrawerLayout extends LinearLayout implements View.OnClickListener
             {
                 mContentList.setVisibility(VISIBLE);
 
-                ObjectAnimator a = ObjectAnimator.ofFloat(mContentList, "translationY", PixelPercentUtil.HeightPxxToPercent(600), 0);
+                ObjectAnimator a = ObjectAnimator.ofFloat(mContentList, "translationY", PxUtil.sHeightPxIn1080p(600), 0);
                 ObjectAnimator b = ObjectAnimator.ofFloat(mContentList, "alpha", 0, 1);
                 AnimatorSet set = new AnimatorSet();
                 set.playTogether(a, b);
@@ -97,7 +97,7 @@ public class DrawerLayout extends LinearLayout implements View.OnClickListener
             }
             else
             {
-                ObjectAnimator a = ObjectAnimator.ofFloat(mContentList, "translationY", PixelPercentUtil.HeightPxxToPercent(600));
+                ObjectAnimator a = ObjectAnimator.ofFloat(mContentList, "translationY", PxUtil.sHeightPxIn1080p(600));
                 ObjectAnimator b = ObjectAnimator.ofFloat(mContentList, "alpha", 1, 0);
                 AnimatorSet set = new AnimatorSet();
                 set.playTogether(a, b);
@@ -125,7 +125,7 @@ public class DrawerLayout extends LinearLayout implements View.OnClickListener
             itemView.setTextColor(Color.WHITE);
             itemView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
             itemView.setOnClickListener(this);
-            ViewGroup.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PixelPercentUtil.HeightPxxToPercent(130));
+            ViewGroup.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PxUtil.sWidthPxIn1080p(130));
             itemView.setLayoutParams(params);
             return new RecyclerView.ViewHolder(itemView) {};
         }

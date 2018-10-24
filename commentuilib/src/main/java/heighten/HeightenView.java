@@ -9,7 +9,7 @@ import android.graphics.Rect;
 import android.support.v4.graphics.ColorUtils;
 import android.view.View;
 
-import util.PixelPercentUtil;
+import util.PxUtil;
 
 public class HeightenView extends View
 {
@@ -278,7 +278,7 @@ public class HeightenView extends View
 
         mPaint.setColor(ColorUtils.setAlphaComponent(Color.GREEN, 255));
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setStrokeWidth(PixelPercentUtil.WidthPxxToPercent(20));
+        mPaint.setStrokeWidth(PxUtil.sWidthPxIn1080p(20));
         canvas.drawPoint(width, mDrawRect.top, mPaint);
         canvas.drawPoint(width, mDrawRect.bottom, mPaint);
 

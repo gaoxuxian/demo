@@ -11,7 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
 
-import util.PixelPercentUtil;
+import util.PxUtil;
 
 /**
  * 聚焦
@@ -54,14 +54,14 @@ public class FocusView extends View
 
     private void initDefParams()
     {
-        mViewDefWH = PixelPercentUtil.WidthPxToPercent(110);
-        mRadius = PixelPercentUtil.WidthPxToPercent(110) /2f;
-        mStrokeWidth = PixelPercentUtil.WidthPxToPercent(2);
+        mViewDefWH = PxUtil.sWidthPxIn1080p((int) (110*1.5f));
+        mRadius = PxUtil.sWidthPxIn1080p((int) (110*1.5f)) /2f;
+        mStrokeWidth = PxUtil.sWidthPxIn1080p(3);
         mStrokeColor = 0xfff8f09a;
 
-        mSunLogoRadius = PixelPercentUtil.WidthPxToPercent(4);
-        mSunLineLength = PixelPercentUtil.WidthPxToPercent(4);
-        mSunSpan = PixelPercentUtil.WidthPxToPercent(2);
+        mSunLogoRadius = PxUtil.sWidthPxIn1080p(6);
+        mSunLineLength = PxUtil.sWidthPxIn1080p(6);
+        mSunSpan = PxUtil.sWidthPxIn1080p(5);
     }
 
     public void setCircleXY(float x, float y)

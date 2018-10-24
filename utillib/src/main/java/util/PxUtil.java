@@ -107,7 +107,7 @@ public class PxUtil
             if (sNonCompatDensity == 0)
             {
                 sNonCompatDensity = dm.density;
-                sCompat540dpDensity = sScreenRealWidth/ Density1080.width_dp;
+                sCompat540dpDensity = (float) sScreenRealWidth/ Density1080.width_dp;
             }
 
             dm.density = sCompat540dpDensity;

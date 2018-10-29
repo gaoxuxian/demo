@@ -120,7 +120,7 @@ public class PxUtil
      * @param px 在标准尺寸下的 px 值
      * @return 适配当前屏幕后的 数值
      */
-    public static int sWidthPxIn1080p(int px)
+    public static int sU_1080p(int px)
     {
         float density = Density1080.width_px / Density1080.width_dp;
         float dp = px / density;
@@ -132,7 +132,7 @@ public class PxUtil
      * @param px 在标准尺寸下的 px 值
      * @return 适配当前屏幕后的 px 值
      */
-    public static int sHeightPxIn1080p(int px)
+    public static int sV_1080p(int px)
     {
         float density = Density1080.height_px / Density1080.height_dp;
         float dp = px / density;

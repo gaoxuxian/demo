@@ -54,14 +54,14 @@ public class FocusView extends View
 
     private void initDefParams()
     {
-        mViewDefWH = PxUtil.sWidthPxIn1080p((int) (110*1.5f));
-        mRadius = PxUtil.sWidthPxIn1080p((int) (110*1.5f)) /2f;
-        mStrokeWidth = PxUtil.sWidthPxIn1080p(3);
+        mViewDefWH = PxUtil.sU_1080p((int) (110*1.5f));
+        mRadius = PxUtil.sU_1080p((int) (110*1.5f)) /2f;
+        mStrokeWidth = PxUtil.sU_1080p(3);
         mStrokeColor = 0xfff8f09a;
 
-        mSunLogoRadius = PxUtil.sWidthPxIn1080p(6);
-        mSunLineLength = PxUtil.sWidthPxIn1080p(6);
-        mSunSpan = PxUtil.sWidthPxIn1080p(5);
+        mSunLogoRadius = PxUtil.sU_1080p(6);
+        mSunLineLength = PxUtil.sU_1080p(6);
+        mSunSpan = PxUtil.sU_1080p(5);
     }
 
     public void setCircleXY(float x, float y)

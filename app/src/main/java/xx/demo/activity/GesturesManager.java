@@ -68,7 +68,7 @@ public class GesturesManager extends GestureDetector.SimpleOnGestureListener
     public GesturesManager(Context context)
     {
         mDetector = new GestureDetector(context, this);
-        mMinMoveInterceptSize = PxUtil.sWidthPxIn1080p(30);
+        mMinMoveInterceptSize = PxUtil.sU_1080p(30);
     }
 
     @Override

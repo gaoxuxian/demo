@@ -67,9 +67,9 @@ public class ARWishView extends View
 
         mViewH = PxUtil.sScreenRealHeight;
         mViewW = PxUtil.sScreenRealWidth;
-        mBigBmpWH = PxUtil.sWidthPxIn1080p((int) (434 * 1.5f));
-        mSmallBmpWH = PxUtil.sWidthPxIn1080p((int) (118 * 1.5f));
-        mSmallBmpCircleRadius = PxUtil.sWidthPxIn1080p((int) (60 * 1.5f));
+        mBigBmpWH = PxUtil.sU_1080p((int) (434 * 1.5f));
+        mSmallBmpWH = PxUtil.sU_1080p((int) (118 * 1.5f));
+        mSmallBmpCircleRadius = PxUtil.sU_1080p((int) (60 * 1.5f));
 
     }
     
@@ -96,18 +96,18 @@ public class ARWishView extends View
 
             float scale = mSmallBmpWH * 1f / mBitmap.getWidth();
             float x = mViewW * 1f / 2f - mSmallBmpCircleRadius;
-            float y = PxUtil.sWidthPxIn1080p((int) ((100 + 32) * 1.5f));
+            float y = PxUtil.sU_1080p((int) ((100 + 32) * 1.5f));
             mMatrix.postScale(scale, scale);
             mMatrix.postTranslate(x, y);
             mBmpShader.setLocalMatrix(mMatrix);
             mBmpPaint.setShader(mBmpShader);
 
             mWhiteBGRadius = mSmallBmpCircleRadius;
-            mRoundRect.set(mViewW * 1f / 2f - mSmallBmpCircleRadius, PxUtil.sWidthPxIn1080p((int) ((100 + 32) * 1.5f)), mViewW * 1f / 2f + mSmallBmpCircleRadius, PxUtil.sWidthPxIn1080p((int) ((100 + 32 + 120) * 1.5f)));
-            mRadius = mWhiteBGRadius - PxUtil.sWidthPxIn1080p(3);
+            mRoundRect.set(mViewW * 1f / 2f - mSmallBmpCircleRadius, PxUtil.sU_1080p((int) ((100 + 32) * 1.5f)), mViewW * 1f / 2f + mSmallBmpCircleRadius, PxUtil.sU_1080p((int) ((100 + 32 + 120) * 1.5f)));
+            mRadius = mWhiteBGRadius - PxUtil.sU_1080p(3);
 
             mCircleX = mViewW / 2f;
-            mCircleY = PxUtil.sWidthPxIn1080p((int) ((100 + 32 + 60) * 1.5f));
+            mCircleY = PxUtil.sU_1080p((int) ((100 + 32 + 60) * 1.5f));
         }
     }
 
@@ -115,35 +115,35 @@ public class ARWishView extends View
     {
         mIsFangDa = true;
         final float new_x = (mViewW - mBigBmpWH) / 2f;
-        final float new_y = PxUtil.sWidthPxIn1080p((int) ((240 + 122) * 1.5f));
+        final float new_y = PxUtil.sU_1080p((int) ((240 + 122) * 1.5f));
 
         final float old_x = (mViewW - mSmallBmpWH) / 2f;
-        final float old_y = PxUtil.sWidthPxIn1080p((int) ((100 + 32)*1.5f));
+        final float old_y = PxUtil.sU_1080p((int) ((100 + 32)*1.5f));
 
         final float old_scale = mSmallBmpWH * 1f / mBitmap.getWidth();
         final float new_scale = mBigBmpWH * 1f / mBitmap.getWidth();
 
         final float old_center_x = mViewW / 2f;
-        final float old_center_y = PxUtil.sWidthPxIn1080p((int) ((100 + 32 + 60)*1.5f));
+        final float old_center_y = PxUtil.sU_1080p((int) ((100 + 32 + 60)*1.5f));
 
         final float new_center_x = mViewW / 2f;
-        final float new_center_y = PxUtil.sWidthPxIn1080p((int) ((240 + 122 + 217)*1.5f));
+        final float new_center_y = PxUtil.sU_1080p((int) ((240 + 122 + 217)*1.5f));
 
         final float old_circle_radius = mSmallBmpWH * 1f / 2f;
         final float new_circle_radius = mBigBmpWH * 1f / 2f;
 
         final float old_white_bg_round_rect_radius = mSmallBmpCircleRadius;
-        final float new_white_bg_round_rect_radius = PxUtil.sWidthPxIn1080p(45);
+        final float new_white_bg_round_rect_radius = PxUtil.sU_1080p(45);
 
         final float old_left = mViewW * 1f / 2f - mSmallBmpCircleRadius;
         final float old_right = mViewW * 1f / 2f + mSmallBmpCircleRadius;
-        final float old_top = PxUtil.sWidthPxIn1080p((int) ((100 + 32)*1.5f));
-        final float old_bottom = PxUtil.sWidthPxIn1080p((int) ((100 + 32 + 120)*1.5f));
+        final float old_top = PxUtil.sU_1080p((int) ((100 + 32)*1.5f));
+        final float old_bottom = PxUtil.sU_1080p((int) ((100 + 32 + 120)*1.5f));
 
-        final float new_left = (mViewW * 1f - PxUtil.sWidthPxIn1080p((int) ((568)*1.5f))) / 2f;
-        final float new_right = (mViewW * 1f + PxUtil.sWidthPxIn1080p((int) ((568)*1.5f))) / 2f;
-        final float new_top = PxUtil.sWidthPxIn1080p((int) ((240)*1.5f));
-        final float new_bottom = PxUtil.sWidthPxIn1080p((int) ((240 + 680)*1.5f));
+        final float new_left = (mViewW * 1f - PxUtil.sU_1080p((int) ((568)*1.5f))) / 2f;
+        final float new_right = (mViewW * 1f + PxUtil.sU_1080p((int) ((568)*1.5f))) / 2f;
+        final float new_top = PxUtil.sU_1080p((int) ((240)*1.5f));
+        final float new_bottom = PxUtil.sU_1080p((int) ((240 + 680)*1.5f));
 
         ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
@@ -187,35 +187,35 @@ public class ARWishView extends View
     {
         mIsFangDa = false;
         final float new_x = (mViewW - mSmallBmpWH) / 2f;
-        final float new_y = PxUtil.sWidthPxIn1080p((int) ((100 + 32)*1.5f));
+        final float new_y = PxUtil.sU_1080p((int) ((100 + 32)*1.5f));
 
         final float old_x = (mViewW - mBigBmpWH) / 2f;
-        final float old_y = PxUtil.sWidthPxIn1080p((int) ((240 + 122)*1.5f));
+        final float old_y = PxUtil.sU_1080p((int) ((240 + 122)*1.5f));
 
         final float new_scale = mSmallBmpWH * 1f / mBitmap.getWidth();
         final float old_scale = mBigBmpWH * 1f / mBitmap.getWidth();
 
         final float old_center_x = mViewW / 2f;
-        final float old_center_y = PxUtil.sWidthPxIn1080p((int) ((240 + 122 + 217)*1.5f));
+        final float old_center_y = PxUtil.sU_1080p((int) ((240 + 122 + 217)*1.5f));
 
         final float new_center_x = mViewW / 2f;
-        final float new_center_y = PxUtil.sWidthPxIn1080p((int) ((100 + 32 + 60)*1.5f));
+        final float new_center_y = PxUtil.sU_1080p((int) ((100 + 32 + 60)*1.5f));
 
         final float old_circle_radius = mBigBmpWH * 1f / 2f;
         final float new_circle_radius = mSmallBmpWH * 1f / 2f;
 
         final float new_white_bg_round_rect_radius = mSmallBmpCircleRadius;
-        final float old_white_bg_round_rect_radius = PxUtil.sWidthPxIn1080p(45);
+        final float old_white_bg_round_rect_radius = PxUtil.sU_1080p(45);
 
         final float new_left = mViewW * 1f / 2f - mSmallBmpCircleRadius;
         final float new_right = mViewW * 1f / 2f + mSmallBmpCircleRadius;
-        final float new_top = PxUtil.sWidthPxIn1080p((int) ((100 + 32)*1.5f));
-        final float new_bottom = PxUtil.sWidthPxIn1080p((int) ((100 + 32 + 120)*1.5f));
+        final float new_top = PxUtil.sU_1080p((int) ((100 + 32)*1.5f));
+        final float new_bottom = PxUtil.sU_1080p((int) ((100 + 32 + 120)*1.5f));
 
-        final float old_left = (mViewW * 1f - PxUtil.sWidthPxIn1080p((int) ((568)*1.5f))) / 2f;
-        final float old_right = (mViewW * 1f + PxUtil.sWidthPxIn1080p((int) ((568)*1.5f))) / 2f;
-        final float old_top = PxUtil.sWidthPxIn1080p((int) ((240)*1.5f));
-        final float old_bottom = PxUtil.sWidthPxIn1080p((int) ((240 + 680)*1.5f));
+        final float old_left = (mViewW * 1f - PxUtil.sU_1080p((int) ((568)*1.5f))) / 2f;
+        final float old_right = (mViewW * 1f + PxUtil.sU_1080p((int) ((568)*1.5f))) / 2f;
+        final float old_top = PxUtil.sU_1080p((int) ((240)*1.5f));
+        final float old_bottom = PxUtil.sU_1080p((int) ((240 + 680)*1.5f));
 
         ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()

@@ -41,8 +41,8 @@ public class WaitProgressView extends View
         mPaint = new Paint();
         mMeasure = new PathMeasure();
         mPaintFlags = Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG;
-        mProgressWidth = PxUtil.sWidthPxIn1080p(12);
-        mViewDefWH = PxUtil.sWidthPxIn1080p(150);
+        mProgressWidth = PxUtil.sU_1080p(12);
+        mViewDefWH = PxUtil.sU_1080p(150);
         mProgressColor = Color.WHITE;
         mPeriodDuration = 1500;
     }

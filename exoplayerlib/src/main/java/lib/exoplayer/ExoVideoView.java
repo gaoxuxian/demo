@@ -151,9 +151,9 @@ public class ExoVideoView extends FrameLayout implements SimpleExoPlayer.VideoLi
             mSeekBar = new BufferSeekBar(context);
             mSeekBar.setOnSeekBarChangeListener(this);
             mSeekBar.setColor(ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.2f)), Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.6f)));
-            mSeekBar.setPointParams(PxUtil.sWidthPxIn1080p(15), Color.WHITE);
-            mSeekBar.setProgressWidth(PxUtil.sWidthPxIn1080p(3));
-            params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PxUtil.sWidthPxIn1080p(150));
+            mSeekBar.setPointParams(PxUtil.sU_1080p(15), Color.WHITE);
+            mSeekBar.setProgressWidth(PxUtil.sU_1080p(3));
+            params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PxUtil.sU_1080p(150));
             params.gravity = Gravity.CENTER;
             mContentFrame.addView(mSeekBar, params);
 

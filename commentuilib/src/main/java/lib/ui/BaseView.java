@@ -31,7 +31,7 @@ public abstract class BaseView<T extends BaseConfig> extends View
     {
         this(context);
 
-        mDefWH = def_wh > 0 ? def_wh : PxUtil.sWidthPxIn1080p(225);
+        mDefWH = def_wh > 0 ? def_wh : PxUtil.sU_1080p(225);
 
         mPaint = new Paint();
 

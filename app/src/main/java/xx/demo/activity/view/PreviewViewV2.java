@@ -455,7 +455,7 @@ public class PreviewViewV2 extends View
                 case MotionEvent.ACTION_MOVE:
                 {
                     float moveSpace = ImageUtil.Spacing(event.getX(0) - mDownX, event.getY(0) - mDownY);
-                    mHasMoveEvent = moveSpace > PxUtil.sWidthPxIn1080p(30);
+                    mHasMoveEvent = moveSpace > PxUtil.sU_1080p(30);
 
                     if (event.getPointerCount() >= 2)
                     {
@@ -499,7 +499,7 @@ public class PreviewViewV2 extends View
                         else if (!mCancelWaterMarkClickEvent && mTouchArea == TouchArea.water_mark)
                         {
                             moveSpace = ImageUtil.Spacing(event.getX(0) - mDownX, event.getY(0) - mDownY);
-                            mCancelWaterMarkClickEvent = moveSpace > PxUtil.sWidthPxIn1080p(30);
+                            mCancelWaterMarkClickEvent = moveSpace > PxUtil.sU_1080p(30);
                         }
                     }
                     break;

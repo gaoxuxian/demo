@@ -54,14 +54,14 @@ public class ShadowSeekBar extends View
 
     private void init()
     {
-        mSelectedProgressWidth = PxUtil.sWidthPxIn1080p(6);
-        mProgressWidth = PxUtil.sWidthPxIn1080p(4);
+        mSelectedProgressWidth = PxUtil.sU_1080p(6);
+        mProgressWidth = PxUtil.sU_1080p(4);
 
         mSelectedProgressColor = Color.WHITE;
         mProgressColor = ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.5f));
 
-        mEdgeSpan = PxUtil.sWidthPxIn1080p(45);
-        mCircleRadius = PxUtil.sWidthPxIn1080p((int) (34 * 1.5f)) / 2f;
+        mEdgeSpan = PxUtil.sU_1080p(45);
+        mCircleRadius = PxUtil.sU_1080p((int) (34 * 1.5f)) / 2f;
 
         x = mEdgeSpan + mCircleRadius;
 
@@ -74,7 +74,7 @@ public class ShadowSeekBar extends View
         int result;
         if (mode == MeasureSpec.AT_MOST)
         {
-            result = PxUtil.sWidthPxIn1080p(90);
+            result = PxUtil.sU_1080p(90);
             if (result > size)
             {
                 result = size;
@@ -143,7 +143,7 @@ public class ShadowSeekBar extends View
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(mSelectedProgressWidth);
         mPaint.setColor(mSelectedProgressColor);
-        mPaint.setShadowLayer(PxUtil.sWidthPxIn1080p(12), 0, 0, ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.1f)));
+        mPaint.setShadowLayer(PxUtil.sU_1080p(12), 0, 0, ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.1f)));
 
         float start_x = mEdgeSpan;
         float end_x = x;
@@ -160,7 +160,7 @@ public class ShadowSeekBar extends View
         mPaint.reset();
         mPaint.setFlags(mPaintFlags);
         mPaint.setColor(mSelectedProgressColor);
-        mPaint.setShadowLayer(PxUtil.sWidthPxIn1080p(12), 0, 0, ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.1f)));
+        mPaint.setShadowLayer(PxUtil.sU_1080p(12), 0, 0, ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.1f)));
         canvas.drawCircle(x, mViewH / 2f, mCircleRadius, mPaint);
 
         canvas.restore();

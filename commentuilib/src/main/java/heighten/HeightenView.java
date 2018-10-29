@@ -278,7 +278,7 @@ public class HeightenView extends View
 
         mPaint.setColor(ColorUtils.setAlphaComponent(Color.GREEN, 255));
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setStrokeWidth(PxUtil.sWidthPxIn1080p(20));
+        mPaint.setStrokeWidth(PxUtil.sU_1080p(20));
         canvas.drawPoint(width, mDrawRect.top, mPaint);
         canvas.drawPoint(width, mDrawRect.bottom, mPaint);
 

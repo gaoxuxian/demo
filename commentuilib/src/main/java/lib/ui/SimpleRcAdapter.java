@@ -40,7 +40,7 @@ public class SimpleRcAdapter extends RecyclerView.Adapter implements View.OnClic
     {
         SimpleItemView itemView = new SimpleItemView(parent.getContext());
         itemView.setOnClickListener(this);
-        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PxUtil.sWidthPxIn1080p(150));
+        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PxUtil.sU_1080p(150));
         itemView.setLayoutParams(params);
         return new RecyclerView.ViewHolder(itemView)
         {

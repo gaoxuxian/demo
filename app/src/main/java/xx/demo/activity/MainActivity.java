@@ -74,11 +74,20 @@ public class MainActivity extends Activity
                         GLES_CLASE_NAME + ".GlesActivity13", "EGL 后台处理图片"
                 },
                 {
-                        CLASS_NAME + ".TestActivity", "SurfaceView 线程绘制"
+                        CLASS_NAME + ".SurfaceViewBgTestActivity", "SurfaceView 线程绘制"
                 },
                 {
                         CLASS_NAME + ".RenderScriptTestActivity", "测试 RenderScript 毛玻璃效果"
-                }
+                },
+                {
+                        CLASS_NAME + ".ConstraintTestActivity", "测试 ConstraintLayout"
+                },
+                {
+                        CLASS_NAME + ".SnapHelperTestActivity", "测试 SnapHelper"
+                },
+                {
+                        CLASS_NAME + ".LayoutAnimationTestActivity", "测试 LayoutAnimation"
+                },
         };
 
         mActivityArr = new ArrayList<>();

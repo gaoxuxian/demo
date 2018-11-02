@@ -2,6 +2,7 @@ package util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
@@ -49,39 +50,40 @@ public class PxUtil
             if (context instanceof Activity)
             {
                 display = ((Activity) context).getWindowManager().getDefaultDisplay();
-                display.getMetrics(dm);
             }
             else
             {
                 WindowManager wm = (WindowManager) (context.getSystemService(Context.WINDOW_SERVICE));
                 display = wm.getDefaultDisplay();
-                display.getMetrics(dm);
             }
 
             boolean initDisplayInfo = false;
 
             try
             {
-                ClassLoader cl = ClassLoader.getSystemClassLoader();
-                Class<?> DisplayInfoClass = cl.loadClass("android.view.DisplayInfo");
-                Object o = DisplayInfoClass.newInstance();
-                Field appWidth = DisplayInfoClass.getDeclaredField("appWidth");
-                appWidth.setAccessible(true);
-                Field appHeight = DisplayInfoClass.getDeclaredField("appHeight");
-                appHeight.setAccessible(true);
-                Field logicalWidth = DisplayInfoClass.getDeclaredField("logicalWidth");
-                logicalWidth.setAccessible(true);
-                Field logicalHeight = DisplayInfoClass.getDeclaredField("logicalHeight");
-                logicalHeight.setAccessible(true);
-                Class<? extends Display> aClass = display.getClass();
-                Method getDisplayInfo = aClass.getDeclaredMethod("getDisplayInfo", DisplayInfoClass);
-                getDisplayInfo.setAccessible(true);
-                getDisplayInfo.invoke(display, o);
-                sScreenWidth = appWidth.getInt(o);
-                sScreenHeight = appHeight.getInt(o);
-                sScreenRealWidth = logicalWidth.getInt(o);
-                sScreenRealHeight = logicalHeight.getInt(o);
-                initDisplayInfo = true;
+                if (Build.VERSION.SDK_INT <= 27)
+                {
+                    ClassLoader cl = ClassLoader.getSystemClassLoader();
+                    Class<?> DisplayInfoClass = cl.loadClass("android.view.DisplayInfo");
+                    Object o = DisplayInfoClass.newInstance();
+                    Field appWidth = DisplayInfoClass.getDeclaredField("appWidth");
+                    appWidth.setAccessible(true);
+                    Field appHeight = DisplayInfoClass.getDeclaredField("appHeight");
+                    appHeight.setAccessible(true);
+                    Field logicalWidth = DisplayInfoClass.getDeclaredField("logicalWidth");
+                    logicalWidth.setAccessible(true);
+                    Field logicalHeight = DisplayInfoClass.getDeclaredField("logicalHeight");
+                    logicalHeight.setAccessible(true);
+                    Class<? extends Display> aClass = display.getClass();
+                    Method getDisplayInfo = aClass.getDeclaredMethod("getDisplayInfo", DisplayInfoClass);
+                    getDisplayInfo.setAccessible(true);
+                    getDisplayInfo.invoke(display, o);
+                    sScreenWidth = appWidth.getInt(o);
+                    sScreenHeight = appHeight.getInt(o);
+                    sScreenRealWidth = logicalWidth.getInt(o);
+                    sScreenRealHeight = logicalHeight.getInt(o);
+                    initDisplayInfo = true;
+                }
             }
             catch (Throwable th)
             {
@@ -89,8 +91,10 @@ public class PxUtil
                 initDisplayInfo = false;
             }
 
-            if (!initDisplayInfo)
+            if (!initDisplayInfo && display != null)
             {
+                display.getMetrics(dm);
+
                 sScreenWidth = dm.widthPixels;
                 sScreenHeight = dm.heightPixels;
                 if (sScreenWidth > sScreenHeight)
@@ -100,14 +104,22 @@ public class PxUtil
                     sScreenWidth -= sScreenHeight;
                 }
 
-                sScreenRealWidth = sScreenWidth;
-                sScreenRealHeight = sScreenHeight;
+                display.getRealMetrics(dm);
+
+                sScreenRealWidth = dm.widthPixels;
+                sScreenRealHeight = dm.heightPixels;
+                if (sScreenRealWidth > sScreenRealHeight)
+                {
+                    sScreenRealWidth += sScreenRealHeight;
+                    sScreenRealHeight = sScreenRealWidth - sScreenRealHeight;
+                    sScreenRealWidth -= sScreenRealHeight;
+                }
             }
 
             if (sNonCompatDensity == 0)
             {
                 sNonCompatDensity = dm.density;
-                sCompat540dpDensity = (float) sScreenRealWidth/ Density1080.width_dp;
+                sCompat540dpDensity = (float) sScreenRealWidth / Density1080.width_dp;
             }
 
             dm.density = sCompat540dpDensity;
@@ -117,6 +129,7 @@ public class PxUtil
 
     /**
      * 以宽为基准, 标准尺寸 1080 * 1920, 540dp * 960dp
+     *
      * @param px 在标准尺寸下的 px 值
      * @return 适配当前屏幕后的 数值
      */
@@ -129,6 +142,7 @@ public class PxUtil
 
     /**
      * 以高为基准, 标准尺寸 1080 * 1920, 540dp * 960dp
+     *
      * @param px 在标准尺寸下的 px 值
      * @return 适配当前屏幕后的 px 值
      */
@@ -137,6 +151,6 @@ public class PxUtil
         float density = Density1080.height_px / Density1080.height_dp;
         float dp = px / density;
         float compatDensity = sScreenRealHeight / Density1080.height_dp;
-        return (int) (dp * compatDensity  + 0.5f);
+        return (int) (dp * compatDensity + 0.5f);
     }
 }

@@ -11,7 +11,7 @@ import android.widget.SeekBar;
 import lib.ui.PictureTestView;
 import util.PxUtil;
 
-public class TestActivity extends BaseActivity
+public class SurfaceViewBgTestActivity extends BaseActivity
 {
     private PictureTestView mTestView;
     private SeekBar progressBar;

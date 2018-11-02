@@ -18,4 +18,7 @@
     <string name="title_activity_gles7">GlesActivity7</string>
     <string name="title_activity_gles8">GlesActivity8</string>
     <string name="title_activity_gles9">GlesActivity9</string>
+    <string name="title_activity_constraint_test">ConstraintTestActivity</string>
+    <string name="title_activity_snap_helper_test">SnapHelperTestActivity</string>
+    <string name="title_activity_layout_animation_test">LayoutAnimationTestActivity</string>
 </resources>

@@ -131,11 +131,27 @@
             android:theme="@style/Theme.FullScreen">
         </activity>
         <activity
-            android:name=".activity.TestActivity"
+            android:name=".activity.SurfaceViewBgTestActivity"
             android:theme="@style/Theme.FullScreen">
         </activity>
-        <activity android:name=".activity.RenderScriptTestActivity"
-                  android:theme="@style/Theme.FullScreen">
+        <activity
+            android:name=".activity.RenderScriptTestActivity"
+            android:theme="@style/Theme.FullScreen">
+        </activity>
+        <activity
+            android:name=".activity.ConstraintTestActivity"
+            android:label="@string/title_activity_constraint_test"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activity.SnapHelperTestActivity"
+            android:label="@string/title_activity_snap_helper_test"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activity.LayoutAnimationTestActivity"
+            android:label="@string/title_activity_layout_animation_test"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

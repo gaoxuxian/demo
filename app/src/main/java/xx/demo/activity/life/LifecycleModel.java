@@ -4,6 +4,8 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
+import util.ThreadUtil;
+
 import android.util.Log;
 
 /**
@@ -12,6 +14,13 @@ import android.util.Log;
  */
 public class LifecycleModel implements LifecycleObserver
 {
+    MyViewModel model;
+
+    public LifecycleModel(MyViewModel model)
+    {
+        this.model = model;
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     void onCreate(LifecycleOwner owner)
     {
@@ -27,6 +36,20 @@ public class LifecycleModel implements LifecycleObserver
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     void onResume(LifecycleOwner owner)
     {
+        if (model != null)
+        {
+            ThreadUtil.runOnUiThreadDelay(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (model != null)
+                    {
+                        model.loadData();
+                    }
+                }
+            }, 3000);
+        }
         Log.d("xxx", "onResume: LifecycleModel == " + this);
     }
 
@@ -47,5 +70,6 @@ public class LifecycleModel implements LifecycleObserver
     {
         Log.d("xxx", "onDestroy: LifecycleModel == " + this);
         owner.getLifecycle().removeObserver(this);
+        model = null;
     }
 }

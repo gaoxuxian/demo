@@ -1,9 +1,12 @@
 package xx.demo.activity;
 
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.constraint.Constraints;
-import android.support.design.widget.CoordinatorLayout;
+import android.os.Build;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -35,22 +38,39 @@ public class ConstraintTestActivity extends BaseActivity
                 @Override
                 public void onClick(View v)
                 {
-                    // btn1.setTranslationY(0);
-                    // btn1.animate().translationY(200).setDuration(300).start();
-                    if (btn1.getVisibility() == View.VISIBLE)
-                    {
-                        btn1.setVisibility(View.GONE);
-                    }
-                    else
-                    {
-                        btn1.setVisibility(View.VISIBLE);
-                    }
+                    // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    // {
+                    //     btn1.setTranslationZ(5);
+                    //     btn1.animate().translationZ(10).setDuration(300).start();
+                    // }
+                    // if (btn1.getVisibility() == View.VISIBLE)
+                    // {
+                    //     btn1.setVisibility(View.GONE);
+                    // }
+                    // else
+                    // {
+                    //     btn1.setVisibility(View.VISIBLE);
+                    // }
+
+                    // btn1.setPivotX(0);
+                    // btn1.setPivotY(0);
+                    SpringAnimation animation = new SpringAnimation(btn1, DynamicAnimation.ROTATION, 0);
+                    animation.animateToFinalPosition(360);
+                    animation.setStartValue(0);
+                    animation.getSpring().setDampingRatio(0.4f);
+                    animation.getSpring().setStiffness(100);
+                    animation.setStartVelocity(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, .2f, getResources().getDisplayMetrics()));
+                    animation.start();
                 }
             });
             ConstraintLayout.LayoutParams clp = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             mConstraintLayout.addView(button, clp);
 
             btn1 = new Button(parent.getContext());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            {
+                btn1.setElevation(5);
+            }
             btn1.setId(View.generateViewId());
             btn1.setText("btn1");
             mConstraintLayout.addView(btn1);

@@ -21,4 +21,5 @@
     <string name="title_activity_constraint_test">ConstraintTestActivity</string>
     <string name="title_activity_snap_helper_test">SnapHelperTestActivity</string>
     <string name="title_activity_layout_animation_test">LayoutAnimationTestActivity</string>
+    <string name="title_activity_lifecycle">LifecycleActivity</string>
 </resources>

@@ -1,29 +1,18 @@
 package xx.demo.activity;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v4.view.OnApplyWindowInsetsListener;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.WindowInsetsCompat;
+import androidx.core.graphics.ColorUtils;
+
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static android.view.animation.Animation.ABSOLUTE;
 import static android.view.animation.Animation.RELATIVE_TO_SELF;

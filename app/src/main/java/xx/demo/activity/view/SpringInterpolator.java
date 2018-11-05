@@ -1,6 +1,6 @@
 package xx.demo.activity.view;
 
-import android.support.annotation.FloatRange;
+import androidx.annotation.FloatRange;
 import android.view.animation.BaseInterpolator;
 
 // 弹性插值器

@@ -153,6 +153,11 @@
             android:label="@string/title_activity_layout_animation_test"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".activity.life.LifecycleActivity"
+            android:label="@string/title_activity_lifecycle"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

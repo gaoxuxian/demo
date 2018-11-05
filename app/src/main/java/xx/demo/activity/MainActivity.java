@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import lib.ui.DottedLineView;
 import lib.ui.SimpleRcAdapter;
 
 public class MainActivity extends Activity
@@ -24,6 +23,7 @@ public class MainActivity extends Activity
     private static final String CLASS_NAME = "xx.demo.activity";
     private static final String CLASS_PACKAGE_MEDIA = ".media";
     private static final String CLASS_PACKAGE_VIEW = ".view";
+    private static final String CLASS_PACKAGE_LIFE = ".life";
 
     private static final String GLES_CLASE_NAME = "xx.demo.gles";
 
@@ -87,6 +87,9 @@ public class MainActivity extends Activity
                 },
                 {
                         CLASS_NAME + ".LayoutAnimationTestActivity", "测试 LayoutAnimation"
+                },
+                {
+                        CLASS_NAME + CLASS_PACKAGE_LIFE + ".LifecycleActivity", "测试 Lifecycle"
                 },
         };
 

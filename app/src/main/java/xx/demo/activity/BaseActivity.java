@@ -1,13 +1,13 @@
 package xx.demo.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-public abstract class BaseActivity extends Activity implements BaseActivityInterface
+public abstract class BaseActivity extends AppCompatActivity implements BaseActivityInterface
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)

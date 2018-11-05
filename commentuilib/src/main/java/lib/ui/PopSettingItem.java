@@ -2,8 +2,8 @@ package lib.ui;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v4.graphics.ColorUtils;
+import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;

@@ -1,5 +1,7 @@
 package xx.demo.activity.life;
 
+import java.util.ArrayList;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,15 +12,19 @@ import androidx.lifecycle.ViewModel;
  */
 public class MyViewModel extends ViewModel
 {
-    private MutableLiveData<String> data = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<String>> data = new MutableLiveData<>();
 
-    public LiveData<String> getData()
+    public LiveData<ArrayList<String>> getData()
     {
         return data;
     }
 
     public void loadData()
     {
-        data.setValue("测试");
+        ArrayList<String> list = new ArrayList<>();
+        list.add("测试");
+        list.add("测试1");
+
+        data.setValue(list);
     }
 }

@@ -5,12 +5,12 @@ import android.graphics.Bitmap;
 public class ImageTask extends AbsTask
 {
     private ImageEntry mEntry;
-    private Bitmap mBitmap;
+    private volatile Bitmap mBitmap;
     private CallBack mCB;
 
     public interface CallBack
     {
-        void onBitampSucceed(Bitmap bitmap);
+        void onBitmapSucceed(Bitmap bitmap);
     }
 
     public ImageTask(ImageEntry entry, CallBack cb)
@@ -41,7 +41,7 @@ public class ImageTask extends AbsTask
     {
         if (mCB != null)
         {
-            mCB.onBitampSucceed(mBitmap);
+            mCB.onBitmapSucceed(mBitmap);
         }
     }
 

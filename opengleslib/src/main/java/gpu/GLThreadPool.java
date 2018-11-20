@@ -12,7 +12,7 @@ public class GLThreadPool
     {
         if (mThreadPool == null)
         {
-            mThreadPool = new ThreadPoolExecutor(5, 7, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+            mThreadPool = new ThreadPoolExecutor(3, 5, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         }
     }
 

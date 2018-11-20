@@ -1,29 +1,29 @@
 package gpu;
 
-public @interface VertexConstant
+public @interface GLConstant
 {
-    float[] CUBE = {
+    float[] VERTEX_CUBE = {
             -1.0f, 1.0f, 0.0f,
             1.0f, 1.0f, 0.0f,
             1.0f, -1.0f, 0.0f,
             -1.0f, -1.0f, 0.0f
     };
 
-    float[] SQUARE = {
+    float[] VERTEX_SQUARE = {
             -1.0f, 1.0f,
             1.0f, 1.0f,
             1.0f, -1.0f,
             -1.0f, -1.0f,
     };
 
-    float[] TEXTURE = {
+    float[] TEXTURE_INDEX = {
             0.0f, 0.0f,
             1.0f, 0.0f,
             1.0f, 1.0f,
             0.0f, 1.0f
     };
 
-    short[] CUBE_INDEX = {
+    short[] VERTEX_INDEX = {
             0, 1, 2,
             0, 2, 3
     };

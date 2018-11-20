@@ -14,6 +14,11 @@ public class GLUtil
 {
     private static final String TAG = GLUtil.class.getName();
 
+    public static int sGetGlSupportVersionInt(Context context)
+    {
+        return (int) sGetGlSupportVersion(context);
+    }
+
     public static float sGetGlSupportVersion(Context context)
     {
         float version = 0;

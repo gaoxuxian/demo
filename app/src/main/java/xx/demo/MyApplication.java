@@ -2,6 +2,7 @@ package xx.demo;
 
 import android.app.Application;
 
+import gpu.GLThreadPool;
 import util.PxUtil;
 import util.ThreadUtil;
 
@@ -17,5 +18,6 @@ public class MyApplication extends Application
         super.onCreate();
         PxUtil.init(this);
         ThreadUtil.init();
+        GLThreadPool.sInit();
     }
 }

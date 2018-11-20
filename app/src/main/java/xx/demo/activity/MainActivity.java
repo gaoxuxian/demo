@@ -74,6 +74,9 @@ public class MainActivity extends Activity
                         GLES_CLASE_NAME + ".GlesActivity13", "EGL 后台处理图片"
                 },
                 {
+                        GLES_CLASE_NAME + ".GlesActivity14", "GPUFilter 测试"
+                },
+                {
                         CLASS_NAME + ".SurfaceViewBgTestActivity", "SurfaceView 线程绘制"
                 },
                 {

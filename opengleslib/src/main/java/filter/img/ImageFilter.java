@@ -169,7 +169,7 @@ public class ImageFilter extends AFilter
 
             VaryTools tools = getMatrixTools();
             tools.pushMatrix();
-//            tools.rotate(30, 0, 1, 0);
+            tools.rotate(8, 0, 0, 1);
 
             GLES20.glUniformMatrix4fv(vMatrix, 1, false, tools.getFinalMatrix(), 0);
             tools.popMatrix();

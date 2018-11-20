@@ -17,8 +17,11 @@ public class VaryTools
     {
         mStack = new Stack<>();
 
-        mMatrixCamera = new float[16];
-        mMatrixProjection = new float[16];
+        // mMatrixCamera = new float[16];
+        // mMatrixProjection = new float[16];
+
+        mMatrixCamera = getOpenGLUnitMatrix();
+        mMatrixProjection = getOpenGLUnitMatrix();
 
         mMatrixCurrent = getOpenGLUnitMatrix();
     }

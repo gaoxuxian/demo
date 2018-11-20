@@ -51,17 +51,6 @@ public class GLES20Util
         return out;
     }
 
-    public static void sCheckGlError(String op)
-    {
-        int error = GLES20.glGetError();
-        if (error != GLES20.GL_NO_ERROR)
-        {
-            String msg = op + ": glError 0x" + Integer.toHexString(error);
-            Log.e(TAG, msg);
-            throw new RuntimeException(msg);
-        }
-    }
-
     // =================================== 着色器 start ====================================== //
 
     public static int sGetShader(int type, String resource)

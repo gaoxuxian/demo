@@ -125,7 +125,7 @@ public class MainActivity extends Activity
         setContentView(mParent);
         {
             mContentView = new RecyclerView(context);
-            mContentView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            mContentView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
             params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             params.gravity = Gravity.CENTER;
             mParent.addView(mContentView, params);

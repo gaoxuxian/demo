@@ -25,7 +25,6 @@ public class LifecycleActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        ViewModelStore viewModelStore = getViewModelStore();
         viewModel = ViewModelProviders.of(this).get(MyViewModel.class);
         getLifecycle().addObserver(new LifecycleModel(viewModel));
         super.onCreate(savedInstanceState);
@@ -34,7 +33,6 @@ public class LifecycleActivity extends BaseActivity
     @Override
     public void createChildren(FrameLayout parent, FrameLayout.LayoutParams params)
     {
-        new ClassInofModel();
         Button btn = new Button(parent.getContext());
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;

@@ -22,4 +22,5 @@
     <string name="title_activity_snap_helper_test">SnapHelperTestActivity</string>
     <string name="title_activity_layout_animation_test">LayoutAnimationTestActivity</string>
     <string name="title_activity_lifecycle">LifecycleActivity</string>
+    <string name="title_activity_gles14">GlesActivity14</string>
 </resources>

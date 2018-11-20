@@ -207,11 +207,11 @@ public class CameraPreviewFilter extends AFilter
                 {
                     tools.scale(-1f, scale, 1f);
 
-                    float dy = (getSurfaceHeight() - ((float) getSurfaceWidth() * scale)) / 2f;
-                    float p = dy * 2/ getSurfaceHeight();
-                    float y = p * (float) getSurfaceHeight() / getSurfaceWidth() / scale;
-
-                    tools.translate(0, y, 0);
+                    // float dy = (getSurfaceHeight() - ((float) getSurfaceWidth() * scale)) / 2f;
+                    // float p = dy * 2/ getSurfaceHeight();
+                    // float y = p * (float) getSurfaceHeight() / getSurfaceWidth() / scale;
+                    //
+                    // tools.translate(0, y, 0);
                 }
 
                 tools.rotate(90, 0, 0, 1);

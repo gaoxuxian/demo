@@ -9,6 +9,13 @@ public @interface VertexConstant
             -1.0f, -1.0f, 0.0f
     };
 
+    float[] SQUARE = {
+            -1.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, -1.0f,
+            -1.0f, -1.0f,
+    };
+
     float[] TEXTURE = {
             0.0f, 0.0f,
             1.0f, 0.0f,

@@ -77,8 +77,8 @@ public class FBOFilter extends GPUImageFilter
 
         // 绑定纹理坐标缓冲
         mTextureIndexBuffer.position(0);
-        GLES20.glVertexAttribPointer(vTextureHandle, 2, GLES20.GL_FLOAT, false, 0, mTextureIndexBuffer);
-        GLES20.glEnableVertexAttribArray(vTextureHandle);
+        GLES20.glVertexAttribPointer(vCoordinateHandle, 2, GLES20.GL_FLOAT, false, 0, mTextureIndexBuffer);
+        GLES20.glEnableVertexAttribArray(vCoordinateHandle);
 
         onDrawArraysPre();
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, mVertexIndexBuffer);

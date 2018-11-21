@@ -130,8 +130,8 @@ public abstract class GPUImageFilter
 
         // 绑定纹理坐标缓冲
         mTextureIndexBuffer.position(0);
-        GLES20.glVertexAttribPointer(vTextureHandle, 2, GLES20.GL_FLOAT, false, 0, mTextureIndexBuffer);
-        GLES20.glEnableVertexAttribArray(vTextureHandle);
+        GLES20.glVertexAttribPointer(vCoordinateHandle, 2, GLES20.GL_FLOAT, false, 0, mTextureIndexBuffer);
+        GLES20.glEnableVertexAttribArray(vCoordinateHandle);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(getTextureType(), textureId);

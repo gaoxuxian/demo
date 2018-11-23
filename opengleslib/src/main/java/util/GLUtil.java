@@ -52,4 +52,29 @@ public class GLUtil
             throw new RuntimeException(msg);
         }
     }
+
+    public static void sCheckFramebufferStatus(String msg)
+    {
+        int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
+        if (status != GLES20.GL_FRAMEBUFFER_COMPLETE)
+        {
+            String error = "";
+            switch (status)
+            {
+                case GLES20.GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+                    msg = "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT";
+                    break;
+                case GLES20.GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
+                    msg = "GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS";
+                    break;
+                case GLES20.GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+                    msg = "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT";
+                    break;
+                case GLES20.GL_FRAMEBUFFER_UNSUPPORTED:
+                    msg = "GL_FRAMEBUFFER_UNSUPPORTED";
+                    break;
+            }
+            throw new RuntimeException(msg + ":" + error + ", error code == " + Integer.toHexString(status));
+        }
+    }
 }

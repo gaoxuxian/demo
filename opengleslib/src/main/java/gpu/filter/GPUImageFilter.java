@@ -1,4 +1,4 @@
-package gpu;
+package gpu.filter;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -8,16 +8,18 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
+import gpu.AbsTask;
+import gpu.GLConstant;
+import gpu.TaskWrapper;
 import util.ByteBufferUtil;
 import util.GLES20Util;
-import util.GLUtil;
 import util.VaryTools;
 
 /**
  * @author Gxx
  * Created by Gxx on 2018/11/20.
  */
-public abstract class GPUImageFilter
+public class GPUImageFilter
 {
     protected static final String DEFAULT_VERTEX_SHADER =
             "attribute vec4 vPosition;\n" +
@@ -63,6 +65,9 @@ public abstract class GPUImageFilter
 
     protected final TaskWrapper mTaskWrapper;
 
+    protected int mVertexShader;
+    protected int mFragmentShader;
+
     public GPUImageFilter(Context context)
     {
         this(context, DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER);
@@ -79,15 +84,33 @@ public abstract class GPUImageFilter
 
     public void onSurfaceCreated(EGLConfig config)
     {
+        if (GLES20.glIsProgram(mProgram))
+        {
+            if (GLES20.glIsShader(mVertexShader))
+            {
+                GLES20.glDetachShader(mProgram, mVertexShader);
+                GLES20.glDeleteShader(mVertexShader);
+                mVertexShader = 0;
+            }
+
+            if (GLES20.glIsShader(mFragmentShader))
+            {
+                GLES20.glDetachShader(mProgram, mFragmentShader);
+                GLES20.glDeleteShader(mFragmentShader);
+                mFragmentShader = 0;
+            }
+            GLES20.glDeleteProgram(mProgram);
+            mProgram = 0;
+        }
+
         onInitBufferData();
 
-        int vertex_shader = GLES20Util.sGetShader(GLES20.GL_VERTEX_SHADER, mVertexStr);
-        int fragment_shader = GLES20Util.sGetShader(GLES20.GL_FRAGMENT_SHADER, mFragmentStr);
+        mVertexShader = GLES20Util.sGetShader(GLES20.GL_VERTEX_SHADER, mVertexStr);
+        mFragmentShader = GLES20Util.sGetShader(GLES20.GL_FRAGMENT_SHADER, mFragmentStr);
 
-        mProgram = GLES20Util.sCreateAndLinkProgram(vertex_shader, fragment_shader);
-        GLUtil.sCheckGlError("SSS");
+        mProgram = GLES20Util.sCreateAndLinkProgram(mVertexShader, mFragmentShader);
+
         onInitProgramHandle();
-        GLUtil.sCheckGlError("SSS");
     }
 
     protected void onInitProgramHandle()
@@ -112,11 +135,11 @@ public abstract class GPUImageFilter
         mSurfaceHeight = height;
     }
 
-    public void onDraw(int textureId)
+    public int onDraw(int textureId)
     {
         if (!GLES20.glIsProgram(getProgram()) || !GLES20.glIsTexture(textureId))
         {
-            return;
+            return textureId;
         }
 
         GLES20.glViewport(0, 0, getSurfaceW(), getSurfaceH());
@@ -137,6 +160,11 @@ public abstract class GPUImageFilter
         GLES20.glBindTexture(getTextureType(), textureId);
         GLES20.glUniform1i(vTextureHandle, 0);
 
+        VaryTools matrix = getMatrix();
+        matrix.pushMatrix();
+        GLES20.glUniformMatrix4fv(vMatrixHandle, 1, false, matrix.getFinalMatrix(), 0);
+        matrix.popMatrix();
+
         onDrawArraysPre();
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, mVertexIndexBuffer);
 
@@ -145,11 +173,18 @@ public abstract class GPUImageFilter
         onDrawArraysAfter();
 
         GLES20.glBindTexture(getTextureType(), 0);
+        return textureId;
     }
 
-    protected abstract void onDrawArraysPre();
+    protected void onDrawArraysPre()
+    {
 
-    protected abstract void onDrawArraysAfter();
+    }
+
+    protected void onDrawArraysAfter()
+    {
+
+    }
 
     protected int getTextureType()
     {

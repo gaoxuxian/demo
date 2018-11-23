@@ -18,7 +18,7 @@ public class TaskWrapper
         mTaskQueue = new LinkedList<>();
     }
 
-    protected void queueRunnable(final AbsTask runnable)
+    public void queueRunnable(final AbsTask runnable)
     {
         synchronized (mTaskQueue)
         {

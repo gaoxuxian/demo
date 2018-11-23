@@ -85,8 +85,8 @@ public class ImgFBOFilter extends AFilter
     @Override
     protected int onCreateProgram()
     {
-        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "shader/simple2D/picture_vertex_shader_v2.glsl");
-        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "shader/simple2D/picture_fragment_shader_v2.glsl");
+        int vertex_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_VERTEX_SHADER, "shader/simple2D/picture_vertex_shader.glsl");
+        int fragment_shader = GLES20Util.sGetShader(getResources(), GLES20.GL_FRAGMENT_SHADER, "shader/simple2D/picture_fragment_shader.glsl");
 
         int program = GLES20Util.sCreateAndLinkProgram(vertex_shader, fragment_shader);
 
@@ -102,10 +102,10 @@ public class ImgFBOFilter extends AFilter
     @Override
     protected void onSurfaceChangeSet(int width, int height)
     {
-        mFrameBufferMgr = new FrameBufferMgr(1080, 540, 1);
+        mFrameBufferMgr = new FrameBufferMgr(width, height, 1);
         VaryTools tools = getMatrixTools();
         float sWidthHeight = (float) width / height;
-        tools.frustum(-1, 1, -1, 1, 3, 5);
+        tools.frustum(-1, 1, -1/sWidthHeight, 1/sWidthHeight, 3, 5);
         tools.setCamera(0, 0, 3, 0, 0, 0, 0, 1, 0);
     }
 
@@ -125,12 +125,9 @@ public class ImgFBOFilter extends AFilter
     {
         if (isTextureBmpAvailable())
         {
-            GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
             GLES20.glUseProgram(getGLProgram());
             createFrameBuffer();
             mFrameBufferMgr.bindNext(true, GLES20.GL_NONE);
-            GLES20.glEnable(GLES20.GL_BLEND);
-            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
             //
             // // 绑定我们构建的 FBO
             // GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBufferArr[0]);
@@ -138,9 +135,6 @@ public class ImgFBOFilter extends AFilter
             // GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, mTextureArr[1], 0);
             // // 为了提高绘制速度，将视图压缩一半
             GLES20.glViewport(0, 0, mFrameBufferMgr.getBufferWidth(), mFrameBufferMgr.getBufferHeight());
-
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-
 
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureArr[0]);
@@ -155,18 +149,24 @@ public class ImgFBOFilter extends AFilter
 
             GLES20.glEnableVertexAttribArray(vCoordinate);
             GLES20.glVertexAttribPointer(vCoordinate, 2, GLES20.GL_FLOAT, false, 0, mTextureIndexBuffer);
+            GLUtil.sCheckGlError("AAA");
+
+            VaryTools tools = getMatrixTools();
+            tools.pushMatrix();
+            tools.scale(1f, 0.5f, 1f);
+            tools.rotate(-11, 0, 0, 1);
+            GLES20.glUniformMatrix4fv(vMatrix, 1, false, tools.getFinalMatrix(), 0);
+            tools.popMatrix();
+
+            GLES20.glClearColor(1f, 1f, 1f, 1.0f);
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
             GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, mVertexIndexBuffer);
-
-            GLES20.glDisableVertexAttribArray(vPosition);
-            GLES20.glDisableVertexAttribArray(vCoordinate);
 
             int currentTextureId = mFrameBufferMgr.getCurrentTextureId();
 
             mFrameBufferMgr.unbind();
 
-            GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
             GLUtil.sCheckGlError("AAA");
 
             // // 将 FBO 切换成默认
@@ -175,18 +175,8 @@ public class ImgFBOFilter extends AFilter
             GLES20.glViewport(0, 0, getSurfaceWidth(), getSurfaceHeight());
             GLUtil.sCheckGlError("AAA");
 
-            VaryTools tools = getMatrixTools();
-            float sWidthHeight = (float) getSurfaceWidth() / getSurfaceHeight();
-            tools.frustum(-1, 1, -1 / sWidthHeight, 1 / sWidthHeight, 3, 5);
-            tools.setCamera(0, 0, 3, 0, 0, 0, 0, 1, 0);
-            GLUtil.sCheckGlError("AAA");
-
             tools.pushMatrix();
-            float y = mTextureBmp.getHeight() / (float) mTextureBmp.getWidth();
-            tools.scale(1f, y, 1f);
-            tools.rotate(-11, 0, 0, 1);
-
-            GLES20.glUniformMatrix4fv(vMatrix, 1, false, tools.getFinalMatrix(), 0);
+            GLES20.glUniformMatrix4fv(vMatrix, 1, false, tools.getOpenGLUnitMatrix(), 0);
             tools.popMatrix();
             GLUtil.sCheckGlError("AAA");
 
@@ -206,9 +196,6 @@ public class ImgFBOFilter extends AFilter
 
             GLES20.glDisableVertexAttribArray(vPosition);
             GLES20.glDisableVertexAttribArray(vCoordinate);
-
-            GLES20.glDisable(GLES20.GL_BLEND);
-            GLES20.glBlendFunc(GLES20.GL_NONE, GLES20.GL_NONE);
         }
     }
 
@@ -234,6 +221,10 @@ public class ImgFBOFilter extends AFilter
         for (int i = 0;i<mTextureArr.length;i++)
         {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureArr[i]);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
             if (i == 0)
             {
                 GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, mTextureBmp, 0);
@@ -243,11 +234,6 @@ public class ImgFBOFilter extends AFilter
             //     GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, getSurfaceWidth()/2, getSurfaceHeight()/2, 0,
             //             GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
             // }
-
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
         }
     }
 

@@ -163,6 +163,11 @@
             android:label="@string/title_activity_gles14"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".gles.GlesActivity15"
+            android:label="@string/title_activity_gles15"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

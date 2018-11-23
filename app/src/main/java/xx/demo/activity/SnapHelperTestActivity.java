@@ -31,7 +31,7 @@ public class SnapHelperTestActivity extends BaseActivity
     public void onCreateInitData()
     {
         mData = new ArrayList<>();
-        int[] resArr = new int[]{R.drawable.ic_test_1, R.drawable.ic_test_2, R.drawable.ic_test_3, R.drawable.ic_test_4,
+        int[] resArr = new int[]{R.drawable.ic_test_1, R.drawable.open_test_2, R.drawable.ic_test_3, R.drawable.ic_test_4,
                 R.drawable.ic_test_5,R.drawable.ic_test_6, R.drawable.ic_test_7,R.drawable.ic_test_8,R.drawable.ic_test_9,
                 R.drawable.ic_test_10,R.drawable.ic_test_11,R.drawable.ic_test_12,R.drawable.ic_test_13, R.drawable.ic_test_14};
 

@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import gpu.FBOFilter;
+import gpu.filter.ImageFilter;
 import util.GLUtil;
 
 /**
@@ -15,13 +15,13 @@ import util.GLUtil;
  */
 public class GLes14View extends GLSurfaceView implements GLSurfaceView.Renderer
 {
-    FBOFilter mFilter;
+    ImageFilter mFilter;
 
     public GLes14View(Context context)
     {
         super(context);
 
-        mFilter = new FBOFilter(context);
+        mFilter = new ImageFilter(context);
         setEGLContextClientVersion(GLUtil.sGetGlSupportVersionInt(context));
         setRenderer(this);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);

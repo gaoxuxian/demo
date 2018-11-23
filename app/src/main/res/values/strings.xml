@@ -23,4 +23,6 @@
     <string name="title_activity_layout_animation_test">LayoutAnimationTestActivity</string>
     <string name="title_activity_lifecycle">LifecycleActivity</string>
     <string name="title_activity_gles14">GlesActivity14</string>
+    <string name="title_activity_gles15">GlesActivity15</string>
+    <string name="title_activity_gles16">GlesActivity16</string>
 </resources>

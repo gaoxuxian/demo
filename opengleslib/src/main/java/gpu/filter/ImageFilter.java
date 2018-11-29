@@ -72,6 +72,7 @@ public class ImageFilter extends GPUImageFilter
         matrix.frustum(-1, 1, -scale, scale, 3, 5);
         matrix.setCamera(0, 0, 3, 0, 0, 0, 0, 1, 0);
         matrix.pushMatrix();
+        matrix.translate(0, 0.5f, 0);
         matrix.rotate(8, 0, 0, 1);
         matrix.scale(0.8f, 0.8f, 1f);
         mMSAAFilter.setMatrix(matrix.getFinalMatrix());
@@ -82,6 +83,7 @@ public class ImageFilter extends GPUImageFilter
         mMSAAFilter.onDraw(mTextureArr[0]);
 
         matrix.pushMatrix();
+        matrix.translate(0, -0.5f, 0);
         matrix.rotate(-8, 0, 0, 1);
         matrix.scale(0.8f, 0.8f, 1f);
         mMSAAFilter.setMatrix(matrix.getFinalMatrix());

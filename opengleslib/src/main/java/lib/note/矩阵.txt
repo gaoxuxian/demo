@@ -1,0 +1,12 @@
+
+    // 逆序
+    mMatrixTools.translate(mLayerTransX, mLayerTransY, 0);
+    mMatrixTools.rotate(mLayerRotate, 0, 0, -1);
+    mMatrixTools.scale(mLayerScaleX, mLayerScaleY, 1);
+
+    上述是 Open GL ES 顶点坐标的换算, 顶点坐标一开始是[-1, 1], x\y 轴都是, 那么上述换算的顺序是:
+    1、先在坐标轴原点, 进行中心缩放
+    2、绕 z轴负方向旋转 一定角度
+    3、在 x\y 轴 分别进行一定平移
+
+    综上, Open GL ES 矩阵换算是逆执行, 顺序相当于android Matrix.preTranslate()、Matrix.preRotate()、Matrix.preScale();

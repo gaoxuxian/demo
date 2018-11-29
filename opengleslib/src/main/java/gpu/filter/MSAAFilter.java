@@ -3,7 +3,6 @@ package gpu.filter;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
-import android.util.Log;
 
 import lib.opengles.R;
 import util.GLES20Util;

@@ -11,6 +11,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 
 import filter.AFilter;
+import gpu.GLConstant;
 import util.ByteBufferUtil;
 import util.GLES20Util;
 import util.VaryTools;
@@ -43,14 +44,14 @@ public class ImageFilter extends AFilter
     @Override
     protected void onInitBaseData()
     {
-        float[] vertex = new float[]{
-                -1.0f, 1.0f, 0.0f,
-                1.0f, 1.0f, 0.0f,
-                1.0f, -1.0f, 0.0f,
-                -1.0f, -1.0f, 0.0f
-        };
+        // float[] vertex = new float[]{
+        //         -1.0f, 1.0f, 0.0f,
+        //         1.0f, 1.0f, 0.0f,
+        //         1.0f, -1.0f, 0.0f,
+        //         -1.0f, -1.0f, 0.0f
+        // };
 
-        mVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(vertex);
+        mVertexBuffer = ByteBufferUtil.getNativeFloatBuffer(GLConstant.VERTEX_CUBE);
 
         short[] vertex_index = new short[]{
                 0, 1, 2,
@@ -59,14 +60,14 @@ public class ImageFilter extends AFilter
 
         mVertexIndexBuffer = ByteBufferUtil.getNativeShortBuffer(vertex_index);
 
-        float[] texture_index = new float[]{
-                0.0f, 0.0f,
-                1.0f, 0.0f,
-                1.0f, 1.0f,
-                0.0f, 1.0f
-        };
+        // float[] texture_index = new float[]{
+        //         0.0f, 0.0f,
+        //         1.0f, 0.0f,
+        //         1.0f, 1.0f,
+        //         0.0f, 1.0f
+        // };
 
-        mTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(texture_index);
+        mTextureIndexBuffer = ByteBufferUtil.getNativeFloatBuffer(GLConstant.TEXTURE_INDEX);
     }
 
     @Override
@@ -169,7 +170,7 @@ public class ImageFilter extends AFilter
 
             VaryTools tools = getMatrixTools();
             tools.pushMatrix();
-            tools.rotate(8, 0, 0, 1);
+            // tools.rotate(8, 0, 0, 1);
 
             GLES20.glUniformMatrix4fv(vMatrix, 1, false, tools.getFinalMatrix(), 0);
             tools.popMatrix();

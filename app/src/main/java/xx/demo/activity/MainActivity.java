@@ -77,7 +77,10 @@ public class MainActivity extends Activity
                         GLES_CLASE_NAME + ".GlesActivity14", "GPUFilter 测试"
                 },
                 {
-                        GLES_CLASE_NAME + ".GlesActivity15", "OPEN GLES 3.0 测试 抗锯齿"
+                        GLES_CLASE_NAME + ".GlesActivity15", "OPEN GL ES 3.0 测试 抗锯齿"
+                },
+                {
+                        GLES_CLASE_NAME + ".GlesActivity16", "OPEN GL ES 蒙版测试"
                 },
                 {
                         CLASS_NAME + ".SurfaceViewBgTestActivity", "SurfaceView 线程绘制"

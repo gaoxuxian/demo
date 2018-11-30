@@ -122,6 +122,10 @@ public interface OpenGLES
      *   https://www.kancloud.cn/trent/imagesharp/100473
      *   https://www.kancloud.cn/trent/hotoimagefilter/102807
      *
+     *  16、
+     *   glrotatef如何绕自身轴旋转
+     *   https://blog.csdn.net/ly763124994/article/details/20161313
+     *
      *
      * =====================  透视投影的理解过程  =========================== 可以在 assets\glDemo\ 下结合demo效果去理解
      *

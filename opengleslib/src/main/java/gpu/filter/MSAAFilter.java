@@ -79,7 +79,7 @@ public class MSAAFilter extends GPUImageFilter
                 GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
             }
         }
-        GLUtil.sCheckFramebufferStatus("AAA");
+        GLUtil.checkFramebufferStatus("AAA");
 
         GLES30.glViewport(0, 0, getSurfaceW(), getSurfaceH());
         GLES30.glUniformMatrix4fv(vMatrixHandle, 1, false, mMatrix, 0);

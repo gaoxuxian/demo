@@ -1,12 +1,14 @@
 package gles;
 
 import android.content.Context;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import gpu.FrameBufferMgr;
+import gpu.LayerStencilFilter;
+import gpu.Texture2dFboMgr;
 import gpu.filter.DisplayFilter;
 import gpu.filter.ImageFilter;
 import gpu.filter.MaskTestFilter;
@@ -22,7 +24,8 @@ public class GLes16View extends GLSurfaceView implements GLSurfaceView.Renderer
     DisplayFilter mDisplayFilter;
     MaskTestFilter mMaskTestFilter;
 
-    FrameBufferMgr mFrameBufferMgr;
+    Texture2dFboMgr mTexture2DFboMgr;
+    LayerStencilFilter mLayerStencilFilter;
 
     public GLes16View(Context context)
     {
@@ -31,8 +34,9 @@ public class GLes16View extends GLSurfaceView implements GLSurfaceView.Renderer
         mImageFilter = new ImageFilter(context);
         mDisplayFilter = new DisplayFilter(context);
         mMaskTestFilter = new MaskTestFilter(context);
+        mLayerStencilFilter = new LayerStencilFilter(context);
 
-        setEGLContextClientVersion(GLUtil.sGetGlSupportVersionInt(context));
+        setEGLContextClientVersion(GLUtil.getGlSupportVersionInt(context));
         setEGLConfigChooser(8, 8, 8, 8, 16, 8);
         setRenderer(this);
         // setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -45,21 +49,26 @@ public class GLes16View extends GLSurfaceView implements GLSurfaceView.Renderer
         mImageFilter.onSurfaceCreated(config);
         mDisplayFilter.onSurfaceCreated(config);
         mMaskTestFilter.onSurfaceCreated(config);
+        mLayerStencilFilter.onSurfaceCreated(config);
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height)
     {
-        mFrameBufferMgr = new FrameBufferMgr(width, height, 2);
+        mTexture2DFboMgr = new Texture2dFboMgr(width, height, 2);
 
         mImageFilter.onSurfaceChanged(width, height);
         mDisplayFilter.onSurfaceChanged(width, height);
         mMaskTestFilter.onSurfaceChanged(width, height);
+        mLayerStencilFilter.onSurfaceChanged(width, height);
+        mLayerStencilFilter.initFrameBuffer(width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 gl)
     {
-        mMaskTestFilter.onDraw(0);
+        // mMaskTestFilter.onDraw(0);
+
+        mLayerStencilFilter.onDrawFrame(0);
     }
 }

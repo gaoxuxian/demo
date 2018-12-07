@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import gpu.FrameBufferMgr;
+import gpu.Texture2dFboMgr;
 import gpu.filter.DisplayFilter;
 import gpu.filter.ImageFilter;
 import util.GLUtil;
@@ -20,7 +20,7 @@ public class GLes15View extends GLSurfaceView implements GLSurfaceView.Renderer
     ImageFilter mImageFilter;
     DisplayFilter mDisplayFilter;
 
-    FrameBufferMgr mFrameBufferMgr;
+    Texture2dFboMgr mTexture2DFboMgr;
 
     public GLes15View(Context context)
     {
@@ -29,7 +29,7 @@ public class GLes15View extends GLSurfaceView implements GLSurfaceView.Renderer
         mImageFilter = new ImageFilter(context);
         mDisplayFilter = new DisplayFilter(context);
 
-        setEGLContextClientVersion(GLUtil.sGetGlSupportVersionInt(context));
+        setEGLContextClientVersion(GLUtil.getGlSupportVersionInt(context));
         setRenderer(this);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         requestRender();
@@ -45,7 +45,7 @@ public class GLes15View extends GLSurfaceView implements GLSurfaceView.Renderer
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height)
     {
-        mFrameBufferMgr = new FrameBufferMgr(width, height, 2);
+        mTexture2DFboMgr = new Texture2dFboMgr(width, height, 2);
 
         mImageFilter.onSurfaceChanged(width, height);
         mDisplayFilter.onSurfaceChanged(width, height);

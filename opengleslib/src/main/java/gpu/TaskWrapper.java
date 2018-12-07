@@ -2,8 +2,6 @@ package gpu;
 
 import java.util.LinkedList;
 
-import gpu.AbsTask;
-
 /**
  * @author Gxx
  * Created by Gxx on 2018/11/20.
@@ -12,6 +10,8 @@ public class TaskWrapper
 {
     // 任务列表
     private final LinkedList<AbsTask> mTaskQueue;
+
+    private boolean mClear;
 
     public TaskWrapper()
     {
@@ -28,6 +28,7 @@ public class TaskWrapper
 
     public void clearTask()
     {
+        mClear = true;
         synchronized (mTaskQueue)
         {
             int size = getTaskSize();
@@ -37,43 +38,90 @@ public class TaskWrapper
                 if (task != null)
                 {
                     task.clear();
+                    task.destroy();
                 }
             }
             mTaskQueue.clear();
         }
     }
 
+    public boolean isClear()
+    {
+         return mClear;
+    }
+
     public int getTaskSize()
     {
-        return mTaskQueue.size();
+        synchronized (mTaskQueue)
+        {
+            return mTaskQueue.size();
+        }
+    }
+
+    public void startTask()
+    {
+        if (!mClear)
+        {
+            synchronized (mTaskQueue)
+            {
+                if (mTaskQueue.isEmpty() || mClear)
+                {
+                    return;
+                }
+                AbsTask task = mTaskQueue.get(0);
+                if (task != null)
+                {
+                    task.start();
+                    if (task.isFinish() && !mClear)
+                    {
+                        task.executeTaskCallback();
+                        task.clear();
+                        mTaskQueue.remove(task);
+
+                        if (mTaskQueue.isEmpty())
+                        {
+                            return;
+                        }
+                        task = mTaskQueue.get(0);
+                        if (task != null)
+                        {
+                            task.start();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void runTask()
     {
-        synchronized (mTaskQueue)
+        if (!mClear)
         {
-            if (mTaskQueue.isEmpty())
+            synchronized (mTaskQueue)
             {
-                return;
-            }
-            AbsTask task = mTaskQueue.get(0);
-            if (task != null)
-            {
-                task.start();
-                if (task.isFinish())
+                if (mTaskQueue.isEmpty() || mClear)
                 {
-                    task.executeTaskCallback();
-                    task.clear();
-                    mTaskQueue.remove(task);
+                    return;
+                }
+                AbsTask task = mTaskQueue.get(0);
+                if (task != null)
+                {
+                    task.run();
+                    if (task.isFinish() && !mClear)
+                    {
+                        task.executeTaskCallback();
+                        task.clear();
+                        mTaskQueue.remove(task);
 
-                    if (mTaskQueue.isEmpty())
-                    {
-                        return;
-                    }
-                    task = mTaskQueue.get(0);
-                    if (task != null)
-                    {
-                        task.start();
+                        if (mTaskQueue.isEmpty())
+                        {
+                            return;
+                        }
+                        task = mTaskQueue.get(0);
+                        if (task != null)
+                        {
+                            task.start();
+                        }
                     }
                 }
             }

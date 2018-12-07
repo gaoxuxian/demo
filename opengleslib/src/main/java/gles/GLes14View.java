@@ -22,7 +22,7 @@ public class GLes14View extends GLSurfaceView implements GLSurfaceView.Renderer
         super(context);
 
         mFilter = new ImageFilter(context);
-        setEGLContextClientVersion(GLUtil.sGetGlSupportVersionInt(context));
+        setEGLContextClientVersion(GLUtil.getGlSupportVersionInt(context));
         setRenderer(this);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }

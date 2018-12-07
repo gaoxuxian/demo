@@ -3,7 +3,6 @@ package filter.fbo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
@@ -13,7 +12,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 
 import filter.AFilter;
-import gpu.FrameBufferMgr;
+import gpu.Texture2dFboMgr;
 import lib.opengles.R;
 import util.ByteBufferUtil;
 import util.GLES20Util;
@@ -37,7 +36,7 @@ public class ImgFBOFilter extends AFilter
 
     private Bitmap mTextureBmp;
     private int[] fRender;
-    private FrameBufferMgr mFrameBufferMgr;
+    private Texture2dFboMgr mTexture2DFboMgr;
     private int uTexMatrix;
 
     public ImgFBOFilter(Resources res)
@@ -102,7 +101,7 @@ public class ImgFBOFilter extends AFilter
     @Override
     protected void onSurfaceChangeSet(int width, int height)
     {
-        mFrameBufferMgr = new FrameBufferMgr(width, height, 1);
+        mTexture2DFboMgr = new Texture2dFboMgr(width, height, 1);
         VaryTools tools = getMatrixTools();
         float sWidthHeight = (float) width / height;
         tools.frustum(-1, 1, -1/sWidthHeight, 1/sWidthHeight, 3, 5);
@@ -127,14 +126,15 @@ public class ImgFBOFilter extends AFilter
         {
             GLES20.glUseProgram(getGLProgram());
             createFrameBuffer();
-            mFrameBufferMgr.bindNext(true, GLES20.GL_NONE);
+            mTexture2DFboMgr.bindNext(GLES20.GL_NONE);
+            mTexture2DFboMgr.clearColor(true, true, true, true, true);
             //
             // // 绑定我们构建的 FBO
             // GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBufferArr[0]);
             // // 给我们构建的 FBO 挂载一个 texture，用来记录接下来绘制的颜色数据
             // GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, mTextureArr[1], 0);
             // // 为了提高绘制速度，将视图压缩一半
-            GLES20.glViewport(0, 0, mFrameBufferMgr.getBufferWidth(), mFrameBufferMgr.getBufferHeight());
+            GLES20.glViewport(0, 0, mTexture2DFboMgr.getBufferWidth(), mTexture2DFboMgr.getBufferHeight());
 
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureArr[0]);
@@ -149,7 +149,7 @@ public class ImgFBOFilter extends AFilter
 
             GLES20.glEnableVertexAttribArray(vCoordinate);
             GLES20.glVertexAttribPointer(vCoordinate, 2, GLES20.GL_FLOAT, false, 0, mTextureIndexBuffer);
-            GLUtil.sCheckGlError("AAA");
+            GLUtil.checkGlError("AAA");
 
             VaryTools tools = getMatrixTools();
             tools.pushMatrix();
@@ -163,22 +163,22 @@ public class ImgFBOFilter extends AFilter
 
             GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, mVertexIndexBuffer);
 
-            int currentTextureId = mFrameBufferMgr.getCurrentTextureId();
+            int currentTextureId = mTexture2DFboMgr.getCurrentTextureId();
 
-            mFrameBufferMgr.unbind();
+            mTexture2DFboMgr.unbind();
 
-            GLUtil.sCheckGlError("AAA");
+            GLUtil.checkGlError("AAA");
 
             // // 将 FBO 切换成默认
             // GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,0);
             // 恢复视图大小
             GLES20.glViewport(0, 0, getSurfaceWidth(), getSurfaceHeight());
-            GLUtil.sCheckGlError("AAA");
+            GLUtil.checkGlError("AAA");
 
             tools.pushMatrix();
             GLES20.glUniformMatrix4fv(vMatrix, 1, false, tools.getOpenGLUnitMatrix(), 0);
             tools.popMatrix();
-            GLUtil.sCheckGlError("AAA");
+            GLUtil.checkGlError("AAA");
 
             GLES20.glUniformMatrix4fv(uTexMatrix, 1, false, matrix, 0);
 

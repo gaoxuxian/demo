@@ -83,6 +83,9 @@ public class MainActivity extends Activity
                         GLES_CLASE_NAME + ".GlesActivity16", "OPEN GL ES 蒙版测试"
                 },
                 {
+                        GLES_CLASE_NAME + ".GlesActivity17", "OPEN GL ES 复制纹理测试"
+                },
+                {
                         CLASS_NAME + ".SurfaceViewBgTestActivity", "SurfaceView 线程绘制"
                 },
                 {

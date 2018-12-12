@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import gpu.Texture2dFboMgr;
+import gpu.TextureFboMgr30;
 import gpu.filter.DisplayFilter;
 import gpu.filter.ImageFilter;
 import util.GLUtil;
@@ -20,7 +20,7 @@ public class GLes15View extends GLSurfaceView implements GLSurfaceView.Renderer
     ImageFilter mImageFilter;
     DisplayFilter mDisplayFilter;
 
-    Texture2dFboMgr mTexture2DFboMgr;
+    TextureFboMgr30 mTextureFboMgr30;
 
     public GLes15View(Context context)
     {
@@ -45,7 +45,7 @@ public class GLes15View extends GLSurfaceView implements GLSurfaceView.Renderer
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height)
     {
-        mTexture2DFboMgr = new Texture2dFboMgr(width, height, 2);
+        mTextureFboMgr30 = new TextureFboMgr30(width, height, 2);
 
         mImageFilter.onSurfaceChanged(width, height);
         mDisplayFilter.onSurfaceChanged(width, height);

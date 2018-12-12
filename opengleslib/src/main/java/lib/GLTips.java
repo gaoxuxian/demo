@@ -190,7 +190,15 @@ public interface GLTips
      *
      *
      * 13、对 Matrix 的一些理解：
+     *      open gl es 中, Matrix.scaleM()、 Matrix.translateM()、 Matrix.rotateM() 函数, 是前乘关系, 代码后执行的, 函数计算时先运算
+     *      采坑经验:
+     *              基于容易理解考虑, 最好先将 事物 scale 到指定大小, 再考虑做旋转或平移
+     *
+     *      当然, 到底要先执行哪一个, 还是要根据 数据、效果 考虑, 以上只是个人在做项目时, 通过 AE 分析获得的数据绘制图形 的绘制 顺序
      *
      *
+     * 14、记录：同一个 FrameBuffer 上同时挂载深度、模板缓冲, 检查 FrameBuffer 完整性时, 抛出异常 GL_FRAMEBUFFER_UNSUPPORTED
+     *     原因: fbo 同时挂载深度、模板rbo, 需要的格式是 GLES30.GL_DEPTH24_STENCIL8, 通常将两个 render buffer 并成一个来用
+     *     详情请参考: https://www.khronos.org/opengl/wiki/Common_Mistakes
      */
 }

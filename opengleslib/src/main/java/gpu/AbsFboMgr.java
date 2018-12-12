@@ -18,12 +18,23 @@ public abstract class AbsFboMgr
 
     protected int mCurrentTextureIndex;
 
+    protected boolean mNeedColorRbo;
+    protected boolean mNeedDepthRbo;
+    protected boolean mNeedStencilRbo;
+
+    private boolean mInit;
+
     public AbsFboMgr(int width, int height)
     {
         this(width, height, DEFAULT_SIZE);
     }
 
     public AbsFboMgr(int width, int height, int size)
+    {
+        this(width, height, size, true, true, true);
+    }
+
+    public AbsFboMgr(int width, int height, int size, boolean color, boolean depth, boolean stencil)
     {
         if (width <= 0)
         {
@@ -48,11 +59,17 @@ public abstract class AbsFboMgr
         this.mBufferWidth = width;
         this.mBufferHeight = height;
         this.mCurrentTextureIndex = -1;
+        this.mNeedColorRbo = color;
+        this.mNeedDepthRbo = depth;
+        this.mNeedStencilRbo = stencil;
 
-        init(width, height, size);
+        init(width, height, size, color, depth, stencil);
+        mInit = true;
     }
 
-    protected abstract void init(int width, int height, int size);
+    protected abstract void init(int width, int height, int size, boolean color, boolean depth, boolean stencil);
+
+    public abstract void reMount(int width, int height);
 
     public boolean bindNext()
     {
@@ -126,6 +143,11 @@ public abstract class AbsFboMgr
             index = mBufferSize - 1;
         }
         return index % mBufferSize;
+    }
+
+    public boolean isInitialized()
+    {
+        return mInit;
     }
 
     public abstract int getCurrentTextureId();

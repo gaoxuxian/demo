@@ -16,9 +16,9 @@ import util.VaryTools;
 /**
  * @author Gxx
  * Created by Gxx on 2018/12/05.
- *
+ * <p>
  * 生命周期: onSurfaceCreated() --> onSurfaceChanged()
- * 如需管理 FBO : initTexture2DFrameBuffer() or initMsaaFrameBuffer()
+ * 如需管理 FBO : initFrameBuffer()
  */
 public class GPUImageFilter
 {
@@ -57,6 +57,11 @@ public class GPUImageFilter
 
     public GPUImageFilter(Context context, String vertex, String fragment)
     {
+        if (!GLUtil.checkSupportGlVersion(context, 2.0f))
+        {
+            throw new RuntimeException("手机系统所支持的 Open GL ES 版本低于 2.0, Filter 创建失败!!!");
+        }
+
         mContext = context;
         mVertexStr = vertex;
         mFragmentStr = fragment;
@@ -220,12 +225,26 @@ public class GPUImageFilter
         return 1;
     }
 
+    protected boolean needInitMsaaFbo()
+    {
+        return true;
+    }
+
+    public void initFrameBuffer(int width, int height)
+    {
+        this.initFrameBuffer(width, height, true, true, true);
+    }
+
     /**
-     * 3.0 挂载的是抗锯齿 render buffer, 2.0 挂载的是普通 2d 纹理, 本身不能抗锯齿
+     * 3.0 可选择生成 抗锯齿fbo 或者 普通fbo, 2.0 只生成 普通fbo
+     * <p>
+     * needInitMsaaFbo() true --> 抗锯齿 render buffer
+     * <p>
+     * needInitMsaaFbo() false --> 普通 2d 纹理, 本身不能抗锯齿
      * @param width
      * @param height
      */
-    public final void initFrameBuffer(int width, int height)
+    public final void initFrameBuffer(int width, int height, boolean color, boolean depth, boolean stencil)
     {
         if (mFrameBufferMgr != null)
         {
@@ -240,12 +259,32 @@ public class GPUImageFilter
         {
             if (GLUtil.checkSupportGlVersion(getContext(), 3.0f))
             {
-                mFrameBufferMgr = new MsaaFboMgr(width, height, createFrameBufferSize());
+                if (needInitMsaaFbo())
+                {
+                    mFrameBufferMgr = new MsaaFboMgr(width, height, createFrameBufferSize(), depth, stencil);
+                }
+                else
+                {
+                    mFrameBufferMgr = new TextureFboMgr30(width, height, createFrameBufferSize(), color, depth, stencil);
+                }
             }
             else
             {
-                mFrameBufferMgr = new Texture2dFboMgr(width, height, createFrameBufferSize());
+                mFrameBufferMgr = new TextureFboMgr20(width, height, createFrameBufferSize(), color, depth, stencil);
             }
+        }
+    }
+
+    /**
+     * 手动检查当前 FrameBuffer 里的缓冲区是否需要重新挂载
+     * @param width
+     * @param height
+     */
+    protected final void checkFrameBufferReMount(int width, int height)
+    {
+        if (mFrameBufferMgr != null)
+        {
+            mFrameBufferMgr.reMount(width, height);
         }
     }
 
@@ -298,6 +337,7 @@ public class GPUImageFilter
 
     /**
      * 同步task
+     *
      * @param runAll 是否将队列内任务全部执行
      */
     protected void runTask(boolean runAll)

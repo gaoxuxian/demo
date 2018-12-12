@@ -220,7 +220,7 @@ public class LayerStencilFilter extends GPUImageFilter
         mDrawBg = false;
         mDrawMask = true;
         GLES20.glColorMask(false, false, false, false);
-        GLES20.glStencilMask(0xFF);
+        GLES20.glStencilMask(1);
         draw(0);
         mDrawMask = false;
 
@@ -230,6 +230,12 @@ public class LayerStencilFilter extends GPUImageFilter
         GLES20.glColorMask(true, true, true, true);
         draw(mTextureIDArr[0]);
         mDrawLayer = false;
+    }
+
+    @Override
+    protected boolean needInitMsaaFbo()
+    {
+        return false;
     }
 
     @Override

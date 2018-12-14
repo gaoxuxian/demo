@@ -82,6 +82,19 @@ public class EGLHelper
         mGL = (GL10) mEglContext.getGL();
     }
 
+    public void destroy()
+    {
+        mEgl.eglMakeCurrent(mEglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE,
+                EGL10.EGL_NO_CONTEXT);
+        mEgl.eglDestroySurface(mEglDisplay, mEglSurface);
+        mEgl.eglDestroyContext(mEglDisplay, mEglContext);
+        mEgl.eglTerminate(mEglDisplay);
+        mEglSurface = EGL10.EGL_NO_SURFACE;
+        mEglDisplay = EGL10.EGL_NO_DISPLAY;
+        mEglContext = EGL10.EGL_NO_CONTEXT;
+        mEgl = null;
+    }
+
     private EGLSurface createEglSurface(int[] attrib_list)
     {
         switch (mEglSurfaceType)
